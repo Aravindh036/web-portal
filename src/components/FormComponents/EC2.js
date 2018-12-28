@@ -6,7 +6,9 @@ export default class EC2 extends Component {
     AvailabilityZone: "",
     KeyName: "",
     InstanceType:"t2.nano",
-    ImageID:"ami-041114ddee4a98333"
+    ImageID:"ami-041114ddee4a98333",
+    SubnetName:"",
+    SecurityGroup:""
   }
   getName = (e) => {
     this.setState({
@@ -33,6 +35,16 @@ export default class EC2 extends Component {
       ImageID: e.target.value
     });
   }
+  getSubnetName = (e) => {
+    this.setState({
+      SubnetName: e.target.value
+    });
+  }
+  getSecurityGroup = (e) => {
+    this.setState({
+      SecurityGroup: e.target.value
+    });
+  }
   saveForm = () => {
     if ((this.state.name !== "") && (this.state.AvailabilityZone !== "") && (this.state.KeyName !== "")) {
       console.log(this.state);
@@ -49,7 +61,10 @@ export default class EC2 extends Component {
       document.getElementById("ec2-form-id").classList.toggle("hide");
       document.getElementById("ec2-name-id").value = "";
       document.getElementById("keyname-id").value = "";
-      document.getElementById("availability-id").value = "";
+      document.getElementById("availability-id").value = ""; 
+      document.getElementById("ec2-subnet-id").value = "";
+      document.getElementById("security-groups-id").value = ""; 
+
     }
   }
   render() {
@@ -87,6 +102,8 @@ export default class EC2 extends Component {
             <option value="ami-041114ddee4a98333">Windows</option>
             <option value="ami-009d6802948d06e52">Linux</option>
           </select>
+          <input type="text" placeholder="SubnetName" id="ec2-subnet-id" onBlur={this.getSubnetName}/>
+          <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} />
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>

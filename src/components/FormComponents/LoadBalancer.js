@@ -5,7 +5,10 @@ export default class LoadBalancer extends Component {
     InstancePort:"",
     LoadBalancerPort:"",
     PolicyNames:"",
-    Protocol:""
+    Protocol:"",
+    LoadBalancerName:"",
+    SecurityGroup:"",
+    Subnet:"",
   }
   getInstancePort=(e)=>{
     this.setState({
@@ -27,6 +30,22 @@ export default class LoadBalancer extends Component {
       Protocol: e.target.value
     })
   }
+  getLoadBalancerName=(e)=>{
+    this.setState({
+      LoadBalancerName: e.target.value
+    })
+  }
+  getSecurityGroup=(e)=>{
+    this.setState({
+      SecurityGroup: e.target.value
+    })
+  }
+  getSubnetName=(e)=>{
+    this.setState({
+      Subnet: e.target.value
+    })
+  }
+  
   saveForm = () => {
     console.log("gegege",this.state);
     if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
@@ -46,6 +65,9 @@ export default class LoadBalancer extends Component {
       document.getElementById("loadbalancer-port-id").value = "";
       document.getElementById("policyname-id").value = "";
       document.getElementById("protocol-id").value = "";
+      document.getElementById("loadbalancer-name-id").value = "";
+      document.getElementById("security-group-id").value = "";
+      document.getElementById("subnet-name-id").value = "";
     }
   }
   render() {
@@ -69,10 +91,13 @@ export default class LoadBalancer extends Component {
     return (
       <div className="ec2-form hide" id="load-balancer-form-id">
         <div className="form-elements">
+            <input id="loadbalancer-name-id" type="text" placeholder="LoadBalancerName" onBlur={this.getLoadBalancerName} />
             <input id="instance-port-id" type="text" placeholder="InstancePort" onBlur={this.getInstancePort} />
             <input id="loadbalancer-port-id" type="text" placeholder="LoadBalancerPort" onBlur={this.getLoadBalancerPort} />
             <input id="policyname-id" type="text" placeholder="PolicyNames" onBlur={this.getPolicyNames} />
             <input id="protocol-id" type="text" placeholder="Protocol" onBlur={this.getProtocol} />
+            <input id="security-group-id" type="text" placeholder="SecurityGroups" onBlur={this.getSecurityGroup}/>
+            <input id="subnet-name-id" type="text" placeholder="SubnetName" onBlur={this.getSubnetName}/>
         </div>
         <button onClick={this.saveForm}>button</button>
       </div>

@@ -1,49 +1,56 @@
 import React, { Component } from 'react'
 import './FormComponents.css';
 export default class DatabaseServer extends Component {
-  state={
-    DBSecurityGroups:"",
-    AllocatedStorage:"",
-    DBInstanceClass:"db.t2.micro",
-    Engine:"",
-    MasterUsername:"",
-    MasterUserPassword:""
+  state = {
+    DBName: "",
+    VPCSecurityGroups: "",
+    AllocatedStorage: "",
+    DBInstanceClass: "db.t2.micro",
+    Engine: "",
+    MasterUsername: "",
+    MasterUserPassword: ""
   }
-  getDBSecurityGroups=(e)=>{
+  getDBSecurityGroups = (e) => {
     this.setState({
-      DBSecurityGroups:e.target.value
+      DBSecurityGroups: e.target.value
     })
   }
-  getAllocatedStorage=(e)=>{
+  getAllocatedStorage = (e) => {
     this.setState({
-      AllocatedStorage:e.target.value
+      AllocatedStorage: e.target.value
     })
   }
-  getDBInstanceClass=(e)=>{
+  getDBInstanceClass = (e) => {
     this.setState({
-      DBInstanceClass:e.target.value
+      DBInstanceClass: e.target.value
     })
   }
-  getEngine=(e)=>{
+  getEngine = (e) => {
     this.setState({
-      Engine:e.target.value
+      Engine: e.target.value
     })
   }
-  getMasterUsername=(e)=>{
+  getMasterUsername = (e) => {
     this.setState({
-      MasterUsername:e.target.value
+      MasterUsername: e.target.value
     })
   }
-  getMasterUserPassword=(e)=>{
+  getMasterUserPassword = (e) => {
     this.setState({
-      MasterUserPassword:e.target.value
+      MasterUserPassword: e.target.value
     })
   }
-  getInstance=(e)=>{
+  getDBName = (e) => {
+    this.setState({
+      DBName: e.target.value
+    })
+  }
+  getInstance = (e) => {
     console.log(e.target.value);
   }
+
   saveForm = () => {
-    if ((this.state.DBSecurityGroups !== "") && (this.state.AllocatedStorage !== "") && (this.state.Engine !== "")&& (this.state.MasterUsername !== "")&& (this.state.MasterUserPassword !== "")) {
+    if ((this.state.DBName !== "") && (this.state.DBSecurityGroups !== "") && (this.state.AllocatedStorage !== "") && (this.state.Engine !== "") && (this.state.MasterUsername !== "") && (this.state.MasterUserPassword !== "")) {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
@@ -61,26 +68,28 @@ export default class DatabaseServer extends Component {
       document.getElementById("engine-id").value = "";
       document.getElementById("master-password-id").value = "";
       document.getElementById("master-username-id").value = "";
+      document.getElementById("dbname-id").value = "";
     }
   }
   render() {
     const id = this.props.currentComponent();
-    console.log("id",id);
+    console.log("id", id);
     return (
       <div className="ec2-form hide" id="database-server-form-id">
         <div className="form-elements">
-            <input onBlur={this.getDBSecurityGroups} type="text" placeholder="DBSecurityGroups" id="db-security-groups-id"/>
-            <input onBlur={this.getAllocatedStorage} type="number" placeholder="AllocatedStorage" id="allocated-storage-id"/>
-            <select onChange={this.getDBInstanceClass} name="DBInstanceClass" id="db-instance-class-id">
-              <option value="db.t2.micro">db.t2.micro</option>
-              <option value="db.t2.small">db.t2.small</option>
-              <option value="db.t2.medium">db.t2.medium</option>
-              <option value="db.t2.large">db.t2.large</option>
-              <option value="db.t2.xlarge">db.t2.xlarge</option>
-            </select>
-            <input onBlur={this.getEngine} type="text" placeholder="Engine" id="engine-id"/>
-            <input onBlur={this.getMasterUsername} type="text" placeholder="MasterUsername" id="master-username-id" />
-            <input onBlur={this.getMasterUserPassword} type="password" id="master-password-id" placeholder="MasterUserPassword"/>
+          <input type="text" placeholder="DBName" id="dbname-id" onBlur={this.getDBName} />
+          <input onBlur={this.getDBSecurityGroups} type="text" placeholder="DBSecurityGroups" id="db-security-groups-id" />
+          <input onBlur={this.getAllocatedStorage} type="number" placeholder="AllocatedStorage" id="allocated-storage-id" />
+          <select onChange={this.getDBInstanceClass} name="DBInstanceClass" id="db-instance-class-id">
+            <option value="db.t2.micro">db.t2.micro</option>
+            <option value="db.t2.small">db.t2.small</option>
+            <option value="db.t2.medium">db.t2.medium</option>
+            <option value="db.t2.large">db.t2.large</option>
+            <option value="db.t2.xlarge">db.t2.xlarge</option>
+          </select>
+          <input onBlur={this.getEngine} type="text" placeholder="Engine" id="engine-id" />
+          <input onBlur={this.getMasterUsername} type="text" placeholder="MasterUsername" id="master-username-id" />
+          <input onBlur={this.getMasterUserPassword} type="password" id="master-password-id" placeholder="MasterUserPassword" />
         </div>
         <button onClick={this.saveForm}>button</button>
       </div>
