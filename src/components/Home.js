@@ -4,9 +4,8 @@ import Parser from './Parser/Parser';
 import './home.modules.css';
 import SideBar from './SideBar/SideBar';
 import EC2 from './FormComponents/EC2';
-import PublicSubnet from './FormComponents/PublicSubnet';
 import LoadBalancer from './FormComponents/LoadBalancer';
-import PrivateSubnet from './FormComponents/PrivateSubnet';
+import Subnet from './FormComponents/Subnet';
 import SecurityGroup from './FormComponents/SecurityGroup';
 import DatabaseServer from './FormComponents/DatabaseServer';
 var count = [];
@@ -40,15 +39,14 @@ export default class Home extends Component {
     this.setState({
       active:"ec2-form-id",
       id:e.target.id,
-      selected:e.target.id
     })
     document.getElementById("ec2-form-id").classList.toggle("hide");
     document.getElementById("ec2-name-id").value = "";
     document.getElementById("keyname-id").value = "";
     document.getElementById("availability-id").value = "";
-    console.log("helllo");
+    console.log("helllo from ec2");
   }
-  PrivateSubnet = (e) => {
+  Subnet = (e) => {
     console.log("helllo");
     this.setState({
       active:"private-subnet-form-id",
@@ -80,17 +78,9 @@ export default class Home extends Component {
     })
     document.getElementById("security-group-form-id").classList.toggle("hide");
   }
-  PublicSubnet = (e) => {
-    console.log("helllo");
-    this.setState({
-      active:"public-subnet-form-id",
-      id:e.target.id
-    })
-    document.getElementById("public-subnet-form-id").classList.toggle("hide");
-  }
   saveMyStore(store){
     count = store;
-    console.log("updated store",count);
+    console.log("updated store",JSON.stringify(count));
   }
   render() {
     var clone;
@@ -132,12 +122,9 @@ export default class Home extends Component {
           clone.ondblclick = this.DatabaseServer;
           clone.onclick = this.selectElement;
         }
-        else if (clone.id === "public-subnet") {
-          clone.ondblclick = this.PublicSubnet;
-          clone.onclick = this.selectElement;
-        }
-        else if (clone.id === "private-subnet") {
-          clone.ondblclick = this.PrivateSubnet;
+
+        else if (clone.id === "subnet") {
+          clone.ondblclick = this.Subnet;
           clone.onclick = this.selectElement;
         }
         else if (clone.id === "load-balancer") {
@@ -162,7 +149,7 @@ export default class Home extends Component {
 
           ]
         });
-        console.log(count);
+        console.log(JSON.stringify(count));
       }
     })
     document.addEventListener("dragover", (e) => {
@@ -191,11 +178,10 @@ export default class Home extends Component {
         <div>
           <Parser />
         </div>
-        {this.state.active!==null ? <PrivateSubnet saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />:null}
+        {this.state.active!==null ? <Subnet saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />:null}
         {this.state.active!==null ? <DatabaseServer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />:null}
         {this.state.active!==null ? <SecurityGroup saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />:null}
         {this.state.active!==null ? <EC2 saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />:null}
-        {this.state.active!==null ? <PublicSubnet saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />:null}
         {this.state.active!==null ? <LoadBalancer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />:null}
       </div>
     )

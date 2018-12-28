@@ -5,6 +5,8 @@ export default class EC2 extends Component {
     name: "",
     AvailabilityZone: "",
     KeyName: "",
+    InstanceType:"t2.nano",
+    ImageID:"ami-041114ddee4a98333"
   }
   getName = (e) => {
     this.setState({
@@ -19,6 +21,16 @@ export default class EC2 extends Component {
   getAvailabilityZone = (e) => {
     this.setState({
       AvailabilityZone: e.target.value
+    });
+  }
+  getInstanceType = (e) => {
+    this.setState({
+      InstanceType: e.target.value
+    });
+  }
+  getImageID = (e) => {
+    this.setState({
+      ImageID: e.target.value
     });
   }
   saveForm = () => {
@@ -43,7 +55,7 @@ export default class EC2 extends Component {
   render() {
     const id = this.props.currentComponent();
     console.log("id", id);
-    if (id === null) {
+    if ((id === null) || (id!=="ec2-form-id")) {
       return <div></div>;
     }
     if (id === "ec2-form-id") {
@@ -64,14 +76,14 @@ export default class EC2 extends Component {
           <input id="ec2-name-id" type="text" placeholder="Name" onBlur={this.getName} value={selected.properties.name} />
           <input id="availability-id" type="text" placeholder="AvailabilityZone" onBlur={this.getAvailabilityZone} value={selected.properties.AvailabilityZone } />
           <input id="keyname-id" type="text" placeholder="KeyName" onBlur={this.getKeyName} value={selected.properties.KeyName} />
-          <select name="instanceType" id="instanceType-id">
+          <select onChange={this.getInstanceType} name="instanceType" id="instanceType-id">
             <option value="t2.nano">t2.nano</option>
             <option value="t2.micro">t2.micro</option>
             <option value="t2.small">t2.small</option>
             <option value="t2.medium">t2.medium</option>
             <option value="t2.large">t2.large</option>
           </select>
-          <select name="imageID" id="imageID-id">
+          <select onChange={this.getImageID} name="imageID" id="imageID-id">
             <option value="ami-041114ddee4a98333">Windows</option>
             <option value="ami-009d6802948d06e52">Linux</option>
           </select>
