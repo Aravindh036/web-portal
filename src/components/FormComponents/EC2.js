@@ -101,7 +101,7 @@ export default class EC2 extends Component {
             </select>
             <select onChange={this.getImageID} name="imageID" id="imageID-id">
               <option value="ami-041114ddee4a98333">Windows</option>
-              <option value="ami-009d6802948d06e52">Linux</option>
+              <option value="ami-e24b7d9d">Linux</option>
             </select>
             <input type="text" placeholder="SubnetName" id="ec2-subnet-id" onBlur={this.getSubnetName}/>
             <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} />
@@ -125,7 +125,7 @@ export default class EC2 extends Component {
           </select>
           <select onChange={this.getImageID} name="imageID" id="imageID-id">
             <option value="ami-041114ddee4a98333">Windows</option>
-            <option value="ami-009d6802948d06e52">Linux</option>
+            <option value="ami-ami-e24b7d9d">Linux</option>
           </select>
           <input type="text" placeholder="SubnetName" id="ec2-subnet-id" onBlur={this.getSubnetName}/>
           <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} />
