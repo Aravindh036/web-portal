@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './FormComponents.css';
 export default class Subnet extends Component {
   state={
+    name:"",
     CidrBlock:"",
     SubnetType:false,
     VpcId:""
@@ -21,6 +22,11 @@ export default class Subnet extends Component {
       VpcId:e.target.value
     });
   }
+  getName=(e)=>{
+    this.setState({
+      name:e.target.value
+    });
+  }
   saveForm = () => {
     console.log("hello");
     if ((this.state.CidrBlock !== "") && (this.state.VpcId !== "")) {
@@ -38,6 +44,7 @@ export default class Subnet extends Component {
       document.getElementById("private-subnet-form-id").classList.toggle("hide");
       document.getElementById("cidr-block-id").value = "";
       document.getElementById("subnet-vpc-id").value = "";
+      document.getElementById("subnet-name-id").value = "";
     }
   }
   render() {
@@ -46,6 +53,7 @@ export default class Subnet extends Component {
     return (
       <div className="ec2-form hide" id="private-subnet-form-id">
         <div className="form-elements">
+            <input type="text" placeholder="SubnetName" id="subnet-name-id" onBlur={this.getName} />
             <input onBlur={this.getCidrBlock} type="text" placeholder="CidrBlock" id="cidr-block-id"/>
             <select onChange={this.getSubnetType} name="SubnetType" id="subnet-type-id">
               <option value="false">Public</option>
