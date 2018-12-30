@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import './Parser.modules.css';
 
 import Json from './Json';
-import Xaml from './Xaml';
+import Yaml from './Yaml';
 class Parser extends Component {
     state = {
-        content: "json"
+        content: "json",
     }
     selectJson = (e) => {
         if (this.state.content === "json")
@@ -36,7 +36,7 @@ class Parser extends Component {
             content = <Json />;
         }
         else {
-            content = <Xaml />;
+            content = <Yaml yaml={this.props.yaml}/>;
         }
         return (
             <div className="parser-nav">
@@ -45,7 +45,7 @@ class Parser extends Component {
                         JSON
                     </div>
                     <div id="xaml-id" className="xaml" onClick={this.selectXaml}>
-                        XAML
+                        YAML
                     </div>
                 </nav>
                 <div className="parser-container">

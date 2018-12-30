@@ -76,7 +76,7 @@ export default class EC2 extends Component {
     if (id === "ec2-form-id") {
       var store = this.props.store(), selected;
       var selectedID = this.props.getSelected();
-      console.log(store);
+      console.log("store array: ",store);
       for (var i = 0; i <= store.length - 1; i++) {
         if (store[i].id === selectedID) {
           console.log("hhhh");
@@ -84,6 +84,31 @@ export default class EC2 extends Component {
         }
         console.log("selected", selected);
       }
+    }
+    if(store.properties===undefined){
+      return (
+        <div className="ec2-form hide" id="ec2-form-id">
+          <div className="form-elements">
+            <input id="ec2-name-id" type="text" placeholder="Name" onBlur={this.getName}  />
+            <input id="availability-id" type="text" placeholder="AvailabilityZone" onBlur={this.getAvailabilityZone} />
+            <input id="keyname-id" type="text" placeholder="KeyName" onBlur={this.getKeyName} />
+            <select onChange={this.getInstanceType} name="instanceType" id="instanceType-id">
+              <option value="t2.nano">t2.nano</option>
+              <option value="t2.micro">t2.micro</option>
+              <option value="t2.small">t2.small</option>
+              <option value="t2.medium">t2.medium</option>
+              <option value="t2.large">t2.large</option>
+            </select>
+            <select onChange={this.getImageID} name="imageID" id="imageID-id">
+              <option value="ami-041114ddee4a98333">Windows</option>
+              <option value="ami-009d6802948d06e52">Linux</option>
+            </select>
+            <input type="text" placeholder="SubnetName" id="ec2-subnet-id" onBlur={this.getSubnetName}/>
+            <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} />
+          </div>
+          <button onClick={this.saveForm}>Save</button>
+        </div>
+      )
     }
     return (
       <div className="ec2-form hide" id="ec2-form-id">

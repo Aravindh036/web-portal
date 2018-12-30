@@ -12,3 +12,13 @@
     color: rgb(119, 117, 117);
     cursor: pointer;
 }
+
+.parser-container{
+    white-space: pre-wrap;
+}
+
+.yaml-container, .json-container{
+    padding: 20px;
+    margin: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.144);
+}
