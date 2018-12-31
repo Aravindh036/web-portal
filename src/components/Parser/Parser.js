@@ -33,19 +33,19 @@ class Parser extends Component {
     render() {
         var content;
         if (this.state.content === "json") {
-            content = <Json />;
+            content = <Yaml yaml={this.props.yaml}/>;
         }
         else {
-            content = <Yaml yaml={this.props.yaml}/>;
+            content = <Json json={this.props.json} />;
         }
         return (
             <div className="parser-nav">
                 <nav className="json-xaml">
                     <div id="json-id" className="json json-selected" onClick={this.selectJson}>
-                        JSON
+                        YAML
                     </div>
                     <div id="xaml-id" className="xaml" onClick={this.selectXaml}>
-                        YAML
+                        JSON
                     </div>
                 </nav>
                 <div className="parser-container">

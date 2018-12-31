@@ -64,7 +64,6 @@ export default class EC2 extends Component {
       document.getElementById("availability-id").value = ""; 
       document.getElementById("ec2-subnet-id").value = "";
       document.getElementById("security-groups-id").value = ""; 
-
     }
   }
   render() {

@@ -9,13 +9,15 @@ import Subnet from './FormComponents/Subnet';
 import SecurityGroup from './FormComponents/SecurityGroup';
 import DatabaseServer from './FormComponents/DatabaseServer';
 import deploy from './YAMLParser';
+import CloudWatch from './FormComponents/CloudWatch';
 var count = [];
 
 export default class Home extends Component {
   state = {
     active: null,
     id: null,
-    yaml:"Deploy to get the json"
+    yaml:"Deploy to get the yaml",
+    json:"Deploy to get the json",
   }
   deploy=()=>{
     var yaml = deploy(count);
@@ -88,6 +90,14 @@ export default class Home extends Component {
     })
     document.getElementById("security-group-form-id").classList.toggle("hide");
   }
+  CloudWatch = (e)=>{
+    console.log("helllo");
+    this.setState({
+      active: "cloud-watch-form-id",
+      id: e.target.id
+    })
+    document.getElementById("cloud-watch-form-id").classList.toggle("hide"); 
+  }
   saveMyStore(store) {
     count = store;
     console.log("updated store", JSON.stringify(count));
@@ -146,6 +156,10 @@ export default class Home extends Component {
           clone.ondblclick = this.SecurityGroup;
           clone.onclick = this.selectElement;
         }
+        else if (clone.id === "cloud-watch") {
+          clone.ondblclick = this.CloudWatch;
+          clone.onclick = this.selectElement;
+        }
         const id = clone.id;
         clone.id = clone.id + "" + Math.random();
         clone.style.position = 'absolute';
@@ -176,7 +190,7 @@ export default class Home extends Component {
     // })
     return (
       <div className="home-container" >
-        <nav className="home-nav" onClick={this.dismiss}>
+        <nav className="home-nav">
           <span>Capsule Corp</span>
           <button className="deploy-button" onClick={this.deploy} >Deploy</button>
         </nav>
@@ -186,13 +200,14 @@ export default class Home extends Component {
           </div>
         </div>
         <div>
-          <Parser yaml={this.state.yaml}/>
+          <Parser yaml={this.state.yaml} json={this.state.json} />
         </div>
         {this.state.active !== null ? <Subnet saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
         {this.state.active !== null ? <DatabaseServer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
         {this.state.active !== null ? <SecurityGroup saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
         {this.state.active !== null ? <EC2 saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
         {this.state.active !== null ? <LoadBalancer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
+        {this.state.active !== null ? <CloudWatch saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
       </div>
     )
   }

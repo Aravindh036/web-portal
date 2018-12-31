@@ -19,15 +19,19 @@ const generate = {
     'instance': (obj) => {
         yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Instance\n${tab}${tab}Properties:\n${tab}${tab}${tab}ImageId: ${obj.properties.ImageID}\n${tab}${tab}${tab}AvailabilityZone: ${obj.properties.AvailabilityZone}\n${tab}${tab}${tab}KeyName: ${obj.properties.KeyName}\n${tab}${tab}${tab}InstanceType: ${obj.properties.InstanceType}\n${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.SubnetName}\n${tab}${tab}${tab}SecurityGroups: !Ref ${obj.properties.SecurityGroup}\n`
         // console.log(obj);
-        if(obj.properties.ImageID=="ami-e24b7d9d"){
+        if(obj.properties.ImageID==="ami-e24b7d9d"){
             yaml+=`${tab}${tab}${tab}UserData:\n${tab}${tab}${tab}${tab}Fn::Base64: !Sub |\n${tab}${tab}${tab}${tab}${tab}sudo su\n${tab}${tab}${tab}${tab}${tab}yum install httpd -y\n${tab}${tab}${tab}${tab}${tab}systemctl enable httpd\n${tab}${tab}${tab}${tab}${tab}systemctl start httpd\n${tab}`
         }
     },
+    'cloud-watch':(obj)=>{
+        yaml+=`SNSTopic:\n${tab}${tab}Type: AWS::SNS::Topic\n${tab}${tab}Properties:\n${tab}${tab}${tab}DisplayName: SampleSNS\n${tab}${tab}${tab}TopicName: SampleSNS\n${tab}${tab}${tab}Subscription:\n${tab}${tab}${tab}${tab}- Endpoint: ${obj.properties.Email}\n${tab}${tab}${tab}${tab}  Protocol: email\n${tab}`
+        yaml+=`${obj.properties.name}:\n${tab}${tab}Type: AWS::CloudWatch::Alarm\n${tab}${tab}Properties:\n${tab}${tab}${tab}AlarmDescription: CPU alarm for my instance\n${tab}${tab}${tab}AlarmActions:\n${tab}${tab}${tab}${tab}- Ref: SNSTopic\n${tab}${tab}${tab}MetricName: CPUUtilization\n${tab}${tab}${tab}Namespace: AWS/EC2\n${tab}${tab}${tab}Statistic: Average\n${tab}${tab}${tab}Period: ${obj.properties.Period}\n${tab}${tab}${tab}DatapointsToAlarm: 2\n${tab}${tab}${tab}EvaluationPeriods: ${obj.properties.EvaluationPeriods}\n${tab}${tab}${tab}Threshold: ${obj.properties.Threshold}\n${tab}${tab}${tab}ComparisonOperator: GreaterThanThreshold\n${tab}${tab}${tab}Dimensions:\n${tab}${tab}${tab}${tab}- Name: !Ref ${obj.properties.InstanceName}\n${tab}${tab}${tab}${tab}  Value:\n${tab}${tab}${tab}${tab}  ${tab}Ref: ${obj.properties.InstanceName}\n${tab}`;
+    }
 }
 
-yaml = `AWSTemplateFormatVersion: 2010-09-09\nDescription: Ec2 block device mapping\nResources:\n${tab}`;
 
 export default function deploy(sample) {
+yaml = `AWSTemplateFormatVersion: 2010-09-09\nDescription: Ec2 block device mapping\nResources:\n${tab}`;
     for (let i in sample) {
         generate[sample[i].serviceName](sample[i]);
     }

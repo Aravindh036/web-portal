@@ -12,11 +12,13 @@
 
 .home-nav button{
     margin-right: 20px;
-    padding: 3px 10px;
-    border: 1px solid #000;
+    padding: 5px 15px;
     border-radius: 3px;
+    border: 0;
     cursor: pointer;
-    background-color: #F5F5F5;
+    background-color: #A2A2A2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.195);
+    color: #fff;
 }
 
 .home-nav span{
