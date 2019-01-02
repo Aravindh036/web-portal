@@ -6,7 +6,7 @@ export default class DatabaseServer extends Component {
     VPCSecurityGroups: "",
     AllocatedStorage: "",
     DBInstanceClass: "db.t2.micro",
-    Engine: "",
+    Engine: "MySQL",
     MasterUsername: "",
     MasterUserPassword: ""
   }
@@ -87,11 +87,18 @@ export default class DatabaseServer extends Component {
             <option value="db.t2.large">db.t2.large</option>
             <option value="db.t2.xlarge">db.t2.xlarge</option>
           </select>
-          <input onBlur={this.getEngine} type="text" placeholder="Engine" id="engine-id" />
+          {/* <input onBlur={this.getEngine} type="text" placeholder="Engine" id="engine-id" /> */}
+          <select name="engine" id="engine-id" onChange={this.getEngine} >
+            <option value="MySQL">MySQL</option>
+            <option value="MariaDB">MariaDB</option>
+            <option value="PostgreSQL">PostgreSQL</option>
+            <option value="Oracle">Oracle</option>
+            <option value="SQL Server">SQL Server</option>
+          </select>
           <input onBlur={this.getMasterUsername} type="text" placeholder="MasterUsername" id="master-username-id" />
           <input onBlur={this.getMasterUserPassword} type="password" id="master-password-id" placeholder="MasterUserPassword" />
         </div>
-        <button onClick={this.saveForm}>button</button>
+        <button onClick={this.saveForm}>Save</button>
       </div>
     )
   }

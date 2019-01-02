@@ -22,6 +22,9 @@ const generate = {
         if(obj.properties.ImageID==="ami-e24b7d9d"){
             yaml+=`${tab}${tab}${tab}UserData:\n${tab}${tab}${tab}${tab}Fn::Base64: !Sub |\n${tab}${tab}${tab}${tab}${tab}sudo su\n${tab}${tab}${tab}${tab}${tab}yum install httpd -y\n${tab}${tab}${tab}${tab}${tab}systemctl enable httpd\n${tab}${tab}${tab}${tab}${tab}systemctl start httpd\n${tab}`
         }
+        else{
+            yaml+=`${tab}`;
+        }
     },
     'cloud-watch':(obj)=>{
         yaml+=`SNSTopic:\n${tab}${tab}Type: AWS::SNS::Topic\n${tab}${tab}Properties:\n${tab}${tab}${tab}DisplayName: SampleSNS\n${tab}${tab}${tab}TopicName: SampleSNS\n${tab}${tab}${tab}Subscription:\n${tab}${tab}${tab}${tab}- Endpoint: ${obj.properties.Email}\n${tab}${tab}${tab}${tab}  Protocol: email\n${tab}`

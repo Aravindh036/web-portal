@@ -23,6 +23,19 @@ export default class Home extends Component {
     var yaml = deploy(count);
     this.setState({
       yaml:yaml
+    },()=>{
+        var request = new Request("http://localhost:5000/deploy",{
+          method:"POST",
+          body:JSON.stringify({"yaml":this.state.yaml}),
+          headers: new Headers({"Content-Type":"application/json"})
+        });
+        fetch(request)
+        .then(res=>{
+          console.log(res);
+        })
+        .catch(e=>{
+          console.log(e);
+        })
     });
   }
   currentComponent = () => {

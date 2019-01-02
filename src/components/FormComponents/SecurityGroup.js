@@ -50,7 +50,7 @@ export default class SecurityGroup extends Component {
             <input type="text"placeholder="GroupDescription" id="group-description-id" onBlur={this.getGroupDescription} />
             <input type="text" placeholder="VpcId" id="vpc-id" onBlur={this.getVpcId} />
         </div>
-        <button onClick={this.saveForm}>button</button>
+        <button onClick={this.saveForm}>Save</button>
       </div>
     )
   }
