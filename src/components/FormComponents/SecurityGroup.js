@@ -4,6 +4,7 @@ export default class SecurityGroup extends Component {
   state={
     GroupName:"",
     GroupDescription:"",
+    Port:""
     // VpcId:""
   }
   getGroupName = (e)=>{
@@ -16,13 +17,18 @@ export default class SecurityGroup extends Component {
       GroupDescription:e.target.value
     });
   }
+  getPort=(e)=>{
+    this.setState({
+      Port:e.target.value
+    });
+  }
   // getVpcId = (e)=>{
   //   this.setState({
   //     VpcId:e.target.value
   //   });
   // }
   saveForm = () => {
-    if ((this.state.GroupName !== "") && (this.state.GroupDescription !== "") && (this.state.VpcId !== "")) {
+    if ((this.state.GroupName !== "") && (this.state.GroupDescription !== "") ) {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
@@ -49,6 +55,7 @@ export default class SecurityGroup extends Component {
             <input type="text" placeholder="GroupName" id="groupname-id" onBlur={this.getGroupName} />
             <input type="text"placeholder="GroupDescription" id="group-description-id" onBlur={this.getGroupDescription} />
             {/* <input type="text" placeholder="VpcId" id="vpc-id" onBlur={this.getVpcId} /> */}
+            <input type="text" placeholder="Port(s)" id="port-id" onBlur={this.getPort}/>
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>

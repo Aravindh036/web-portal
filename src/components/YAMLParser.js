@@ -1,7 +1,13 @@
 let yaml, tab = "   ", tab1 = "  ";
 const generate = {
     'security-group': (obj) => {
-        yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}`
+        var ports = [];
+        ports = obj.properties.Port.split(",");
+        console.log(ports);
+        yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}SecurityGroupIngress:\n`
+        for(var i in ports){
+            yaml+=`${tab}${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0\n${tab}${tab}${tab}${tab}${tab}FromPort: ${ports[i]}\n${tab}${tab}${tab}${tab}${tab}IpProtocol: tcp\n${tab}${tab}${tab}${tab}${tab}ToPort: ${ports[i]}\n`
+        }
         // console.log(obj);
     },
     'database-server': (obj) => {
