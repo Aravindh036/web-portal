@@ -8,7 +8,8 @@ export default class EC2 extends Component {
     InstanceType:"t2.nano",
     ImageID:"ami-041114ddee4a98333",
     SubnetName:"",
-    SecurityGroup:""
+    SecurityGroup:"",
+    Backup:false
   }
   getName = (e) => {
     this.setState({
@@ -44,6 +45,12 @@ export default class EC2 extends Component {
     this.setState({
       SecurityGroup: e.target.value
     });
+  }
+  getBackup=(e)=>{
+    this.setState({
+      Backup: ! this.state.Backup
+    });
+    console.log(this.state.Backup);
   }
   saveForm = () => {
     if ((this.state.name !== "") && (this.state.AvailabilityZone !== "") && (this.state.KeyName !== "")) {
@@ -102,6 +109,15 @@ export default class EC2 extends Component {
               <option value="ami-041114ddee4a98333">Windows</option>
               <option value="ami-e24b7d9d">Linux</option>
             </select>
+            <div className="automatic-shutdown">
+              <div class="conatiner">
+                <label for="checkbox" class="switch">
+                  <input type="checkbox" id="checkbox" onChange={this.getBackup}/>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            <label>Automatic Shutdown</label>
+            </div>
             <input type="text" placeholder="SubnetName" id="ec2-subnet-id" onBlur={this.getSubnetName}/>
             <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} />
           </div>

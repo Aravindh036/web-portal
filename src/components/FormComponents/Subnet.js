@@ -5,7 +5,7 @@ export default class Subnet extends Component {
     name:"",
     CidrBlock:"",
     SubnetType:false,
-    VpcId:""
+    // VpcId:""
   }
   getCidrBlock=(e)=>{
     this.setState({
@@ -17,11 +17,11 @@ export default class Subnet extends Component {
       SubnetType:e.target.value
     });
   }
-  getVpcId=(e)=>{
-    this.setState({
-      VpcId:e.target.value
-    });
-  }
+  // getVpcId=(e)=>{
+  //   this.setState({
+  //     VpcId:e.target.value
+  //   });
+  // }
   getName=(e)=>{
     this.setState({
       name:e.target.value
@@ -29,7 +29,7 @@ export default class Subnet extends Component {
   }
   saveForm = () => {
     console.log("hello");
-    if ((this.state.CidrBlock !== "") && (this.state.VpcId !== "")) {
+    if ((this.state.CidrBlock !== "")) {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
@@ -43,7 +43,7 @@ export default class Subnet extends Component {
       this.props.saveMyStore(store);
       document.getElementById("private-subnet-form-id").classList.toggle("hide");
       document.getElementById("cidr-block-id").value = "";
-      document.getElementById("subnet-vpc-id").value = "";
+      // document.getElementById("subnet-vpc-id").value = "";
       document.getElementById("subnet-name-id").value = "";
     }
   }
@@ -59,7 +59,7 @@ export default class Subnet extends Component {
               <option value="false">Public</option>
               <option value="true">Private</option>
             </select>
-            <input onBlur={this.getVpcId} type="text" placeholder="VpcId" id="subnet-vpc-id"/>
+            {/* <input onBlur={this.getVpcId} type="text" placeholder="VpcId" id="subnet-vpc-id"/> */}
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>
