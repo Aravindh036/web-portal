@@ -4,7 +4,7 @@ export default class SecurityGroup extends Component {
   state={
     GroupName:"",
     GroupDescription:"",
-    VpcId:""
+    // VpcId:""
   }
   getGroupName = (e)=>{
     this.setState({
@@ -16,11 +16,11 @@ export default class SecurityGroup extends Component {
       GroupDescription:e.target.value
     });
   }
-  getVpcId = (e)=>{
-    this.setState({
-      VpcId:e.target.value
-    });
-  }
+  // getVpcId = (e)=>{
+  //   this.setState({
+  //     VpcId:e.target.value
+  //   });
+  // }
   saveForm = () => {
     if ((this.state.GroupName !== "") && (this.state.GroupDescription !== "") && (this.state.VpcId !== "")) {
       console.log(this.state);
@@ -37,7 +37,7 @@ export default class SecurityGroup extends Component {
       document.getElementById("security-group-form-id").classList.toggle("hide");
       document.getElementById("groupname-id").value = "";
       document.getElementById("group-description-id").value = "";
-      document.getElementById("vpc-id").value = "";
+      // document.getElementById("vpc-id").value = "";
     }
   }
   render() {
@@ -48,7 +48,7 @@ export default class SecurityGroup extends Component {
         <div className="form-elements">
             <input type="text" placeholder="GroupName" id="groupname-id" onBlur={this.getGroupName} />
             <input type="text"placeholder="GroupDescription" id="group-description-id" onBlur={this.getGroupDescription} />
-            <input type="text" placeholder="VpcId" id="vpc-id" onBlur={this.getVpcId} />
+            {/* <input type="text" placeholder="VpcId" id="vpc-id" onBlur={this.getVpcId} /> */}
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>

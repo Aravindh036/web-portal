@@ -1,7 +1,7 @@
 let yaml, tab = "   ", tab1 = "  ";
 const generate = {
     'security-group': (obj) => {
-        yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: ${obj.properties.VpcId}\n${tab}`
+        yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}`
         // console.log(obj);
     },
     'database-server': (obj) => {
@@ -45,7 +45,7 @@ let temp = false;
 export default function deploy(sample) {
     yaml = `AWSTemplateFormatVersion: 2010-09-09\nDescription: Ec2 block device mapping\nResources:\n${tab}LambdaExecutionRole:\n${tab}${tab}Type: AWS::IAM::Role\n${tab}${tab}Properties:\n${tab}${tab}${tab}AssumeRolePolicyDocument:\n${tab}${tab}${tab}${tab}Version: '2012-10-17'\n${tab}${tab}${tab}${tab}Statement:\n${tab}${tab}${tab}${tab}- Effect: Allow\n${tab}${tab}${tab}${tab}  Principal:\n${tab}${tab}${tab}${tab}${tab}  Service:\n${tab}${tab}${tab}${tab}${tab}  - lambda.amazonaws.com\n${tab}${tab}${tab}${tab}  Action:\n${tab}${tab}${tab}${tab}  - sts:AssumeRole\n${tab}${tab}${tab}Path: "/"\n${tab}${tab}${tab}Policies:\n${tab}${tab}${tab}- PolicyName: root\n${tab}${tab}${tab}  PolicyDocument:\n${tab}${tab}${tab}${tab}  Version: '2012-10-17'\n${tab}${tab}${tab}${tab}  Statement:\n${tab}${tab}${tab}${tab}  - Effect: Allow\n${tab}${tab}${tab}${tab}    Action:\n${tab}${tab}${tab}${tab}    - "logs:*"\n${tab}${tab}${tab}${tab}    Resource: arn:aws:logs:::*\n${tab}`;
     for (let i in sample) {
-        if ((sample[i].serviceName === "subnet") && (temp === false)) {
+        if (((sample[i].serviceName === "subnet") || (sample[i].serviceName === "security-group")) && (temp === false)) {
             yaml += vpc;
             temp = true;
         }
