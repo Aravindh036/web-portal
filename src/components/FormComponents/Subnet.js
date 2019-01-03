@@ -61,7 +61,7 @@ export default class Subnet extends Component {
             </select>
             <input onBlur={this.getVpcId} type="text" placeholder="VpcId" id="subnet-vpc-id"/>
         </div>
-        <button onClick={this.saveForm}>button</button>
+        <button onClick={this.saveForm}>Save</button>
       </div>
     )
   }

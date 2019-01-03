@@ -99,7 +99,7 @@ export default class LoadBalancer extends Component {
             <input id="security-group-id" type="text" placeholder="SecurityGroups" onBlur={this.getSecurityGroup}/>
             <input id="subnet-name-id" type="text" placeholder="SubnetName" onBlur={this.getSubnetName}/>
         </div>
-        <button onClick={this.saveForm}>button</button>
+        <button onClick={this.saveForm}>Save</button>
       </div>
     )
   }
