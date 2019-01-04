@@ -43,7 +43,7 @@ export default class SecurityGroup extends Component {
       document.getElementById("security-group-form-id").classList.toggle("hide");
       document.getElementById("groupname-id").value = "";
       document.getElementById("group-description-id").value = "";
-      // document.getElementById("vpc-id").value = "";
+      document.getElementById("port-id").value = "";
     }
   }
   render() {

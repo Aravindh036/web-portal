@@ -20,7 +20,7 @@ export default class Home extends Component {
     json:"Deploy to get the json",
   }
   deploy=()=>{
-    var yaml = deploy(count);
+    var yaml = deploy([{"id":"subnet0.11706778980718924","serviceName":"subnet","properties":{"name":"subnet1","CidrBlock":"172.31.0.0/20","SubnetType":false}},{"id":"subnet0.8245752919067497","serviceName":"subnet","properties":{"name":"subnet2","CidrBlock":"172.31.16.0/20","SubnetType":"true"}},{"id":"load-balancer0.05362829721258744","serviceName":"load-balancer","properties":{"InstancePort":"80","LoadBalancerPort":"80","PolicyNames":"","Protocol":"https","LoadBalancerName":"lb","SecurityGroup":"lbgrp","Subnet":"subnet1"}},{"id":"instance0.41395720435820116","serviceName":"instance","properties":{"name":"webserver1","AvailabilityZone":"us-east-1a","KeyName":"windows","InstanceType":"t2.micro","ImageID":"ami-041114ddee4a98333","SubnetName":"subnet1","SecurityGroup":"web1grp","Backup":true}},{"id":"instance0.6227855659915429","serviceName":"instance","properties":{"name":"webserver2","AvailabilityZone":"us-east-1a","KeyName":"windows","InstanceType":"t2.micro","ImageID":"ami-e24b7d9d","SubnetName":"subnet1","SecurityGroup":"wbgrp2","Backup":false}},{"id":"database-server0.760227466020251","serviceName":"database-server","properties":{"DBName":"dbserver","VPCSecurityGroups":"","AllocatedStorage":"10","DBInstanceClass":"db.t2.micro","Engine":"MySQL","MasterUsername":"root","MasterUserPassword":"eniyan007","DBSecurityGroups":"dbgrp"}},{"id":"security-group0.22712235517250856","serviceName":"security-group","properties":{"GroupName":"lbgrp","GroupDescription":"sample","Port":"80,443"}},{"id":"security-group0.00906562568086855","serviceName":"security-group","properties":{"GroupName":"web1grp","GroupDescription":"sample","Port":"80,443,22,3389"}},{"id":"security-group0.2388936306207443","serviceName":"security-group","properties":{"GroupName":"wbgrp2","GroupDescription":"sample","Port":"80,443,22,3389"}},{"id":"security-group0.6053688104790425","serviceName":"security-group","properties":{"GroupName":"dbgrp","GroupDescription":"sample","Port":"22,3389,3306,1403"}},{"id":"cloud-watch0.13543790834419767","serviceName":"cloud-watch","properties":{"name":"alarm","InstanceName":"webserver1","Period":"2","EvaluationPeriods":"500","Threshold":"80","Email":"r.eniyanilavan@gmail.com"}},{"id":"cloud-watch0.25121533502992266","serviceName":"cloud-watch","properties":{"name":"alarm2","InstanceName":"webserver2","Period":"2","EvaluationPeriods":"500","Threshold":"80","Email":"r.eniyanilavan@gmail.com"}}]);
     this.setState({
       yaml:yaml
     },()=>{
@@ -204,7 +204,7 @@ export default class Home extends Component {
     return (
       <div className="home-container" >
         <nav className="home-nav">
-          <span>Capsule Corp</span>
+          <span>Pilvi Automaatori</span>
           <button className="deploy-button" onClick={this.deploy} >Deploy</button>
         </nav>
         <div className="body" >
