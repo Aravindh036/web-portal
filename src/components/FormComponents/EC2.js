@@ -106,8 +106,8 @@ export default class EC2 extends Component {
               <option value="t2.large">t2.large</option>
             </select>
             <select onChange={this.getImageID} name="imageID" id="imageID-id">
-              <option value="ami-041114ddee4a98333">Windows</option>
-              <option value="ami-e24b7d9d">Linux</option>
+              <option value="ami-0df43b4f8a07c7c14">Windows</option>
+              <option value="ami-0f9cf087c1f27d9b1 ">Linux</option>
             </select>
             <div className="automatic-shutdown">
               <div class="conatiner">

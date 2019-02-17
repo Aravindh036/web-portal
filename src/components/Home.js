@@ -8,6 +8,7 @@ import LoadBalancer from './FormComponents/LoadBalancer';
 import Subnet from './FormComponents/Subnet';
 import SecurityGroup from './FormComponents/SecurityGroup';
 import DatabaseServer from './FormComponents/DatabaseServer';
+import DBsubnet from './FormComponents/DBSubnet';
 import deploy from './YAMLParser';
 import CloudWatch from './FormComponents/CloudWatch';
 var count = [],active=null,id=null,selected=null;
@@ -537,6 +538,16 @@ Resources:
     id = e.target.id;
     document.getElementById("cloud-watch-form-id").classList.toggle("hide"); 
   }
+  DBSubnet = (e)=>{
+   console.log("helllo");
+  //  this.setState({
+  //    active: "cloud-watch-form-id",
+  //    id: e.target.id
+  //  })
+   active = "dbsubnet-form-id";
+   id = e.target.id;
+   document.getElementById("dbsubnet-form-id").classList.toggle("hide"); 
+ }
   saveMyStore(store) {
     count = store;
     console.log("updated store", JSON.stringify(count));
@@ -601,6 +612,10 @@ Resources:
           clone.ondblclick = this.CloudWatch;
           clone.onclick = this.selectElement;
         }
+        else if (clone.id === "db-subnet") {
+         clone.ondblclick = this.DBSubnet;
+         clone.onclick = this.selectElement;
+       }
         const id = clone.id;
         clone.id = clone.id + "" + Math.random();
         clone.style.position = 'absolute';
@@ -654,6 +669,7 @@ Resources:
         { <EC2 saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
         { <LoadBalancer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
         { <CloudWatch saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
+        { <DBsubnet saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
       </div>
     )
   }

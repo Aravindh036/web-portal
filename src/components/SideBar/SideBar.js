@@ -15,6 +15,7 @@ export default class SideBar extends Component {
             <div  id="instance" draggable="true">Instance</div>
             <div  id="database-server" draggable="true">Database Server</div>
             <div id="cloud-watch" draggable="true">Cloud Watch</div>
+            <div id="db-subnet" draggable="true">DBSubnet</div>
         </div>
       </div>
     )
