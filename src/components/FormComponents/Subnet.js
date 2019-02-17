@@ -4,7 +4,7 @@ export default class Subnet extends Component {
   state={
     name:"",
     CidrBlock:"",
-    SubnetType:false,
+    SubnetType:true,
     // VpcId:""
   }
   getCidrBlock=(e)=>{
@@ -56,8 +56,8 @@ export default class Subnet extends Component {
             <input type="text" placeholder="SubnetName" id="subnet-name-id" onBlur={this.getName} />
             <input onBlur={this.getCidrBlock} type="text" placeholder="CidrBlock" id="cidr-block-id"/>
             <select onChange={this.getSubnetType} name="SubnetType" id="subnet-type-id">
-              <option value="false">Public</option>
-              <option value="true">Private</option>
+              <option value="true">Public</option>
+              <option value="false">Private</option>
             </select>
             {/* <input onBlur={this.getVpcId} type="text" placeholder="VpcId" id="subnet-vpc-id"/> */}
         </div>

@@ -5,10 +5,10 @@ const generate = {
         ports = obj.properties.Port.split(",");
         console.log(ports);
         yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}SecurityGroupIngress:\n`
-        for(var i in ports){
-            yaml+=`${tab}${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0\n${tab}${tab}${tab}${tab}${tab}FromPort: ${ports[i]}\n${tab}${tab}${tab}${tab}${tab}IpProtocol: tcp\n${tab}${tab}${tab}${tab}${tab}ToPort: ${ports[i]}\n`
+        for (var i in ports) {
+            yaml += `${tab}${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0\n${tab}${tab}${tab}${tab}${tab}FromPort: ${ports[i]}\n${tab}${tab}${tab}${tab}${tab}IpProtocol: tcp\n${tab}${tab}${tab}${tab}${tab}ToPort: ${ports[i]}\n`
         }
-        yaml+=`${tab}`
+        yaml += `${tab}`
         // console.log(obj);
     },
     'database-server': (obj) => {
@@ -16,12 +16,12 @@ const generate = {
         // console.log(obj);
     },
     'load-balancer': (obj) => {
-        yaml += `${obj.properties.LoadBalancerName}:\n${tab}${tab}Type: AWS::ElasticLoadBalancing::LoadBalancer\n${tab}${tab}Properties:\n${tab}${tab}${tab}LoadBalancerName: ${obj.properties.LoadBalancerName}\n${tab}${tab}${tab}Subnets: ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.Subnet}\n${tab}${tab}${tab}SecurityGroups: ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n${tab}${tab}${tab}Listeners:\n${tab}${tab}${tab}-${tab1}LoadBalancerPort: ${obj.properties.LoadBalancerPort}\n${tab}${tab}${tab}${tab}InstancePort: ${obj.properties.InstancePort}\n${tab}${tab}${tab}${tab}Protocol: ${obj.properties.Protocol}\n${tab}`
+        yaml += `${obj.properties.LoadBalancerName}:\n${tab}${tab}Type: AWS::ElasticLoadBalancing::LoadBalancer\n${tab}${tab}Properties:\n${tab}${tab}${tab}LoadBalancerName: ${obj.properties.LoadBalancerName}\n${tab}${tab}${tab}Subnets:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.Subnet}\n${tab}${tab}${tab}SecurityGroups:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n${tab}${tab}${tab}Listeners:\n${tab}${tab}${tab}-${tab1}LoadBalancerPort: ${obj.properties.LoadBalancerPort}\n${tab}${tab}${tab}${tab}InstancePort: ${obj.properties.InstancePort}\n${tab}${tab}${tab}${tab}Protocol: ${obj.properties.Protocol}\n${tab}`
         // console.log(obj);
     },
     'subnet': (obj) => {
-        yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Subnet\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}`
-        // console.log(obj);
+        yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Subnet\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}AvailabilityZone: "us-east-1a"\n${tab}${tab}${tab}MapPublicIpOnLaunch: ${obj.properties.SubnetType}\n${tab}${obj.properties.name}RouteTableAssociation:\n${tab}${tab}Type: AWS::EC2::SubnetRouteTableAssociation\n${tab}${tab}Properties:\n${tab}${tab}${tab}RouteTableId: !Ref RouteTable\n${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.name}\n${tab}`
+        console.log(obj);
     },
     'instance': (obj) => {
         yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Instance\n${tab}${tab}Properties:\n${tab}${tab}${tab}ImageId: ${obj.properties.ImageID}\n${tab}${tab}${tab}AvailabilityZone: ${obj.properties.AvailabilityZone}\n${tab}${tab}${tab}KeyName: ${obj.properties.KeyName}\n${tab}${tab}${tab}InstanceType: ${obj.properties.InstanceType}\n${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.SubnetName}\n${tab}${tab}${tab}SecurityGroups: !Ref ${obj.properties.SecurityGroup}\n`
@@ -31,7 +31,7 @@ const generate = {
         }
         else {
             // yaml += `\n${tab}`;
-            yaml+=`${tab}${tab}${tab}UserData:\n${tab}${tab}${tab}${tab}!Base64 |\n${tab}${tab}${tab}${tab}${tab}<powershell>\n${tab}${tab}${tab}${tab}${tab}Start-Transcript;\n${tab}${tab}${tab}${tab}${tab}Import-Module ServerManager;\n${tab}${tab}${tab}${tab}${tab}Enable-WindowsOptionalFeature -Online -NoRestart -FeatureName 'IIS-WebServerRole', 'IIS-WebServer', 'IIS-ManagementConsole';\n${tab}${tab}${tab}${tab}${tab}</powershell>\n${tab}`;
+            yaml += `${tab}${tab}${tab}UserData:\n${tab}${tab}${tab}${tab}!Base64 |\n${tab}${tab}${tab}${tab}${tab}<powershell>\n${tab}${tab}${tab}${tab}${tab}Start-Transcript;\n${tab}${tab}${tab}${tab}${tab}Import-Module ServerManager;\n${tab}${tab}${tab}${tab}${tab}Enable-WindowsOptionalFeature -Online -NoRestart -FeatureName 'IIS-WebServerRole', 'IIS-WebServer', 'IIS-ManagementConsole';\n${tab}${tab}${tab}${tab}${tab}</powershell>\n${tab}`;
         }
         if (obj.properties.Backup === true) {
             yaml += `LambdaFunctionForStop${obj.properties.name}:\n${tab}${tab}Type: AWS::Lambda::Function\n${tab}${tab}Properties:\n${tab}${tab}${tab}Code:\n${tab}${tab}${tab}${tab}ZipFile: !Sub |\n${tab}${tab}${tab}${tab}${tab}import boto3\n${tab}${tab}${tab}${tab}${tab}def lambda_handler(event,context):\n${tab}${tab}${tab}${tab}${tab}ec2 = boto3.client('ec2', region_name=Region)\n${tab}${tab}${tab}${tab}${tab}ec2.stop_instances(InstanceIds=INSTANCEID)\n${tab}${tab}${tab}Description: Lambda function.\n${tab}${tab}${tab}FunctionName: lambda_function\n${tab}${tab}${tab}Handler: index.lambda_handler\n${tab}${tab}${tab}Role : !GetAtt LambdaExecutionRole.Arn\n${tab}${tab}${tab}Runtime: python2.7\n${tab}${tab}${tab}Timeout: 10\n${tab}${tab}${tab}Environment:\n${tab}${tab}${tab}${tab}Variables:\n${tab}${tab}${tab}${tab}${tab}INSTANCEID: !Ref ${obj.properties.name}\n${tab}${tab}${tab}${tab}${tab}Region:\n${tab}${tab}${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}${tab}${tab}- ${obj.properties.name}\n${tab}${tab}${tab}${tab}${tab}${tab}${tab}- AvailabilityZone\n${tab}`;
@@ -49,13 +49,18 @@ const generate = {
 }
 
 const vpc = `VPC:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: 172.31.0.0/16\n${tab}${tab}${tab}EnableDnsSupport: true\n${tab}${tab}${tab}EnableDnsHostnames: true\n${tab}${tab}${tab}InstanceTenancy: default\n${tab}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}InternetGatewayId: !Ref InternetGateway\n${tab}`;
-let temp = false;
+const routeTableConfig = `RouteTable:\n${tab}${tab}Type: AWS::EC2::RouteTable\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}InternetRoute:\n${tab}${tab}Type: AWS::EC2::Route\n${tab}${tab}DependsOn: VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}DestinationCidrBlock: 0.0.0.0/0\n${tab}${tab}${tab}GatewayId: !Ref InternetGateway\n${tab}${tab}${tab}RouteTableId: !Ref RouteTable\n${tab}`;
+let temp = false, routeTableTemp = false;
 export default function deploy(sample) {
     yaml = `AWSTemplateFormatVersion: 2010-09-09\nDescription: Ec2 block device mapping\nResources:\n${tab}LambdaExecutionRole:\n${tab}${tab}Type: AWS::IAM::Role\n${tab}${tab}Properties:\n${tab}${tab}${tab}AssumeRolePolicyDocument:\n${tab}${tab}${tab}${tab}Version: '2012-10-17'\n${tab}${tab}${tab}${tab}Statement:\n${tab}${tab}${tab}${tab}- Effect: Allow\n${tab}${tab}${tab}${tab}  Principal:\n${tab}${tab}${tab}${tab}${tab}  Service:\n${tab}${tab}${tab}${tab}${tab}  - lambda.amazonaws.com\n${tab}${tab}${tab}${tab}  Action:\n${tab}${tab}${tab}${tab}  - sts:AssumeRole\n${tab}${tab}${tab}Path: "/"\n${tab}${tab}${tab}Policies:\n${tab}${tab}${tab}- PolicyName: root\n${tab}${tab}${tab}  PolicyDocument:\n${tab}${tab}${tab}${tab}  Version: '2012-10-17'\n${tab}${tab}${tab}${tab}  Statement:\n${tab}${tab}${tab}${tab}  - Effect: Allow\n${tab}${tab}${tab}${tab}    Action:\n${tab}${tab}${tab}${tab}    - "logs:*"\n${tab}${tab}${tab}${tab}    Resource: arn:aws:logs:::*\n${tab}`;
     for (let i in sample) {
         if (((sample[i].serviceName === "subnet") || (sample[i].serviceName === "security-group")) && (temp === false)) {
             yaml += vpc;
             temp = true;
+        }
+        if ((sample[i].serviceName === "subnet") && (routeTableTemp !== true)) {
+            yaml += routeTableConfig;
+                routeTableTemp = true;
         }
         generate[sample[i].serviceName](sample[i]);
     }

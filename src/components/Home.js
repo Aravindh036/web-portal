@@ -10,7 +10,7 @@ import SecurityGroup from './FormComponents/SecurityGroup';
 import DatabaseServer from './FormComponents/DatabaseServer';
 import deploy from './YAMLParser';
 import CloudWatch from './FormComponents/CloudWatch';
-var count = [];
+var count = [],active=null,id=null,selected=null;
 
 export default class Home extends Component {
   state = {
@@ -20,7 +20,9 @@ export default class Home extends Component {
     json:"Deploy to get the json",
   }
   deploy=()=>{
-    var yaml = deploy([{"id":"subnet0.11706778980718924","serviceName":"subnet","properties":{"name":"subnet1","CidrBlock":"172.31.0.0/20","SubnetType":false}},{"id":"subnet0.8245752919067497","serviceName":"subnet","properties":{"name":"subnet2","CidrBlock":"172.31.16.0/20","SubnetType":"true"}},{"id":"load-balancer0.05362829721258744","serviceName":"load-balancer","properties":{"InstancePort":"80","LoadBalancerPort":"80","PolicyNames":"","Protocol":"https","LoadBalancerName":"lb","SecurityGroup":"lbgrp","Subnet":"subnet1"}},{"id":"instance0.41395720435820116","serviceName":"instance","properties":{"name":"webserver1","AvailabilityZone":"us-east-1a","KeyName":"windows","InstanceType":"t2.micro","ImageID":"ami-041114ddee4a98333","SubnetName":"subnet1","SecurityGroup":"web1grp","Backup":true}},{"id":"instance0.6227855659915429","serviceName":"instance","properties":{"name":"webserver2","AvailabilityZone":"us-east-1a","KeyName":"windows","InstanceType":"t2.micro","ImageID":"ami-e24b7d9d","SubnetName":"subnet1","SecurityGroup":"wbgrp2","Backup":false}},{"id":"database-server0.760227466020251","serviceName":"database-server","properties":{"DBName":"dbserver","VPCSecurityGroups":"","AllocatedStorage":"10","DBInstanceClass":"db.t2.micro","Engine":"MySQL","MasterUsername":"root","MasterUserPassword":"eniyan007","DBSecurityGroups":"dbgrp"}},{"id":"security-group0.22712235517250856","serviceName":"security-group","properties":{"GroupName":"lbgrp","GroupDescription":"sample","Port":"80,443"}},{"id":"security-group0.00906562568086855","serviceName":"security-group","properties":{"GroupName":"web1grp","GroupDescription":"sample","Port":"80,443,22,3389"}},{"id":"security-group0.2388936306207443","serviceName":"security-group","properties":{"GroupName":"wbgrp2","GroupDescription":"sample","Port":"80,443,22,3389"}},{"id":"security-group0.6053688104790425","serviceName":"security-group","properties":{"GroupName":"dbgrp","GroupDescription":"sample","Port":"22,3389,3306,1403"}},{"id":"cloud-watch0.13543790834419767","serviceName":"cloud-watch","properties":{"name":"alarm","InstanceName":"webserver1","Period":"2","EvaluationPeriods":"500","Threshold":"80","Email":"r.eniyanilavan@gmail.com"}},{"id":"cloud-watch0.25121533502992266","serviceName":"cloud-watch","properties":{"name":"alarm2","InstanceName":"webserver2","Period":"2","EvaluationPeriods":"500","Threshold":"80","Email":"r.eniyanilavan@gmail.com"}}]);
+   //  var yaml = deploy([{"id":"subnet0.11706778980718924","serviceName":"subnet","properties":{"name":"subnet1","CidrBlock":"172.31.0.0/20","SubnetType":false}},{"id":"subnet0.8245752919067497","serviceName":"subnet","properties":{"name":"subnet2","CidrBlock":"172.31.16.0/20","SubnetType":"true"}},{"id":"load-balancer0.05362829721258744","serviceName":"load-balancer","properties":{"InstancePort":"80","LoadBalancerPort":"80","PolicyNames":"","Protocol":"https","LoadBalancerName":"lb","SecurityGroup":"lbgrp","Subnet":"subnet1"}},{"id":"instance0.41395720435820116","serviceName":"instance","properties":{"name":"webserver1","AvailabilityZone":"us-east-1a","KeyName":"windows","InstanceType":"t2.micro","ImageID":"ami-041114ddee4a98333","SubnetName":"subnet1","SecurityGroup":"web1grp","Backup":true}},{"id":"instance0.6227855659915429","serviceName":"instance","properties":{"name":"webserver2","AvailabilityZone":"us-east-1a","KeyName":"windows","InstanceType":"t2.micro","ImageID":"ami-e24b7d9d","SubnetName":"subnet1","SecurityGroup":"wbgrp2","Backup":false}},{"id":"database-server0.760227466020251","serviceName":"database-server","properties":{"DBName":"dbserver","VPCSecurityGroups":"","AllocatedStorage":"10","DBInstanceClass":"db.t2.micro","Engine":"MySQL","MasterUsername":"root","MasterUserPassword":"eniyan007","DBSecurityGroups":"dbgrp"}},{"id":"security-group0.22712235517250856","serviceName":"security-group","properties":{"GroupName":"lbgrp","GroupDescription":"sample","Port":"80,443"}},{"id":"security-group0.00906562568086855","serviceName":"security-group","properties":{"GroupName":"web1grp","GroupDescription":"sample","Port":"80,443,22,3389"}},{"id":"security-group0.2388936306207443","serviceName":"security-group","properties":{"GroupName":"wbgrp2","GroupDescription":"sample","Port":"80,443,22,3389"}},{"id":"security-group0.6053688104790425","serviceName":"security-group","properties":{"GroupName":"dbgrp","GroupDescription":"sample","Port":"22,3389,3306,1403"}},{"id":"cloud-watch0.13543790834419767","serviceName":"cloud-watch","properties":{"name":"alarm","InstanceName":"webserver1","Period":"2","EvaluationPeriods":"500","Threshold":"80","Email":"r.eniyanilavan@gmail.com"}},{"id":"cloud-watch0.25121533502992266","serviceName":"cloud-watch","properties":{"name":"alarm2","InstanceName":"webserver2","Period":"2","EvaluationPeriods":"500","Threshold":"80","Email":"r.eniyanilavan@gmail.com"}}]);
+   console.log(count);
+   var yaml = deploy(count);
     var template = 
 `AWSTemplateFormatVersion: 2010-09-09
 Description: Ec2 block device mapping
@@ -434,7 +436,7 @@ Resources:
     this.setState({
       yaml:yaml
     },()=>{
-        var request = new Request("http://localhost:6000/deploy",{
+        var request = new Request("http://localhost:5000/deploy",{
           method:"POST",
           body:JSON.stringify({"yaml":template}),
           headers: new Headers({"Content-Type":"application/json"})
@@ -449,32 +451,35 @@ Resources:
     });
   }
   currentComponent = () => {
-    return this.state.active;
+    return active;
   }
   getCount = () => {
     console.log("count number: ",count);
     return count;
   }
   getSelected = () => {
-    return this.state.selected;
+    return selected;
   }
   dismiss = () => {
-    if (this.state.active != null) {
-      document.getElementById(this.state.active).classList.toggle("hide");
+    if (active != null) {
+      document.getElementById(active).classList.toggle("hide");
     }
-    console.log("heuhe", this.state.active);
+    console.log("heuhe", active);
   }
   selectElement = (e) => {
-    this.setState({
-      selected: e.target.id
-    })
+   //  this.setState({
+   //    selected: e.target.id
+   //  })
+   selected = e.target.id;
     console.log(e.target.id);
   }
   ec2 = (e) => {
-    this.setState({
-      active: "ec2-form-id",
-      id: e.target.id,
-    })
+   //  this.setState({
+   //    active: "ec2-form-id",
+   //    id: e.target.id,
+   //  })
+    active = "ec2-form-id";
+    id = e.target.id;
     document.getElementById("ec2-form-id").classList.toggle("hide");
     document.getElementById("ec2-name-id").value = "";
     document.getElementById("keyname-id").value = "";
@@ -483,42 +488,53 @@ Resources:
   }
   Subnet = (e) => {
     console.log("helllo");
-    this.setState({
-      active: "private-subnet-form-id",
-      id: e.target.id
-    })
+   //  this.setState({
+   //    active: "private-subnet-form-id",
+   //    id: e.target.id
+   //  })
+    active = "private-subnet-form-id";
+    id = e.target.id;
     document.getElementById("private-subnet-form-id").classList.toggle("hide");
+   console.log(document.getElementById("private-subnet-form-id"));
   }
   LoadBalancer = (e) => {
     console.log("helllo");
-    this.setState({
-      active: "load-balancer-form-id",
-      id: e.target.id
-    })
+   //  this.setState({
+   //    active: "load-balancer-form-id",
+   //    id: e.target.id
+   //  })
+    active = "load-balancer-form-id";
+    id = e.target.id;
     document.getElementById("load-balancer-form-id").classList.toggle("hide");
   }
   DatabaseServer = (e) => {
     console.log("helllo");
-    this.setState({
-      active: "database-server-form-id",
-      id: e.target.id
-    })
+   //  this.setState({
+   //    active: "database-server-form-id",
+   //    id: e.target.id
+   //  })
+    active = "database-server-form-id";
+    id = e.target.id;
     document.getElementById("database-server-form-id").classList.toggle("hide");
   }
   SecurityGroup = (e) => {
     console.log("helllo");
-    this.setState({
-      active: "security-group-form-id",
-      id: e.target.id
-    })
+   //  this.setState({
+   //    active: "security-group-form-id",
+   //    id: e.target.id
+   //  })
+    active = "security-group-form-id";
+    id = e.target.id;
     document.getElementById("security-group-form-id").classList.toggle("hide");
   }
   CloudWatch = (e)=>{
     console.log("helllo");
-    this.setState({
-      active: "cloud-watch-form-id",
-      id: e.target.id
-    })
+   //  this.setState({
+   //    active: "cloud-watch-form-id",
+   //    id: e.target.id
+   //  })
+    active = "cloud-watch-form-id";
+    id = e.target.id;
     document.getElementById("cloud-watch-form-id").classList.toggle("hide"); 
   }
   saveMyStore(store) {
@@ -528,8 +544,8 @@ Resources:
   render() {
     var clone;
     document.addEventListener("keydown", (e) => {
-      if ((e.key === "Delete") && (this.state.selected != null)) {
-        var item = document.getElementById(this.state.selected);
+      if ((e.key === "Delete") && (selected != null)) {
+        var item = document.getElementById(selected);
         console.log(item);
         item.parentNode.removeChild(item);
         this.setState({
@@ -555,11 +571,13 @@ Resources:
         clone = document.getElementById(e.target.id);
       }
       else {
+        console.log("in if");
         clone = e.target.cloneNode(true);
         // e.dataTransfer.setData("widget",clone);
         if (clone.id === "instance") {
           clone.ondblclick = this.ec2;
           clone.onclick = this.selectElement;
+
         }
         else if (clone.id === "database-server") {
           clone.ondblclick = this.DatabaseServer;
@@ -587,7 +605,12 @@ Resources:
         clone.id = clone.id + "" + Math.random();
         clone.style.position = 'absolute';
         clone.style.transition = "all 0.1s ease";
-        document.getElementById("work-space-id").append(clone);
+        if(!e.target.id.includes("0")){
+            document.getElementById("work-space-id").append(clone);
+        }
+        setInterval(1000,()=>{
+           console.log("interval");
+        })
         console.log(clone);
         count.push({
           id: clone.id,
@@ -625,12 +648,12 @@ Resources:
         <div>
           <Parser yaml={this.state.yaml} json={this.state.json} />
         </div>
-        {this.state.active !== null ? <Subnet saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
-        {this.state.active !== null ? <DatabaseServer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
-        {this.state.active !== null ? <SecurityGroup saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
-        {this.state.active !== null ? <EC2 saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
-        {this.state.active !== null ? <LoadBalancer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
-        {this.state.active !== null ? <CloudWatch saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} /> : null}
+        { <Subnet saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
+        { <DatabaseServer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
+        { <SecurityGroup saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
+        { <EC2 saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
+        { <LoadBalancer saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
+        { <CloudWatch saveMyStore={this.saveMyStore} getSelected={this.getSelected} store={this.getCount} currentComponent={this.currentComponent} />}
       </div>
     )
   }
