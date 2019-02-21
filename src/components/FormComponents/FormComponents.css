@@ -46,7 +46,7 @@ select{
     margin: 5px 0;
 }
 
-.automatic-shutdown{
+.automatic-shutdown, .event-log{
     display: flex;
     align-items: center;
     color: rgb(255, 255, 255);
@@ -55,7 +55,7 @@ select{
 
 
 /* custom toggler */
-.switch{
+.switch,  .switch-event{
     position:relative;
     display:inline-block;
     width:60px;
@@ -64,11 +64,11 @@ select{
     transform: scale(0.45);
   }
   
-  .switch input{
+  .switch input, .switch-event input{
     display:none;
   }
   
-  .slider{
+  .slider, .slider-event{
     position:absolute;
     top:0;
     left:0;
@@ -79,7 +79,7 @@ select{
     border-radius:50px;
   }
   
-  .slider:before{
+  .slider:before, .slider-event:before{
     position:absolute;
     content:"";
     height:26px;
@@ -91,10 +91,11 @@ select{
     border-radius:50px;
   }
   
-  input:checked + .slider{
+  input:checked + .slider, input:checked + .slider-event{
     background-color:orangered;
   }
   
-  input:checked + .slider:before{
+  input:checked + .slider:before, input:checked + .slider-event:before{
     transform:translateX(26px);
   }
+

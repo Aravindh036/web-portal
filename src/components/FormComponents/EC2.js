@@ -9,7 +9,8 @@ export default class EC2 extends Component {
     ImageID:"ami-041114ddee4a98333",
     SubnetName:"",
     SecurityGroup:"",
-    Backup:false
+    Backup:false,
+    EventLog:false,
   }
   getName = (e) => {
     this.setState({
@@ -51,6 +52,11 @@ export default class EC2 extends Component {
       Backup: ! this.state.Backup
     });
     console.log(this.state.Backup);
+  }
+  getEventLog=(e)=>{
+    this.setState({
+      EventLog:!this.state.EventLog
+    });
   }
   saveForm = () => {
     if ((this.state.name !== "") && (this.state.AvailabilityZone !== "") && (this.state.KeyName !== "")) {
@@ -110,13 +116,22 @@ export default class EC2 extends Component {
               <option value="ami-0f9cf087c1f27d9b1 ">Linux</option>
             </select>
             <div className="automatic-shutdown">
-              <div class="conatiner">
-                <label for="checkbox" class="switch">
+              <div className="conatiner">
+                <label className="switch">
                   <input type="checkbox" id="checkbox" onChange={this.getBackup}/>
-                  <span class="slider round"></span>
+                  <span className="slider round"></span>
                 </label>
               </div>
             <label>Automatic Shutdown</label>
+            </div>
+            <div className="event-log">
+              <div className="conatiner-event">
+                <label className="switch-event">
+                  <input type="checkbox" id="checkbox-event"/>
+                  <span className="slider-event round-event"></span>
+                </label>
+              </div>
+              <label>Event Log</label>
             </div>
             <input type="text" placeholder="SubnetName" id="ec2-subnet-id" onBlur={this.getSubnetName}/>
             <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} />
