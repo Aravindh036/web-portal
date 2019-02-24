@@ -1,0 +1,13 @@
+.resource-container .resource-items{
+    padding: 8px 14px;
+}
+
+.resource-container{
+    margin-top: 20px;
+}
+
+.resource-container .resource-items:hover{
+    background-color: #707070;
+    border-radius: 5px;
+    cursor: pointer;
+}

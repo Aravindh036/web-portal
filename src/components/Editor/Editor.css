@@ -1,0 +1,155 @@
+:root{
+    --sidebar:200px;
+  }
+
+  *{
+      box-sizing: border-box;
+  }
+
+  .editor-container{
+      overflow: hidden;
+      background-color: #403D4E;
+  }
+
+.sidebar, .main-container{
+    display: inline-block;
+    height: calc(100vh - 4px);
+    overflow: auto;
+    background-color: #403D4E;
+    color: #fff;
+}
+
+.sidebar{
+   width: var(--sidebar);
+   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26); */
+}
+
+.main-container{
+    width: calc(100% - (var(--sidebar) + 1px));
+
+}
+
+.image-container{
+    display: flex;
+    align-items: flex-end;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+}
+
+.image-container img{
+    width: 60px;
+    margin-right: 10px;
+}
+
+.name span:not(:first-child){
+    font-size: 20px;
+}
+
+.resource-types{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons-container{
+    display: flex;
+    align-items: center;   
+}
+
+.buttons-container .user{
+    width: 60px;
+    border-radius: 50px;
+    margin-left: 30px;
+}
+
+.buttons-container button {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    width: 120px;
+    border-radius: 50px;
+    border: 2px solid #21F9CF;
+    background-color: transparent;
+    color: #21F9CF;
+    margin: 0 10px;
+    transform: scale(0.8);
+}
+
+.deploy{
+    background-color: #25FCCA!important;
+    color: #fff!important;
+}
+
+.buttons-container button:hover{
+    cursor: pointer;
+}
+
+.buttons-container button img{
+    width: 20px;
+}
+
+
+.resource-heading{
+    font-size: 20px;
+    color: #21F9CF;
+    border-bottom: 2px solid #21F9CF;
+    display: inline-block;
+    padding-bottom: 7px;
+}
+
+.nav-container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 80px;
+}
+
+.workflow-code{
+    position: relative;
+}
+
+.workflow-code, .workflow, .code{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.workflow{
+    width: 100px;
+    margin-right: 25px;
+} 
+
+.code{
+    width: 70px;
+}
+
+.under-line{
+    position: absolute;
+    top: 32px;
+    border-bottom: 2px solid #21F9CF;
+    width: 100px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.move-right{
+    transform: translateX(120px);
+    width: 85px;
+}
+
+.workflow-code img{
+    width: 20px;
+}
+
+.work-space, .code-space{
+    background-color: #707070;
+    width: calc(100% - 3px);
+    height: calc(100% - 80px);
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
