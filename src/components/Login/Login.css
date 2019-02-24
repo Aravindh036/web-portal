@@ -1,15 +1,24 @@
 .home-container{
     background-color: #302E3A;
+
 }
 .home-image{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-items: flex-start;
     background-color: #302E3A;
-    float: left;
     height: 100vh;
     overflow: auto;
+    background: url('../../assets/background.png');
+    background-size: 100% 100%;
+    background-color: #302E3A;
+}
+
+.home-image .container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 130px;
 }
 
 .home-image img{
@@ -17,7 +26,7 @@
 }
 
 .form-container{
-    padding: 20px 70px;
+    padding: 20px 35px;
     float: left;
     border-radius: 50px;
     background-color: #403D4E;
@@ -41,20 +50,20 @@
 .under-line-form{
     border-bottom: 4px solid #21F9CF;
     border-radius: 8px;
-    width: 130px;
-    left: 10px;
+    width: 120px;
+    left: 30px;
     position: absolute;
     top: 35px;
     transition: all 0.3s ease;
 }
 
 .move-line-right{
-    left: 160px;
+    left: 220px;
 }
 
 .login-signup-form label {
     color: #21F9CF;
-    font-size: 13px;
+    font-size: 16px;
     margin-top: 30px;
 }
 
@@ -74,7 +83,8 @@
     border: 0;
     border-bottom: 2px solid rgba(229, 250, 247, 0.288);
     width: 100%;
-    padding: 8px 14px;
+    padding: 8px 5px;
+    font-size: 15px;
     color: #fff;
 }
 
@@ -102,4 +112,66 @@
     float: right;
     height: 74.8%;
     margin-right: 0px;
+}
+.bg-image{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 7%;
+    padding-left: 25%;
+    overflow: hidden;
+}
+.bg-image img{
+    height: 80%;
+    width: 150%;
+    transition: all 1.5s;
+}
+
+#gb-workflow{
+    /* margin-left: -250%; */
+}
+
+#gb-code{
+    margin-left: 100%;
+}
+
+.password{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+.password input{
+    width: 90%;
+}
+
+.pass-match{
+    color:red;
+    margin-top: 10px;
+    font-size: 12px;
+    display: none;
+}
+
+.pass-match-display{
+    display: inline;
+}
+
+#singup-success{
+    color:rgb(0, 255, 106);
+    margin-top: 10px;
+    font-size: 15px;
+    display: none;
+}
+
+#lin-wrong{
+    color:red;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.success{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

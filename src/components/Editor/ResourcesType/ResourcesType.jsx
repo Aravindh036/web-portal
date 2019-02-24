@@ -1,19 +1,34 @@
 import React, { Component } from 'react';
 
 import './ResourcesType.css';
+import instance from '../../../assets/instance.png';
 class ResourcesType extends Component {
+    image = document.createElement("img");
+    dragstart = (e)=>{
+        if(e.target.innerHTML === "Instance"){
+            e.dataTransfer.setData("type","instance");
+            e.dataTransfer.setDragImage(this.image,0,0)
+        }
+    }
+    mouseDown = (e)=>{
+        if(e.target.innerHTML === "Instance"){
+            this.image.src = instance;
+            this.image.width = 10;
+            this.image.height = 10;
+        }
+    }
     render() {
         return (
             <div className="resource-container" >
-                <div className="resource-items">Auto Scaling</div>
-                <div className="resource-items">Auto Scaling Batch</div>
-                <div className="resource-items">EC2</div>
-                <div className="resource-items">Subnet</div>
-                <div className="resource-items">Security Group</div>
-                <div className="resource-items">Load Balancer</div>
-                <div className="resource-items">Cloud9</div>
-                <div className="resource-items">Cloud Front</div>
-                <div className="resource-items">S3</div>
+                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Instance</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Auto Scaling Batch</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">EC2</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Subnet</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Security Group</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Load Balancer</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Cloud9</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Cloud Front</div>
+                <div draggable={true} onDragStart={(e)=>this.dragstart(e)} className="resource-items">S3</div>
             </div>
         );
     }

@@ -11,6 +11,7 @@ import user from '../../assets/user.png';
 import ResourcesType from './ResourcesType/ResourcesType';
 
 import './Editor.css';
+import Workspace from './Workspace/Workspace';
 
 
 class Editor extends Component {
@@ -74,7 +75,7 @@ class Editor extends Component {
                             <button className="deploy"> <img src={deploy} alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <div className="work-space">WorkSpace</div> : null}
+                    {this.state.workflow === true ? <Workspace/> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
             </div>

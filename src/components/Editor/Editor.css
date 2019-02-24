@@ -154,5 +154,6 @@
 }
 
 .work-space{
-    background-image: url(../../assets/workspace_bg.png)
+    background-image: url(../../assets/workspace_bg.png);
+    position: relative;
 }
