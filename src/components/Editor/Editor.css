@@ -4,7 +4,6 @@
 
   *{
       box-sizing: border-box;
-      outline: none;
   }
 
   .editor-container{
@@ -13,8 +12,7 @@
   }
 
 .sidebar, .main-container{
-    display: inline-block;
-    height: calc(100vh - 4px);
+    height: calc(100vh);
     overflow: auto;
     background-color: #403D4E;
     color: #fff;
@@ -22,12 +20,12 @@
 
 .sidebar{
    width: var(--sidebar);
-   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.26); */
+   float: left;
+   box-shadow: 3px 0px 6px #00000028;
 }
 
 .main-container{
     width: calc(100% - (var(--sidebar) + 1px));
-
 }
 
 .image-container{
@@ -102,7 +100,8 @@
 
 .nav-container{
     display: flex;
-    justify-content: space-around;
+    padding-left: 10px;
+    justify-content: space-between;
     align-items: center;
     height: 80px;
 }
@@ -146,11 +145,14 @@
 }
 
 .work-space, .code-space{
-    background-color: #707070;
+    background-color: #2C2A37;
     width: calc(100% - 3px);
     height: calc(100% - 80px);
-    border-radius: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.work-space{
+    background-image: url(../../assets/workspace_bg.png)
 }

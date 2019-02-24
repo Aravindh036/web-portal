@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './Login.css';
 
 import logo from '../../assets/logo.png';
+import editor from '../../assets/editor.png';
 
 class Login extends Component {
     state = {
@@ -65,6 +66,9 @@ class Login extends Component {
                                 </div> : null}
                         </div>
                     </div>
+                </div>
+                <div className="editor-image">
+                    <img src={editor} alt="editor"/>
                 </div>
             </div>
         );

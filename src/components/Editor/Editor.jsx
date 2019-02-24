@@ -68,10 +68,10 @@ class Editor extends Component {
                             <div id="under-line-id" className="under-line"></div>
                         </div>
                         <div className="buttons-container">
+                            <button className="save" >Save</button>
                             <button className="upload"> <img src={upload} alt="⬆️" /> Upload</button>
                             <button className="download"> <img src={download} alt="⬇️" /> Download</button>
                             <button className="deploy"> <img src={deploy} alt="🚀" /> Deploy</button>
-                            <button className="save" >Save</button>
                         </div>
                     </nav>
                     {this.state.workflow === true ? <div className="work-space">WorkSpace</div> : null}
