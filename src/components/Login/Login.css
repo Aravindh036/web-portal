@@ -2,11 +2,21 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     background-color: #302E3A;
-
     height: 100vh;
     overflow: auto;
+    background: url('../../assets/background.png');
+    background-size: cover;
+    background-color: #302E3A;
+}
+
+.home-image .container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 130px;
 }
 
 .home-image img{
