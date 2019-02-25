@@ -15,27 +15,28 @@ import Workspace from './Workspace/Workspace';
 
 
 class Editor extends Component {
+    static properties = "null";
     state = {
         workflow: true,
         code: false
     }
-    changeImage=()=>{
+    changeImage = () => {
 
     }
     workflowPressed = (e) => {
-        if(this.state.workflow!==true){
+        if (this.state.workflow !== true) {
             this.setState({
-                workflow:true,
-                code:false
+                workflow: true,
+                code: false
             });
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
     }
     codePressed = (e) => {
-        if(this.state.code!==true){
+        if (this.state.code !== true) {
             this.setState({
-                workflow:false,
-                code:true
+                workflow: false,
+                code: true
             });
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
@@ -78,14 +79,16 @@ class Editor extends Component {
                             <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace/> : null}
+                    {this.state.workflow === true ? <Workspace /> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
-                <div id = "properties" className="properties">
-                    <label className="properties-title">
-                        Properties
-                    </label>
-
+                <div id="properties" className="properties">
+                    <div className="properties-container">
+                        <div className="properties-title">
+                            Properties
+                        </div>
+                        {Editor.properties}
+                    </div>
                 </div>
             </div>
         );
