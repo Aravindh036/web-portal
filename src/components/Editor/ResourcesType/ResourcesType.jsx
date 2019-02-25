@@ -13,8 +13,6 @@ class ResourcesType extends Component {
     mouseDown = (e)=>{
         if(e.target.innerHTML === "Instance"){
             this.image.src = instance;
-            this.image.width = 10;
-            this.image.height = 10;
         }
     }
     render() {

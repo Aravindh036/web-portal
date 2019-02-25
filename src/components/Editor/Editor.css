@@ -67,7 +67,8 @@
     justify-content: space-around;
     align-items: center;
     padding: 10px;
-    width: 120px;
+    width: 150px;
+    font-size: 16px;
     border-radius: 50px;
     border: 2px solid #21F9CF;
     background-color: transparent;
@@ -76,9 +77,21 @@
     transform: scale(0.8);
 }
 
+.buttons-container button:hover{
+    background-color: rgba(255, 255, 255, 0.925);
+    font-size: 14px;
+    color: rgb(9, 133, 108);
+    border: 2px solid rgb(5, 204, 164)
+}
+
 .deploy{
     background-color: #25FCCA!important;
-    color: #fff!important;
+    color: rgb(9, 133, 108)!important;
+}
+
+.deploy:hover{
+    background-color: rgba(255, 255, 255, 0.925)!important;
+    color: rgb(9, 133, 108)!important;
 }
 
 .buttons-container button:hover{
@@ -87,6 +100,15 @@
 
 .buttons-container button img{
     width: 20px;
+}
+.deploy:hover img{
+    width: 20px;
+    display: none;
+}
+
+.deploy:hover::before{
+    width: 20px;
+    content: url(../../assets/deploy-hover.png)
 }
 
 
