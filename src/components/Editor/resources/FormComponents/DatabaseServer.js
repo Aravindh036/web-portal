@@ -11,7 +11,14 @@ export default class DatabaseServer extends Component {
     DBInstanceClass: "db.t2.micro",
     Engine: "MySQL",
     MasterUsername: "",
-    MasterUserPassword: ""
+    MasterUserPassword: "",
+    x:0,
+    y:0
+  }
+  constructor(props){
+    super(props);
+    this.state.x = this.props.x;
+    this.state.y = this.props.y;
   }
   componentDidMount(){
     document.getElementById('drop-head-id').addEventListener('click',()=>{

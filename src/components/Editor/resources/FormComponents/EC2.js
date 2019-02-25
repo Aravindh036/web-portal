@@ -14,6 +14,13 @@ export default class EC2 extends Component {
     SecurityGroup:"",
     Backup:false,
     EventLog:false,
+    x:0,
+    y:0
+  }
+  constructor(props){
+    super(props);
+    this.state.x = this.props.x;
+    this.state.y = this.props.y;
   }
   componentDidMount(){
     document.getElementById('drop-head-id').addEventListener('click',()=>{
@@ -96,7 +103,8 @@ export default class EC2 extends Component {
       document.getElementById("keyname-id").value = "";
       document.getElementById("availability-id").value = ""; 
       document.getElementById("ec2-subnet-id").value = "";
-      document.getElementById("security-groups-id").value = ""; 
+      document.getElementById("security-groups-id").value = "";
+      document.getElementById('properties').style.right = "-314px"; 
     }
   }
   render() {

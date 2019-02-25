@@ -28,27 +28,27 @@ class Editor extends Component {
     state = {
         workflow: true,
         code: false,
-        instance:()=>{
+        instance:(x,y)=>{
             console.log("hello");
-            return <EC2/>
+            return <EC2 x={x} y={y}/>
         },
-        cwatch:()=>{
-            return <CloudWatch/>
+        cwatch:(x,y)=>{
+            return <CloudWatch x={x} y={y}/>
         },
-        dbsubnet:()=>{
-            return <DBSubnet/>
+        dbsubnet:(x,y)=>{
+            return <DBSubnet x={x} y={y}/>
         },
-        dbinstance:()=>{
-            return <DatabaseServer/>
+        dbinstance:(x,y)=>{
+            return <DatabaseServer x={x} y={y}/>
         },
-        lbalancer:()=>{
-            return <LoadBalancer/>
+        lbalancer:(x,y)=>{
+            return <LoadBalancer x={x} y={y}/>
         },
-        sg:()=>{
-            return <SecurityGroup/>
+        sg:(x,y)=>{
+            return <SecurityGroup x={x} y={y}/>
         },
-        subnet:()=>{
-            return <Subnet/>
+        subnet:(x,y)=>{
+            return <Subnet x={x} y={y}/>
         },
     }
     changeImage = () => {
@@ -63,9 +63,9 @@ class Editor extends Component {
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
     }
-    changeProperty = (resource) =>{
+    changeProperty = (resource,x,y) =>{
         console.log(resource);
-        Editor.properties = this.state[resource]();
+        Editor.properties = this.state[resource](x,y);
         console.log(Editor.properties);
         this.forceUpdate();
     }

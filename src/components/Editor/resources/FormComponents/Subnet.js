@@ -7,7 +7,14 @@ export default class Subnet extends Component {
     name: "",
     CidrBlock: "",
     SubnetType: true,
-    // VpcId:""
+    // VpcId:"",
+    x:0,
+    y:0
+  }
+  constructor(props){
+    super(props);
+    this.state.x = this.props.x;
+    this.state.y = this.props.y;
   }
   componentDidMount(){
     document.getElementById('drop-head-id').addEventListener('click',()=>{

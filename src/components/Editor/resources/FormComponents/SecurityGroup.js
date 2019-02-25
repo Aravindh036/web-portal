@@ -7,8 +7,15 @@ export default class SecurityGroup extends Component {
   state={
     GroupName:"",
     GroupDescription:"",
-    Port:""
+    Port:"",
+    x:0,
+    y:0
     // VpcId:""
+  }
+  constructor(props){
+    super(props);
+    this.state.x = this.props.x;
+    this.state.y = this.props.y;
   }
   getGroupName = (e)=>{
     this.setState({

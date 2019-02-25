@@ -8,8 +8,15 @@ export default class DBSubnet extends Component {
     state = {
         name:"",
         description:"",
-        subnetIDs:""
+        subnetIDs:"",
+        x:0,
+        y:0
     }
+    constructor(props){
+        super(props);
+        this.state.x = this.props.x;
+        this.state.y = this.props.y;
+      }
     getName=(e)=>{
         this.setState({
             name:e.target.value

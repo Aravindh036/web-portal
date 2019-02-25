@@ -12,6 +12,13 @@ export default class LoadBalancer extends Component {
     LoadBalancerName:"",
     SecurityGroup:"",
     Subnet:"",
+    x:0,
+    y:0
+  }
+  constructor(props){
+    super(props);
+    this.state.x = this.props.x;
+    this.state.y = this.props.y;
   }
   getInstancePort=(e)=>{
     this.setState({
