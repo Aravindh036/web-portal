@@ -21,6 +21,7 @@ import LoadBalancer from './resources/FormComponents/LoadBalancer';
 import SecurityGroup from './resources/FormComponents/SecurityGroup';
 import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
+import deploy from '../YAMLParser';
 
 var count=[],current_element_id=null;
 class Editor extends Component {
@@ -51,8 +52,12 @@ class Editor extends Component {
             return <Subnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
         },
     }
-    saveStore=()=>{
-        
+    deploy=()=>{
+        var template =deploy(count);
+        console.log(template);
+    }
+    saveStore=(store)=>{
+        count = store;
     }
     store=()=>{
         return count;
@@ -136,7 +141,7 @@ class Editor extends Component {
                             <button className="save" ><img src={save} alt="⬆️" /> </button>
                             <button className="upload"> <img src={upload} alt="⬆️" /> </button>
                             <button className="download"> <img src={download} alt="⬇️" /> </button>
-                            <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
+                            <button className="deploy" onClick={this.deploy} onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
                     {this.state.workflow === true ? <Workspace updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
