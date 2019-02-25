@@ -4,7 +4,7 @@ import dbinstance from '../../../assets/dbserver.png';
 import subnet from '../../../assets/subnet.png';
 import dbsubnet from '../../../assets/dbsubnet.png';
 import cwatch from '../../../assets/cwatch.png';
-import lbalencer from '../../../assets/lbalance.png';
+import lbalancer from '../../../assets/lbalance.png';
 import sg from '../../../assets/sg.png';
 
 
@@ -41,7 +41,8 @@ class Workspace extends Component {
         e.target.style.border = "1px solid rgba(33,249,207,0.5)";
         e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
         document.getElementById("properties").style.right = "0px";
-        console.log("double click");
+        console.log("double click",e.target.className);
+        this.props.changeProperty(e.target.className);   
     }
 
     drop = (e)=>{
@@ -82,8 +83,8 @@ class Workspace extends Component {
             image.setAttribute("title","DB Subnet");
 
         }
-        else if(type === "lbalencer"){
-            image.setAttribute("src",lbalencer);
+        else if(type === "lbalancer"){
+            image.setAttribute("src",lbalancer);
             image.setAttribute("title","Load Balancer");
 
         }
