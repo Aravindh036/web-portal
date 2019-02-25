@@ -49,6 +49,9 @@ export default class EC2 extends Component {
         ImageID:e.target.innerHTML
       });
     })
+    var store = this.props.store();
+    var selectedID = this.props.getSelected();
+    console.log(store,selectedID);
   }
   getName = (e) => {
     this.setState({
@@ -91,12 +94,13 @@ export default class EC2 extends Component {
       // console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
-      for (var i = 0; i <= store.length - 1; i++) {
-        if (store[i].id === selectedID) {
-          console.log("hhhh");
-          store[i].properties = this.state
-        }
-      }
+      // for (var i = 0; i <= store.length - 1; i++) {
+      //   if (store[i].id === selectedID) {
+      //     console.log("hhhh");
+      //     store[i].properties = this.state
+      //   }
+      // }
+      store[selectedID].properties = this.state;
       console.log("inside the save button", store);
       this.props.saveStore(store);
       document.getElementById("ec2-name-id").value = "";

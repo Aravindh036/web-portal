@@ -22,7 +22,7 @@ import SecurityGroup from './resources/FormComponents/SecurityGroup';
 import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 
-var count=[],current_element_id=null;
+var count={},current_element_id=null;
 class Editor extends Component {
     static properties = "null";
     state = {
@@ -68,13 +68,19 @@ class Editor extends Component {
     }
     updateStore=(title,id)=>{
         console.log(title);
-        count.push({
-            id:id,
+        // count.push({
+        //     id:id,
+        //     serviceName:title,
+        //     properties:{
+
+        //     }
+        // })
+        count[id] = {
             serviceName:title,
             properties:{
 
             }
-        })
+        }
         console.log(count);
     }
     workflowPressed = (e) => {
@@ -133,7 +139,7 @@ class Editor extends Component {
                             <div id="under-line-id" className="under-line"></div>
                         </div>
                         <div className="buttons-container">
-                            <button className="save" ><img src={save} alt="⬆️" /> </button>
+                            <button onClick={this.cloud_save} className="save" ><img src={save} alt="⬆️" /> </button>
                             <button className="upload"> <img src={upload} alt="⬆️" /> </button>
                             <button className="download"> <img src={download} alt="⬇️" /> </button>
                             <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
