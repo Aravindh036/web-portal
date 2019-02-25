@@ -15,6 +15,7 @@
     height: calc(100vh);
     overflow: auto;
     display: inline-block;
+    vertical-align: top;
     background-color: #403D4E;
     color: #fff;
 }
@@ -132,6 +133,7 @@
     color: #21F9CF;
     border-bottom: 5px solid #21F9CF;
     display: inline-block;
+    vertical-align: top;
     padding-bottom: 7px;
     width: 200px;
     border-radius: 2px;
@@ -186,7 +188,7 @@
 
 .work-space, .code-space{
     background-color: #2C2A37;
-    width: calc(100% - 314px);
+    width: calc(100% - 3px);
     height: calc(100% - 80px);
     display: flex;
     justify-content: center;
@@ -201,7 +203,7 @@
 .properties{
     position: fixed;
     top: 80px;
-    right: 0;
+    right: -314px;
     width: 314px;
     height: calc(100vh - 80px);
     display: flex;
@@ -209,6 +211,7 @@
     justify-content: center;
     box-shadow: inset 0px 3px 5px rgba(46,52,51,0.78);
     background-color: #403d4e;
+    transition: all 0.2s;
 }
 
 .properties-title{

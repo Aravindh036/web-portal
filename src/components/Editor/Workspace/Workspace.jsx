@@ -16,7 +16,7 @@ class Workspace extends Component {
         if(e.button === 2){
             e.preventDefault();
             var property = document.getElementById("properties");
-            
+            document.getElementById("properties").style.right = "0px";
             return false;
         }
         else if(e.button === 0){
@@ -38,6 +38,9 @@ class Workspace extends Component {
     }
 
     dblclick = (e)=>{
+        e.target.style.border = "1px solid rgba(33,249,207,0.5)";
+        e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
+        document.getElementById("properties").style.right = "0px";
         console.log("double click");
     }
 
@@ -107,7 +110,7 @@ class Workspace extends Component {
     
     render() {
         return (
-            <div id = "workspace" onMouseMove = {(e)=>this.mouseover(e)} onDrop={(e)=>this.drop(e)} onDragOver={(e)=>this.dragOver(e)} className="work-space">
+            <div id = "workspace" onClick={(e)=>document.getElementById("properties").style.right = "-314px"} onMouseMove = {(e)=>this.mouseover(e)} onDrop={(e)=>this.drop(e)} onDragOver={(e)=>this.dragOver(e)} className="work-space">
                 
             </div>
         );
