@@ -8,8 +8,15 @@ export default class DBSubnet extends Component {
     state = {
         name:"",
         description:"",
-        subnetIDs:""
+        subnetIDs:"",
+        x:0,
+        y:0
     }
+    constructor(props){
+        super(props);
+        this.state.x = this.props.x;
+        this.state.y = this.props.y;
+      }
     getName=(e)=>{
         this.setState({
             name:e.target.value
@@ -27,20 +34,22 @@ export default class DBSubnet extends Component {
     }
     saveForm = () => {
         if ((this.state.name !== "") && (this.state.subnetIDs !== "")) {
-        //   var store = this.props.store();
-        //   var selectedID = this.props.getSelected();
-        //   for (var i = 0; i <= store.length - 1; i++) {
-        //     if (store[i].id === selectedID) {
-        //       console.log("hhhh");
-        //       store[i].properties = this.state;
-        //     }
-        //   }
-        //   console.log("inside the save button", store);
-        //   this.props.saveMyStore(store);
+          var store = this.props.store();
+          var selectedID = this.props.getSelected();
+          for (var i = 0; i <= store.length - 1; i++) {
+            if (store[i].id === selectedID) {
+              console.log("hhhh");
+              store[i].properties = this.state;
+            }
+          }
+          console.log("inside the save button", store);
+          this.props.saveStore(store);
           document.getElementById("dbsubnet-name-id").value = "";
           document.getElementById("dbsubnet-id").value = "";
           document.getElementById("dbsubnet-des-id").value = "";
           document.getElementById("dbsubnet-ids").value = "";
+      document.getElementById('properties').style.right = "-314px"; 
+
         }
       }
     render() {

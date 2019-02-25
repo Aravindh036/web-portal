@@ -19,7 +19,7 @@ class Workspace extends Component {
             // e.preventDefault();
             // var property = document.getElementById("properties");
             // property.style.right = "0px";
-            // this.props.changeProperty(e.target.className);
+            // this.props.changeProperty(e.target.className,e.target.offsetLeft,e.target.offsetTop);
             // document.getElementById('workspace').addEventListener("click",this.windowclick,true);
         }
         else if(e.button === 0){
@@ -32,6 +32,7 @@ class Workspace extends Component {
             window.addEventListener("mouseup",this.up);
         }
         console.log(e.target.id);
+        this.props.currentID(e.target.id);
     }
 
     up = (e)=>{
@@ -48,7 +49,7 @@ class Workspace extends Component {
         e.target.style.border = "1px solid rgba(33,249,207,0.5)";
         e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
         document.getElementById("properties").style.right = "0px";
-        this.props.changeProperty(e.target.className);   
+        this.props.changeProperty(e.target.className,e.target.offsetLeft,e.target.offsetTop);   
     }
 
     drop = (e)=>{
@@ -135,7 +136,7 @@ class Workspace extends Component {
     click = (e)=>{
         if(this.down_pos_x === e.pageX && this.down_pos_y === e.pageY){
             this.select_elem = e.target;
-            this.props.changeProperty(e.target.className);
+            this.props.changeProperty(e.target.className,e.target.offsetLeft,e.target.offsetTop);
             e.target.style.border = "1px solid rgba(33,249,207,0.5)";
             e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
             var property = document.getElementById("properties");

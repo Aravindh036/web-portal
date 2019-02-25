@@ -12,6 +12,13 @@ export default class LoadBalancer extends Component {
     LoadBalancerName:"",
     SecurityGroup:"",
     Subnet:"",
+    x:0,
+    y:0
+  }
+  constructor(props){
+    super(props);
+    this.state.x = this.props.x;
+    this.state.y = this.props.y;
   }
   getInstancePort=(e)=>{
     this.setState({
@@ -51,18 +58,18 @@ export default class LoadBalancer extends Component {
   
   saveForm = () => {
     // console.log("gegege",this.state);
-    if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
-      // console.log(this.state);
-      // var store = this.props.store();
-      // var selectedID = this.props.getSelected();
-      // for (var i = 0; i <= store.length - 1; i++) {
-      //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
-      //     store[i].properties = this.state;
-      //   }
-      // }
-      // console.log("inside the save button", store);
-      // this.props.saveMyStore(store);
+    // if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
+      console.log(this.state);
+      var store = this.props.store();
+      var selectedID = this.props.getSelected();
+      for (var i = 0; i <= store.length - 1; i++) {
+        if (store[i].id === selectedID) {
+          console.log("hhhh");
+          store[i].properties = this.state;
+        }
+      }
+      console.log("inside the save button", store);
+      this.props.saveStore(store);
       document.getElementById("instance-port-id").value = "";
       document.getElementById("loadbalancer-port-id").value = "";
       document.getElementById("policyname-id").value = "";
@@ -70,10 +77,12 @@ export default class LoadBalancer extends Component {
       document.getElementById("loadbalancer-name-id").value = "";
       document.getElementById("security-group-id").value = "";
       document.getElementById("subnet-name-id").value = "";
-    }
+      document.getElementById('properties').style.right = "-314px"; 
+
+    // }
   }
   render() {
-    // const id = this.props.currentComponent();
+    // const id = this.props.getSelected();
     // console.log("id",id);
     // if ((id === null) || (id!=="load-balancer-form-id")) {
     //   return <div></div>;

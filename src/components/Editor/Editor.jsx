@@ -22,39 +22,49 @@ import SecurityGroup from './resources/FormComponents/SecurityGroup';
 import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 
-var count=[];
+var count=[],current_element_id=null;
 class Editor extends Component {
     static properties = "null";
     state = {
         workflow: true,
         code: false,
-        instance:()=>{
-            return <EC2 saveStore={this.saveStore} />
+        instance:(x,y)=>{
+            console.log("hello");
+            return <EC2 x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} />
         },
-        cwatch:()=>{
-            return <CloudWatch saveStore={this.saveStore} />
+        cwatch:(x,y)=>{
+            return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}   />
         },
-        dbsubnet:()=>{
-            return <DBSubnet saveStore={this.saveStore} />
+        dbsubnet:(x,y)=>{
+            return <DBSubnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
         },
-        dbinstance:()=>{
-            return <DatabaseServer saveStore={this.saveStore} />
+        dbinstance:(x,y)=>{
+            return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
         },
-        lbalancer:()=>{
-            return <LoadBalancer saveStore={this.saveStore} />
+        lbalancer:(x,y)=>{
+            return <LoadBalancer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
         },
-        sg:()=>{
-            return <SecurityGroup saveStore={this.saveStore} />
+        sg:(x,y)=>{
+            return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
         },
-        subnet:()=>{
-            return <Subnet saveStore={this.saveStore} />
+        subnet:(x,y)=>{
+            return <Subnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
         },
     }
     saveStore=()=>{
         
     }
+    store=()=>{
+        return count;
+    }
     changeImage = () => {
 
+    }
+    currentID=(id)=>{
+        current_element_id = id;
+    }
+    getSelected=()=>{
+        return current_element_id;
     }
     updateStore=(title,id)=>{
         console.log(title);
@@ -76,8 +86,10 @@ class Editor extends Component {
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
     }
-    changeProperty = (resource) =>{
-        Editor.properties = this.state[resource]();
+    changeProperty = (resource,x,y) =>{
+        console.log(resource);
+        Editor.properties = this.state[resource](x,y);
+        console.log(Editor.properties);
         this.forceUpdate();
     }
     codePressed = (e) => {
@@ -127,7 +139,7 @@ class Editor extends Component {
                             <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace updateStore={this.updateStore} changeProperty={this.changeProperty} /> : null}
+                    {this.state.workflow === true ? <Workspace updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
                 {/* <div id="properties" className="properties">

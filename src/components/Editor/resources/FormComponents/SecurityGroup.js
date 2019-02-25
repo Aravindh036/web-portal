@@ -7,8 +7,15 @@ export default class SecurityGroup extends Component {
   state={
     GroupName:"",
     GroupDescription:"",
-    Port:""
+    Port:"",
+    x:0,
+    y:0
     // VpcId:""
+  }
+  constructor(props){
+    super(props);
+    this.state.x = this.props.x;
+    this.state.y = this.props.y;
   }
   getGroupName = (e)=>{
     this.setState({
@@ -33,19 +40,20 @@ export default class SecurityGroup extends Component {
   saveForm = () => {
     if ((this.state.GroupName !== "") && (this.state.GroupDescription !== "") ) {
       console.log(this.state);
-      // var store = this.props.store();
-      // var selectedID = this.props.getSelected();
-      // for (var i = 0; i <= store.length - 1; i++) {
-      //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
-      //     store[i].properties = this.state
-      //   }
-      // }
-      // console.log("inside the save button", store);
-      // this.props.saveMyStore(store);
+      var store = this.props.store();
+      var selectedID = this.props.getSelected();
+      for (var i = 0; i <= store.length - 1; i++) {
+        if (store[i].id === selectedID) {
+          console.log("hhhh");
+          store[i].properties = this.state
+        }
+      }
+      console.log("inside the save button", store);
+      this.props.saveStore(store);
       document.getElementById("groupname-id").value = "";
       document.getElementById("group-description-id").value = "";
       document.getElementById("port-id").value = "";
+      document.getElementById('properties').style.right = "-314px"; 
     }
   }
   render() {
