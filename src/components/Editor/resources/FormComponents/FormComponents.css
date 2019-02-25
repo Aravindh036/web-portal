@@ -3,6 +3,18 @@
     border: 0;
     margin: 10px 0;
     width: 100%;  
+    background-color: #7B7986;
+    border-radius: 4px;
+    color: #AFECE1;
+}
+
+.form-elements input::placeholder{
+  color: #AFECE1;
+}
+
+.form-elements label{
+  color: #21F9CF;
+  font-size: 14px;
 }
 
 .ec2-form{
@@ -12,14 +24,14 @@
 }
 
 .ec2-form button{
-  padding: 11px 35px;
+  padding: 10px 35px;
   border-radius: 8px;
   border: 0;
   color:#403D4E;
   background-color: #25FCCA;
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.178);
-
+  margin-top: 10px;
   cursor: pointer;
 }
 
@@ -32,6 +44,7 @@
 
 /* custom toggler */
 .switch{
+  margin-top: 5px;
     position:relative;
     display:inline-block;
     width:58px;
@@ -85,14 +98,15 @@
   
   .drop-head{
     border-radius:4px;
-    padding: 10px 20px;
+    padding: 5px 10px;
     background-color:#7B7986;
     color: #AFECE1;
     width:200px;
     height: 100%;
     transition: all 0.4s ease;
     cursor: pointer;
-    margin: 3px 0;
+    margin: 10px 0;
+    font-size: 15px;
   }
   
   .drop-down{
@@ -172,3 +186,10 @@
     background-color: rgba(255,255,255,0.15);
   }
 
+
+
+  .automatic-shutdown, .event-log{
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+  }

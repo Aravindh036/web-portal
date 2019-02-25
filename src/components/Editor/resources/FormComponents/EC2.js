@@ -116,7 +116,7 @@ export default class EC2 extends Component {
             </select> */}
             <div className="drop-down-container">
               <div className="drop-head" id="drop-head-id">
-                select one
+                select a Instance Type
               </div>
               <div className="drop-down hide" id="drop-id">
                 <div className="drop-down-item">t2.nano</div>
@@ -132,7 +132,7 @@ export default class EC2 extends Component {
             </select> */}
             <div className="drop-down-container">
               <div className="drop-head" id="drop-head-image">
-                select one
+              Select a Image ID
               </div>
               <div className="drop-down hide" id="drop-image">
                 <div className="drop-down-item">Windows</div>

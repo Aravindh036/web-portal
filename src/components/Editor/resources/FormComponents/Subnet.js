@@ -77,7 +77,7 @@ export default class Subnet extends Component {
             </select> */}
           <div className="drop-down-container">
             <div className="drop-head" id="drop-head-id">
-              select one
+              select a Subnet Type
             </div>
             <div className="drop-down hide" id="drop-id">
               <div className="drop-down-item">Public</div>
