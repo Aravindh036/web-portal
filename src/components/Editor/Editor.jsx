@@ -5,7 +5,7 @@ import setting from '../../assets/settings.png';
 import code from '../../assets/code.png';
 import upload from '../../assets/upload.png';
 import download from '../../assets/download.png';
-import deploy from '../../assets/deploy.png'
+import save from '../../assets/save.png';
 import user from '../../assets/user.png';
 
 import ResourcesType from './ResourcesType/ResourcesType';
@@ -18,6 +18,9 @@ class Editor extends Component {
     state = {
         workflow: true,
         code: false
+    }
+    changeImage=()=>{
+
     }
     workflowPressed = (e) => {
         if(this.state.workflow!==true){
@@ -69,14 +72,20 @@ class Editor extends Component {
                             <div id="under-line-id" className="under-line"></div>
                         </div>
                         <div className="buttons-container">
-                            <button className="save" >Save</button>
-                            <button className="upload"> <img src={upload} alt="⬆️" /> Upload</button>
-                            <button className="download"> <img src={download} alt="⬇️" /> Download</button>
-                            <button className="deploy"> <img src={deploy} alt="🚀" /> Deploy</button>
+                            <button className="save" ><img src={save} alt="⬆️" /> </button>
+                            <button className="upload"> <img src={upload} alt="⬆️" /> </button>
+                            <button className="download"> <img src={download} alt="⬇️" /> </button>
+                            <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
                     {this.state.workflow === true ? <Workspace/> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
+                </div>
+                <div id = "properties" className="properties">
+                    <label className="properties-title">
+                        Properties
+                    </label>
+
                 </div>
             </div>
         );

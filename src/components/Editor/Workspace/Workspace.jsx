@@ -1,40 +1,94 @@
 import React, { Component } from 'react';
 import instance from '../../../assets/instance.png';
+import dbinstance from '../../../assets/dbserver.png';
+import subnet from '../../../assets/subnet.png';
+import dbsubnet from '../../../assets/dbsubnet.png';
+import cwatch from '../../../assets/cwatch.png';
+import lbalencer from '../../../assets/lbalance.png';
+import sg from '../../../assets/sg.png';
+
+
+
 
 class Workspace extends Component {
 
     down = (e)=>{
-        this.drag_elem = e.target;
-        // this.drag_elem.style.border = "1px solid rgba(33,249,207,0.5)";
-        this.drag_elem.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
-        window.addEventListener("mouseup",this.up);
+        if(e.button === 2){
+            e.preventDefault();
+            var property = document.getElementById("properties");
+            
+            return false;
+        }
+        else if(e.button === 0){
+            this.drag_elem = e.target;
+            this.drag_elem.style.border = "1px solid rgba(33,249,207,0.5)";
+            this.drag_elem.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
+            window.addEventListener("mouseup",this.up);
+        }
     }
 
     up = (e)=>{
+        if(!this.drag_elem){
+            return false;
+        }
+        this.drag_elem.style.border = "";
         this.drag_elem.style.boxShadow = "";
         window.addEventListener("mouseup",null);
         this.drag_elem = undefined;
     }
 
+    dblclick = (e)=>{
+        console.log("double click");
+    }
+
     drop = (e)=>{
-        // e.preventDefault();
+        console.log(e.target);
         var type = e.dataTransfer.getData("type");
         var workspace = document.getElementById('workspace');
+        var image = document.createElement("img");
+        image.setAttribute("class",type);
+        image.style.left = e.pageX-workspace.offsetLeft + "px";
+        image.style.top = e.pageY-workspace.offsetTop + "px";
+        image.style.width = "90px"
+        image.style.position = "absolute";
+        image.style.transition = "all 0.02s";
+        image.addEventListener("mousedown",this.down);
+        image.addEventListener("dblclick",this.dblclick);
+        image.draggable = false;
         if(type === "instance"){
-            var image = document.createElement("img");
-            image.setAttribute("class","instance");
             image.setAttribute("src",instance);
-            image.style.left = e.pageX-workspace.offsetLeft + "px";
-            image.style.top = e.pageY-workspace.offsetTop + "px";
-            image.style.width = "40px"
-            image.style.position = "absolute";
-            image.style.transition = "all 0.08s";
-            image.addEventListener("mousedown",this.down);
-            image.addEventListener("mouseup",this.up);
-            // image.addEventListener("dragstart",(e)=>e.preventDefault);
-            image.draggable = false;
-            workspace.appendChild(image);
+            image.setAttribute("title","Instance");
         }
+        else if(type === "dbinstance"){
+            image.setAttribute("src",dbinstance);
+            image.setAttribute("title","DB Instance");
+
+        }
+        else if(type === "cwatch"){
+            image.setAttribute("src",cwatch);
+            image.setAttribute("title","Cloud Watch");
+
+        }
+        else if(type === "subnet"){
+            image.setAttribute("src",subnet);
+            image.setAttribute("title","Subnet");
+
+        }
+        else if(type === "dbsubnet"){
+            image.setAttribute("src",dbsubnet);
+            image.setAttribute("title","DB Subnet");
+
+        }
+        else if(type === "lbalencer"){
+            image.setAttribute("src",lbalencer);
+            image.setAttribute("title","Load Balancer");
+
+        }
+        else if(type === "sg"){
+            image.setAttribute("src",sg);
+            image.setAttribute("title","Security Group");
+        }
+        workspace.appendChild(image);
     }
 
     mouseover = (e)=>{

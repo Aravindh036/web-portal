@@ -1,5 +1,5 @@
 :root{
-    --sidebar:200px;
+    --sidebar:240px;
   }
 
   *{
@@ -14,14 +14,13 @@
 .sidebar, .main-container{
     height: calc(100vh);
     overflow: auto;
+    display: inline-block;
     background-color: #403D4E;
     color: #fff;
 }
 
 .sidebar{
    width: var(--sidebar);
-   float: left;
-   box-shadow: 3px 0px 6px #00000028;
 }
 
 .main-container{
@@ -53,7 +52,7 @@
 
 .buttons-container{
     display: flex;
-    align-items: center;   
+    align-items: center;
 }
 
 .buttons-container .user{
@@ -67,14 +66,15 @@
     justify-content: space-around;
     align-items: center;
     padding: 10px;
-    width: 150px;
+    width: 70px;
     font-size: 16px;
     border-radius: 50px;
-    border: 2px solid #21F9CF;
+    border: 0px solid #21F9CF;
     background-color: transparent;
     color: #21F9CF;
-    margin: 0 10px;
+    /* margin: 0 10px; */
     transform: scale(0.8);
+    transition: all 0.2s;
 }
 
 .buttons-container button:hover{
@@ -86,38 +86,55 @@
 
 .deploy{
     background-color: #25FCCA!important;
-    color: rgb(9, 133, 108)!important;
+    color: #403D4E!important;
+    transition: all 0.2s;
+    width: 120px!important;
+    padding: 12px 10px!important;
 }
 
-.deploy:hover{
-    background-color: rgba(255, 255, 255, 0.925)!important;
-    color: rgb(9, 133, 108)!important;
-}
-
-.buttons-container button:hover{
-    cursor: pointer;
+.deploy:hover, .upload:hover, .save:hover, .download:hover{
+    background-color: transparent!important;
+    color: white!important;
+    width: 140px;
 }
 
 .buttons-container button img{
     width: 20px;
 }
+
+.deploy img{
+    content: url(../../assets/deploy.png);
+}
+
 .deploy:hover img{
-    width: 20px;
-    display: none;
+    content: url(../../assets/deploy-hover.png);
+
 }
 
-.deploy:hover::before{
-    width: 20px;
-    content: url(../../assets/deploy-hover.png)
+.save img{
+    width: 30px!important;
 }
 
+.upload:hover::after{
+    content: "Upload"
+}
+
+.download:hover::after{
+    content: "Download"
+}
+
+.save:hover::after{
+    content: "Save"
+}
 
 .resource-heading{
-    font-size: 20px;
+    font-size: 22px;
     color: #21F9CF;
-    border-bottom: 2px solid #21F9CF;
+    border-bottom: 5px solid #21F9CF;
     display: inline-block;
     padding-bottom: 7px;
+    width: 200px;
+    border-radius: 2px;
 }
 
 .nav-container{
@@ -125,6 +142,7 @@
     padding-left: 10px;
     justify-content: space-between;
     align-items: center;
+    box-shadow: inset 3px 0px 6px #00000028;
     height: 80px;
 }
 
@@ -168,7 +186,7 @@
 
 .work-space, .code-space{
     background-color: #2C2A37;
-    width: calc(100% - 3px);
+    width: calc(100% - 314px);
     height: calc(100% - 80px);
     display: flex;
     justify-content: center;
@@ -178,4 +196,30 @@
 .work-space{
     background-image: url(../../assets/workspace_bg.png);
     position: relative;
+}
+
+.properties{
+    position: fixed;
+    top: 80px;
+    right: 0;
+    width: 314px;
+    height: calc(100vh - 80px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    box-shadow: inset 0px 3px 5px rgba(46,52,51,0.78);
+    background-color: #403d4e;
+}
+
+.properties-title{
+    height: 44.5px;
+    width: 186px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #21F9CF;
+    margin-top: 10px;
+    font-size: 22px;
+    border-bottom: 5px solid #21F9CF;
+    border-radius: 2px;
 }
