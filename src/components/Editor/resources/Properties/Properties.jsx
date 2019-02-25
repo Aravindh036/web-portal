@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Properties extends Component {
     shouldComponentUpdate(){
-        console.log('jjjjj');
+        // console.log('jjjjj');
         return true;
     }
     render() {

@@ -12,12 +12,12 @@ export default class Subnet extends Component {
   componentDidMount(){
     document.getElementById('drop-head-id').addEventListener('click',()=>{
       document.getElementById('drop-id').classList.toggle('hide');
-      console.log("hhhh");
+      // console.log("hhhh");
     }) ;
     
     document.getElementById('drop-id').addEventListener('click',(e)=>{
       document.getElementById("drop-id").classList.toggle('hide');
-      console.log(e.target.innerHTML);
+      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
         InstanceType:e.target.innerHTML
@@ -45,7 +45,7 @@ export default class Subnet extends Component {
     });
   }
   saveForm = () => {
-    console.log("hello");
+    // console.log("hello");
     if ((this.state.CidrBlock !== "")) {
       // console.log(this.state);
       // var store = this.props.store();

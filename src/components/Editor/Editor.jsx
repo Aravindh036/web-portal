@@ -22,37 +22,50 @@ import SecurityGroup from './resources/FormComponents/SecurityGroup';
 import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 
-
+var count=[];
 class Editor extends Component {
     static properties = "null";
     state = {
         workflow: true,
         code: false,
         instance:()=>{
-            console.log("hello");
-            return <EC2/>
+            return <EC2 saveStore={this.saveStore} />
         },
         cwatch:()=>{
-            return <CloudWatch/>
+            return <CloudWatch saveStore={this.saveStore} />
         },
         dbsubnet:()=>{
-            return <DBSubnet/>
+            return <DBSubnet saveStore={this.saveStore} />
         },
         dbinstance:()=>{
-            return <DatabaseServer/>
+            return <DatabaseServer saveStore={this.saveStore} />
         },
         lbalancer:()=>{
-            return <LoadBalancer/>
+            return <LoadBalancer saveStore={this.saveStore} />
         },
         sg:()=>{
-            return <SecurityGroup/>
+            return <SecurityGroup saveStore={this.saveStore} />
         },
         subnet:()=>{
-            return <Subnet/>
+            return <Subnet saveStore={this.saveStore} />
         },
+    }
+    saveStore=()=>{
+        
     }
     changeImage = () => {
 
+    }
+    updateStore=(title,id)=>{
+        console.log(title);
+        count.push({
+            id:id,
+            serviceName:title,
+            properties:{
+
+            }
+        })
+        console.log(count);
     }
     workflowPressed = (e) => {
         if (this.state.workflow !== true) {
@@ -64,9 +77,7 @@ class Editor extends Component {
         }
     }
     changeProperty = (resource) =>{
-        console.log(resource);
         Editor.properties = this.state[resource]();
-        console.log(Editor.properties);
         this.forceUpdate();
     }
     codePressed = (e) => {
@@ -116,7 +127,7 @@ class Editor extends Component {
                             <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace changeProperty={this.changeProperty} /> : null}
+                    {this.state.workflow === true ? <Workspace updateStore={this.updateStore} changeProperty={this.changeProperty} /> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
                 {/* <div id="properties" className="properties">

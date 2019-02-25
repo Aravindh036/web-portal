@@ -34,7 +34,7 @@ class Login extends Component {
         text.innerHTML = '';
         var email = elements[0].value;
         var pass = elements[1].value;
-        console.log(email,pass);
+        // console.log(email,pass);
         fetch(`http://localhost:2019/login?email=${email}&password=${pass}`,{
             method:"GET",
         })

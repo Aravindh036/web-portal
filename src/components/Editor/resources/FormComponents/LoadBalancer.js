@@ -50,7 +50,7 @@ export default class LoadBalancer extends Component {
   }
   
   saveForm = () => {
-    console.log("gegege",this.state);
+    // console.log("gegege",this.state);
     if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
       // console.log(this.state);
       // var store = this.props.store();

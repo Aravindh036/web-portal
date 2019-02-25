@@ -18,12 +18,12 @@ export default class EC2 extends Component {
   componentDidMount(){
     document.getElementById('drop-head-id').addEventListener('click',()=>{
       document.getElementById('drop-id').classList.toggle('hide');
-      console.log("hhhh");
+      // console.log("hhhh");
     }) ;
     
     document.getElementById('drop-id').addEventListener('click',(e)=>{
       document.getElementById("drop-id").classList.toggle('hide');
-      console.log(e.target.innerHTML);
+      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
         InstanceType:e.target.innerHTML
@@ -31,12 +31,12 @@ export default class EC2 extends Component {
     })  
     document.getElementById('drop-head-image').addEventListener('click',()=>{
       document.getElementById('drop-image').classList.toggle('hide');
-      console.log("hhhh");
+      // console.log("hhhh");
     }) ;
     
     document.getElementById('drop-image').addEventListener('click',(e)=>{
       document.getElementById("drop-image").classList.toggle('hide');
-      console.log(e.target.innerHTML);
+      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-image').innerHTML = e.target.innerHTML;
       this.setState({
         ImageID:e.target.innerHTML
@@ -72,7 +72,7 @@ export default class EC2 extends Component {
     this.setState({
       Backup: ! this.state.Backup
     });
-    console.log(this.state.Backup);
+    // console.log(this.state.Backup);
   }
   getEventLog=(e)=>{
     this.setState({
@@ -81,12 +81,12 @@ export default class EC2 extends Component {
   }
   saveForm = () => {
     if ((this.state.name !== "") && (this.state.AvailabilityZone !== "") && (this.state.KeyName !== "")) {
-      console.log(this.state);
+      // console.log(this.state);
       // var store = this.props.store();
       // var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
+          // console.log("hhhh");
       //     store[i].properties = this.state
       //   }
       // }

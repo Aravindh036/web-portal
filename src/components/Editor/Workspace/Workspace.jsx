@@ -31,6 +31,7 @@ class Workspace extends Component {
             this.drag_elem.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
             window.addEventListener("mouseup",this.up);
         }
+        console.log(e.target.id);
     }
 
     up = (e)=>{
@@ -54,6 +55,7 @@ class Workspace extends Component {
         var type = e.dataTransfer.getData("type");
         var workspace = document.getElementById('workspace');
         var image = document.createElement("img");
+        image.id = type + (Math.random()).toPrecision(4);
         image.setAttribute("class",type);
         image.style.left = e.pageX-workspace.offsetLeft + "px";
         image.style.top = e.pageY-workspace.offsetTop + "px";
@@ -99,6 +101,7 @@ class Workspace extends Component {
             image.setAttribute("title","Security Group");
         }
         workspace.appendChild(image);
+        this.props.updateStore(type,image.id);
     }
 
     mouseover = (e)=>{
@@ -120,7 +123,7 @@ class Workspace extends Component {
     }
 
     windowclick = (e)=>{
-        console.log(e.target);
+        // console.log(e.target);
         this.select_elem.style.border = "";
         this.select_elem.style.boxShadow = "";
         this.select_elem = undefined;

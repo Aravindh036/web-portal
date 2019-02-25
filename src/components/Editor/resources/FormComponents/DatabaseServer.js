@@ -16,12 +16,12 @@ export default class DatabaseServer extends Component {
   componentDidMount(){
     document.getElementById('drop-head-id').addEventListener('click',()=>{
       document.getElementById('drop-id').classList.toggle('hide');
-      console.log("hhhh");
+      // console.log("hhhh");
     }) ;
     
     document.getElementById('drop-id').addEventListener('click',(e)=>{
       document.getElementById("drop-id").classList.toggle('hide');
-      console.log(e.target.innerHTML);
+      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
         InstanceType:e.target.innerHTML
@@ -29,12 +29,12 @@ export default class DatabaseServer extends Component {
     })  
     document.getElementById('drop-head-image').addEventListener('click',()=>{
       document.getElementById('drop-image').classList.toggle('hide');
-      console.log("hhhh");
+      // console.log("hhhh");
     }) ;
     
     document.getElementById('drop-image').addEventListener('click',(e)=>{
       document.getElementById("drop-image").classList.toggle('hide');
-      console.log(e.target.innerHTML);
+      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-image').innerHTML = e.target.innerHTML;
       this.setState({
         ImageID:e.target.innerHTML
@@ -77,7 +77,7 @@ export default class DatabaseServer extends Component {
     })
   }
   getInstance = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
   }
 
   saveForm = () => {

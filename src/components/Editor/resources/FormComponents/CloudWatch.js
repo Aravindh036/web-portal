@@ -42,9 +42,8 @@ export default class CloudWatch extends Component {
         });
     }
     saveForm = () => {
-        console.log("hello");
         if ((this.state.CidrBlock !== "") && (this.state.VpcId !== "")) {
-          console.log(this.state);
+        //   console.log(this.state);
         //   var store = this.props.store();
         //   var selectedID = this.props.getSelected();
         //   for (var i = 0; i <= store.length - 1; i++) {
