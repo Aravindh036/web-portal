@@ -23,7 +23,7 @@ import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 import deploy from '../YAMLParser';
 
-var count=[],current_element_id=null;
+var count=[],current_element_id=null,yaml="Deploy for yaml";
 class Editor extends Component {
     static properties = "null";
     state = {
@@ -53,8 +53,8 @@ class Editor extends Component {
         },
     }
     deploy=()=>{
-        var template =deploy(count);
-        console.log(template);
+        yaml =deploy(count);
+        console.log(yaml);
     }
     saveStore=(store)=>{
         count = store;
@@ -106,6 +106,19 @@ class Editor extends Component {
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
     }
+
+    download=()=>{
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(yaml));
+        element.setAttribute('download', "template.yaml");
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+      
+        element.click();
+      
+        document.body.removeChild(element);
+    }
     render() {
         return (
             <div className="editor-container">
@@ -140,7 +153,7 @@ class Editor extends Component {
                         <div className="buttons-container">
                             <button className="save" ><img src={save} alt="⬆️" /> </button>
                             <button className="upload"> <img src={upload} alt="⬆️" /> </button>
-                            <button className="download"> <img src={download} alt="⬇️" /> </button>
+                            <button className="download" onClick={this.download} > <img src={download} alt="⬇️" /> </button>
                             <button className="deploy" onClick={this.deploy} onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
