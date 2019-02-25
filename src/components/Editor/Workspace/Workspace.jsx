@@ -4,7 +4,7 @@ import dbinstance from '../../../assets/dbserver.png';
 import subnet from '../../../assets/subnet.png';
 import dbsubnet from '../../../assets/dbsubnet.png';
 import cwatch from '../../../assets/cwatch.png';
-import lbalencer from '../../../assets/lbalance.png';
+import lbalancer from '../../../assets/lbalance.png';
 import sg from '../../../assets/sg.png';
 
 
@@ -16,10 +16,11 @@ class Workspace extends Component {
         this.down_pos_x = e.pageX;
         this.down_pos_y = e.pageY;
         if(e.button === 2){
-            e.preventDefault();
-            var property = document.getElementById("properties");
-            property.style.right = "0px";
-            return false;
+            // e.preventDefault();
+            // var property = document.getElementById("properties");
+            // property.style.right = "0px";
+            // this.props.changeProperty(e.target.className);
+            // document.getElementById('workspace').addEventListener("click",this.windowclick,true);
         }
         else if(e.button === 0){
             this.drag_elem = e.target;
@@ -43,7 +44,10 @@ class Workspace extends Component {
     }
 
     dblclick = (e)=>{
-         
+        e.target.style.border = "1px solid rgba(33,249,207,0.5)";
+        e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
+        document.getElementById("properties").style.right = "0px";
+        this.props.changeProperty(e.target.className);   
     }
 
     drop = (e)=>{
@@ -59,6 +63,7 @@ class Workspace extends Component {
         image.addEventListener("mousedown",this.down);
         image.addEventListener("dblclick",this.dblclick);
         image.addEventListener("click",this.click);
+        image.addEventListener('contextmenu', event => event.preventDefault());
         image.draggable = false;
         if(type === "instance"){
             image.setAttribute("src",instance);
@@ -84,8 +89,8 @@ class Workspace extends Component {
             image.setAttribute("title","DB Subnet");
 
         }
-        else if(type === "lbalencer"){
-            image.setAttribute("src",lbalencer);
+        else if(type === "lbalancer"){
+            image.setAttribute("src",lbalancer);
             image.setAttribute("title","Load Balancer");
 
         }
@@ -115,23 +120,24 @@ class Workspace extends Component {
     }
 
     windowclick = (e)=>{
+        console.log(e.target);
         this.select_elem.style.border = "";
         this.select_elem.style.boxShadow = "";
         this.select_elem = undefined;
         var property = document.getElementById("properties");
         property.style.right = "-314px";
-        window.removeEventListener("click",this.windowclick,true);
+        document.getElementById('workspace').removeEventListener("click",this.windowclick,true);
     }
 
     click = (e)=>{
         if(this.down_pos_x === e.pageX && this.down_pos_y === e.pageY){
             this.select_elem = e.target;
+            this.props.changeProperty(e.target.className);
             e.target.style.border = "1px solid rgba(33,249,207,0.5)";
             e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
-            e.preventDefault();
             var property = document.getElementById("properties");
             property.style.right = "0px";
-            window.addEventListener("click",this.windowclick,true);
+            document.getElementById('workspace').addEventListener("click",this.windowclick,true);
         }
     }
     

@@ -13,29 +13,67 @@ import ResourcesType from './ResourcesType/ResourcesType';
 import './Editor.css';
 import Workspace from './Workspace/Workspace';
 
+import EC2 from './resources/FormComponents/EC2';
+import CloudWatch from './resources/FormComponents/CloudWatch';
+import DBSubnet from './resources/FormComponents/DBSubnet';
+import DatabaseServer from './resources/FormComponents/DatabaseServer';
+import LoadBalancer from './resources/FormComponents/LoadBalancer';
+import SecurityGroup from './resources/FormComponents/SecurityGroup';
+import Subnet from './resources/FormComponents/Subnet';
+import Properties from './resources/Properties/Properties';
+
 
 class Editor extends Component {
+    static properties = "null";
     state = {
         workflow: true,
-        code: false
+        code: false,
+        instance:()=>{
+            console.log("hello");
+            return <EC2/>
+        },
+        cwatch:()=>{
+            return <CloudWatch/>
+        },
+        dbsubnet:()=>{
+            return <DBSubnet/>
+        },
+        dbinstance:()=>{
+            return <DatabaseServer/>
+        },
+        lbalancer:()=>{
+            return <LoadBalancer/>
+        },
+        sg:()=>{
+            return <SecurityGroup/>
+        },
+        subnet:()=>{
+            return <Subnet/>
+        },
     }
-    changeImage=()=>{
+    changeImage = () => {
 
     }
     workflowPressed = (e) => {
-        if(this.state.workflow!==true){
+        if (this.state.workflow !== true) {
             this.setState({
-                workflow:true,
-                code:false
+                workflow: true,
+                code: false
             });
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
     }
+    changeProperty = (resource) =>{
+        console.log(resource);
+        Editor.properties = this.state[resource]();
+        console.log(Editor.properties);
+        this.forceUpdate();
+    }
     codePressed = (e) => {
-        if(this.state.code!==true){
+        if (this.state.code !== true) {
             this.setState({
-                workflow:false,
-                code:true
+                workflow: false,
+                code: true
             });
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
@@ -78,15 +116,18 @@ class Editor extends Component {
                             <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace/> : null}
+                    {this.state.workflow === true ? <Workspace changeProperty={this.changeProperty} /> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
-                <div id = "properties" className="properties">
-                    <label className="properties-title">
-                        Properties
-                    </label>
-
-                </div>
+                {/* <div id="properties" className="properties">
+                    <div className="properties-container">
+                        <div className="properties-title">
+                            Properties
+                        </div>
+                        {Editor.properties}
+                    </div>
+                </div> */}
+                <Properties properties={Editor.properties} />
             </div>
         );
     }

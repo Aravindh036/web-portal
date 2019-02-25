@@ -6,7 +6,7 @@ import dbinstance from '../../../assets/dbserver.png';
 import subnet from '../../../assets/subnet.png';
 import dbsubnet from '../../../assets/dbsubnet.png';
 import cwatch from '../../../assets/cwatch.png';
-import lbalencer from '../../../assets/lbalance.png';
+import lbalancer from '../../../assets/lbalance.png';
 import sg from '../../../assets/sg.png';
 class ResourcesType extends Component {
     image = document.createElement("img");
@@ -27,7 +27,7 @@ class ResourcesType extends Component {
             e.dataTransfer.setData("type","dbsubnet");
         }
         else if(e.target.innerHTML === "Load Balancer"){
-            e.dataTransfer.setData("type","lbalencer");
+            e.dataTransfer.setData("type","lbalancer");
         }
         else if(e.target.innerHTML === "Security Group"){
             e.dataTransfer.setData("type","sg");
@@ -51,7 +51,7 @@ class ResourcesType extends Component {
             this.image.src = dbsubnet;
         }
         else if(e.target.innerHTML === "Load Balancer"){
-            this.image.src = lbalencer;
+            this.image.src = lbalancer;
         }
         else if(e.target.innerHTML === "Security Group"){
             this.image.src = sg;
