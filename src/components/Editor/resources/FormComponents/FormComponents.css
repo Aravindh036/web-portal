@@ -12,7 +12,7 @@
 }
 
 .ec2-form button{
-  padding: 10px 25px;
+  padding: 11px 35px;
   border-radius: 8px;
   border: 0;
   color:#403D4E;
@@ -34,9 +34,10 @@
 .switch{
     position:relative;
     display:inline-block;
-    width:60px;
+    width:58px;
     height:20px;
     border-radius:50px;
+    transform: scale(0.6)
   }
   
   .switch input{
@@ -57,21 +58,21 @@
   .slider:before{
     position:absolute;
     content:"";
-    height:26px;
-    width:26px;
+    height:33px;
+    width:33px;
     left:0px;
-    top:-3px;
-    background-color:red;
+    top:-6px;
+    background-color:#21F9CF;
     transition:all 0.4s;
     border-radius:50px;
   }
   
   input:checked + .slider{
-    background-color:orangered;
+    background-color:rgba(33, 249, 206, 0.527);
   }
   
   input:checked + .slider:before{
-    transform:translateX(36px);
+    transform:translateX(30px);
   }
 
 
