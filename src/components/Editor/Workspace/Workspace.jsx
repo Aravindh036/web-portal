@@ -13,14 +13,20 @@ import sg from '../../../assets/sg.png';
 class Workspace extends Component {
 
     down = (e)=>{
+        this.down_pos_x = e.pageX;
+        this.down_pos_y = e.pageY;
         if(e.button === 2){
-            e.preventDefault();
-            var property = document.getElementById("properties");
-            document.getElementById("properties").style.right = "0px";
-            return false;
+            // e.preventDefault();
+            // var property = document.getElementById("properties");
+            // property.style.right = "0px";
+            // this.props.changeProperty(e.target.className);
+            // document.getElementById('workspace').addEventListener("click",this.windowclick,true);
         }
         else if(e.button === 0){
             this.drag_elem = e.target;
+            var workspace = document.getElementById('workspace');
+            this.image_x = e.pageX - e.target.offsetLeft - workspace.offsetLeft;
+            this.image_y = e.pageY - e.target.offsetTop - workspace.offsetTop;
             this.drag_elem.style.border = "1px solid rgba(33,249,207,0.5)";
             this.drag_elem.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
             window.addEventListener("mouseup",this.up);
@@ -33,7 +39,7 @@ class Workspace extends Component {
         }
         this.drag_elem.style.border = "";
         this.drag_elem.style.boxShadow = "";
-        window.addEventListener("mouseup",null);
+        window.removeEventListener("mouseup",this.up);
         this.drag_elem = undefined;
     }
 
@@ -41,12 +47,10 @@ class Workspace extends Component {
         e.target.style.border = "1px solid rgba(33,249,207,0.5)";
         e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
         document.getElementById("properties").style.right = "0px";
-        console.log("double click",e.target.className);
         this.props.changeProperty(e.target.className);   
     }
 
     drop = (e)=>{
-        console.log(e.target);
         var type = e.dataTransfer.getData("type");
         var workspace = document.getElementById('workspace');
         var image = document.createElement("img");
@@ -58,6 +62,8 @@ class Workspace extends Component {
         image.style.transition = "all 0.02s";
         image.addEventListener("mousedown",this.down);
         image.addEventListener("dblclick",this.dblclick);
+        image.addEventListener("click",this.click);
+        image.addEventListener('contextmenu', event => event.preventDefault());
         image.draggable = false;
         if(type === "instance"){
             image.setAttribute("src",instance);
@@ -99,8 +105,12 @@ class Workspace extends Component {
         if(this.drag_elem){
             var workspace = document.getElementById('workspace');
             if(this.drag_elem){
-                this.drag_elem.style.left = e.pageX-workspace.offsetLeft + "px";
-                this.drag_elem.style.top = e.pageY-workspace.offsetTop + "px";
+                var x = e.pageX - workspace.offsetLeft - this.image_x;
+                var y =  e.pageY - workspace.offsetTop - this.image_y;
+                if(x>0 && y>0 && x+this.drag_elem.width<workspace.clientWidth && y+this.drag_elem.height<workspace.clientHeight){
+                    this.drag_elem.style.left = x + "px";
+                    this.drag_elem.style.top = y + "px";
+                }
             }
         }
     }
@@ -108,10 +118,32 @@ class Workspace extends Component {
     dragOver = (e)=>{
         e.preventDefault();
     }
+
+    windowclick = (e)=>{
+        console.log(e.target);
+        this.select_elem.style.border = "";
+        this.select_elem.style.boxShadow = "";
+        this.select_elem = undefined;
+        var property = document.getElementById("properties");
+        property.style.right = "-314px";
+        document.getElementById('workspace').removeEventListener("click",this.windowclick,true);
+    }
+
+    click = (e)=>{
+        if(this.down_pos_x === e.pageX && this.down_pos_y === e.pageY){
+            this.select_elem = e.target;
+            this.props.changeProperty(e.target.className);
+            e.target.style.border = "1px solid rgba(33,249,207,0.5)";
+            e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
+            var property = document.getElementById("properties");
+            property.style.right = "0px";
+            document.getElementById('workspace').addEventListener("click",this.windowclick,true);
+        }
+    }
     
     render() {
         return (
-            <div id = "workspace" onClick={(e)=>document.getElementById("properties").style.right = "-314px"} onMouseMove = {(e)=>this.mouseover(e)} onDrop={(e)=>this.drop(e)} onDragOver={(e)=>this.dragOver(e)} className="work-space">
+            <div id = "workspace" onMouseMove = {(e)=>this.mouseover(e)} onDrop={(e)=>this.drop(e)} onDragOver={(e)=>this.dragOver(e)} className="work-space">
                 
             </div>
         );
