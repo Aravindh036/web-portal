@@ -13,7 +13,6 @@ import sg from '../../../assets/sg.png';
 class Workspace extends Component {
 
     down = (e)=>{
-        console.log("down");
         this.down_pos_x = e.pageX;
         this.down_pos_y = e.pageY;
         if(e.button === 2){
@@ -34,7 +33,6 @@ class Workspace extends Component {
     }
 
     up = (e)=>{
-        console.log("up");
         if(!this.drag_elem){
             return false;
         }
@@ -102,10 +100,8 @@ class Workspace extends Component {
         if(this.drag_elem){
             var workspace = document.getElementById('workspace');
             if(this.drag_elem){
-                console.log(this.image_x,this.image_y);
                 var x = e.pageX - workspace.offsetLeft - this.image_x;
                 var y =  e.pageY - workspace.offsetTop - this.image_y;
-                console.log(workspace.clientWidth);
                 if(x>0 && y>0 && x+this.drag_elem.width<workspace.clientWidth && y+this.drag_elem.height<workspace.clientHeight){
                     this.drag_elem.style.left = x + "px";
                     this.drag_elem.style.top = y + "px";
@@ -119,7 +115,6 @@ class Workspace extends Component {
     }
 
     windowclick = (e)=>{
-        console.log("window");
         this.select_elem.style.border = "";
         this.select_elem.style.boxShadow = "";
         this.select_elem = undefined;
@@ -130,14 +125,13 @@ class Workspace extends Component {
 
     click = (e)=>{
         if(this.down_pos_x === e.pageX && this.down_pos_y === e.pageY){
-            console.log("click");
             this.select_elem = e.target;
             e.target.style.border = "1px solid rgba(33,249,207,0.5)";
             e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
             e.preventDefault();
             var property = document.getElementById("properties");
             property.style.right = "0px";
-            window.addEventListener("click",this.windowclick,true)
+            window.addEventListener("click",this.windowclick,true);
         }
     }
     
