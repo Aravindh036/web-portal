@@ -5,9 +5,14 @@ class Workspace extends Component {
 
     down = (e)=>{
         this.drag_elem = e.target;
+        // this.drag_elem.style.border = "1px solid rgba(33,249,207,0.5)";
+        this.drag_elem.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
+        window.addEventListener("mouseup",this.up);
     }
 
     up = (e)=>{
+        this.drag_elem.style.boxShadow = "";
+        window.addEventListener("mouseup",null);
         this.drag_elem = undefined;
     }
 
@@ -21,10 +26,12 @@ class Workspace extends Component {
             image.setAttribute("src",instance);
             image.style.left = e.pageX-workspace.offsetLeft + "px";
             image.style.top = e.pageY-workspace.offsetTop + "px";
+            image.style.width = "40px"
             image.style.position = "absolute";
+            image.style.transition = "all 0.08s";
             image.addEventListener("mousedown",this.down);
             image.addEventListener("mouseup",this.up);
-            image.addEventListener("dragstart",(e)=>e.preventDefault);
+            // image.addEventListener("dragstart",(e)=>e.preventDefault);
             image.draggable = false;
             workspace.appendChild(image);
         }

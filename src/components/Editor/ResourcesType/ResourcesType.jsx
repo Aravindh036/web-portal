@@ -7,7 +7,7 @@ class ResourcesType extends Component {
     dragstart = (e)=>{
         if(e.target.innerHTML === "Instance"){
             e.dataTransfer.setData("type","instance");
-            e.dataTransfer.setDragImage(this.image,0,0)
+            e.dataTransfer.setDragImage(this.image,10,10)
         }
     }
     mouseDown = (e)=>{
