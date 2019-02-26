@@ -21,38 +21,57 @@ import LoadBalancer from './resources/FormComponents/LoadBalancer';
 import SecurityGroup from './resources/FormComponents/SecurityGroup';
 import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
+import deploy from '../YAMLParser';
 
-var count={},current_element_id=null;
+var count={},current_element_id=null,yaml="Deploy for yaml";
 class Editor extends Component {
-    static properties = "null";
+    static properties = null;
     state = {
         workflow: true,
         code: false,
         instance:(x,y)=>{
             console.log("hello");
-            return <EC2 x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} />
+            return <EC2 x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
         cwatch:(x,y)=>{
-            return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}   />
+            return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/> 
         },
         dbsubnet:(x,y)=>{
-            return <DBSubnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
+            return <DBSubnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
         dbinstance:(x,y)=>{
-            return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
+            return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
         lbalancer:(x,y)=>{
-            return <LoadBalancer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
+            return <LoadBalancer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
         sg:(x,y)=>{
-            return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
+            return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  remove = {this.removeproperties}/>
         },
         subnet:(x,y)=>{
-            return <Subnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  />
+            return <Subnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
     }
-    saveStore=()=>{
-        
+    deploy=()=>{
+        if(Object.keys(count).length === 0){
+            alert('no service to build');
+            return;
+        }
+        yaml =deploy(count);
+        console.log(yaml);
+        fetch('http://localhost:2019/deploy',{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({yaml:yaml})
+        })
+    }
+    removeproperties = ()=>{
+        Editor.properties = null;
+        console.log("remove",count);
+        this.forceUpdate()
+    }
+    saveStore=(store)=>{
+        // count = store;
     }
     store=()=>{
         return count;
@@ -93,9 +112,7 @@ class Editor extends Component {
         }
     }
     changeProperty = (resource,x,y) =>{
-        console.log(resource);
         Editor.properties = this.state[resource](x,y);
-        console.log(Editor.properties);
         this.forceUpdate();
     }
     codePressed = (e) => {
@@ -106,6 +123,47 @@ class Editor extends Component {
             });
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
+    }
+
+    cloud_save = ()=>{
+        fetch('http://localhost:2019/save',{
+            method:"POST",
+            body:JSON.stringify({
+                "json":JSON.stringify(count),
+                "name":"template1",
+                "email":"r.eniyanilavan@gmail.com"
+            }),
+            headers:{"Content-Type":"application/json"}
+        })
+        .then(res=>{
+            if(res.status === 200){
+                alert("save successful");
+            }
+            else{
+                alert("try again later");
+            }
+        })
+        .catch(err=>{
+            console.log(err.message);
+        })
+    }
+
+    download=()=>{
+        if(Object.keys(count).length === 0){
+            alert('no service to build');
+            return;
+        }
+        var element = document.createElement('a');
+        yaml = deploy(count);
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(yaml));
+        element.setAttribute('download', "template.yaml");
+      
+        element.style.display = 'none';
+        document.body.appendChild(element);
+      
+        element.click();
+      
+        document.body.removeChild(element);
     }
     render() {
         return (
@@ -141,8 +199,8 @@ class Editor extends Component {
                         <div className="buttons-container">
                             <button onClick={this.cloud_save} className="save" ><img src={save} alt="⬆️" /> </button>
                             <button className="upload"> <img src={upload} alt="⬆️" /> </button>
-                            <button className="download"> <img src={download} alt="⬇️" /> </button>
-                            <button className="deploy" onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
+                            <button className="download" onClick={this.download} > <img src={download} alt="⬇️" /> </button>
+                            <button className="deploy" onClick={this.deploy} onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
                     {this.state.workflow === true ? <Workspace updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}

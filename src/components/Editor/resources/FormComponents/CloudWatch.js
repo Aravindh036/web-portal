@@ -17,7 +17,22 @@ export default class CloudWatch extends Component {
         super(props);
         this.state.x = this.props.x;
         this.state.y = this.props.y;
-      }
+    }
+    componentDidMount(){
+        var store = this.props.store();
+        var selectedID = this.props.getSelected();
+        if(Object.keys(store[selectedID].properties).length !== 0){
+            console.log("mount",store[selectedID].properties);
+            this.setState({...store[selectedID].properties},()=>{
+                document.getElementById("alarm-name-id").value = this.state.name;
+                document.getElementById("instance-name-id").value = this.state.InstanceName;
+                document.getElementById("period-id").value = this.state.Period;
+                document.getElementById("evaluation-period-id").value = this.state.EvaluationPeriods;
+                document.getElementById("threshold-id").value = this.state.Threshold;
+                document.getElementById("mail-id").value = this.state.Email;
+            })
+        }
+    }
     getName=(e)=>{
         this.setState({
             name:e.target.value
@@ -50,23 +65,20 @@ export default class CloudWatch extends Component {
     }
     saveForm = () => {
         if ((this.state.CidrBlock !== "") && (this.state.VpcId !== "")) {
-          console.log(this.state);
-          var store = this.props.store();
-          var selectedID = this.props.getSelected();
-          for (var i = 0; i <= store.length - 1; i++) {
-            if (store[i].id === selectedID) {
-              console.log("hhhh");
-              store[i].properties = this.state
-            }
-          }
-          console.log("inside the save button", store);
-          this.props.saveStore(store);
-          document.getElementById("alarm-name-id").value = "";
-          document.getElementById("instance-name-id").value = "";
-          document.getElementById("period-id").value = "";
-          document.getElementById("evaluation-period-id").value = "";
-          document.getElementById("threshold-id").value = "";
-          document.getElementById("mail-id").value = "";
+            console.log(this.state);
+            var store = this.props.store();
+            var selectedID = this.props.getSelected();
+            // for (var i = 0; i <= store.length - 1; i++) {
+            //   if (store[i].id === selectedID) {
+            //     console.log("hhhh");
+            //     store[i].properties = this.state
+            //   }
+            // }
+            store[selectedID].properties = this.state;
+            console.log("inside the save button", store);
+            this.props.saveStore(store);
+            document.getElementById('properties').style.right = "-314px"; 
+            this.props.remove();
         }
       }
     render() {

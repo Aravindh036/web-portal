@@ -6,7 +6,7 @@ export default class Subnet extends Component {
   state = {
     name: "",
     CidrBlock: "",
-    SubnetType: true,
+    SubnetType: "Public",
     // VpcId:"",
     x:0,
     y:0
@@ -17,6 +17,15 @@ export default class Subnet extends Component {
     this.state.y = this.props.y;
   }
   componentDidMount(){
+    var store = this.props.store();
+    var selectedID = this.props.getSelected();
+    if(Object.keys(store[selectedID].properties).length !== 0){
+        this.setState({...store[selectedID].properties},()=>{
+            document.getElementById("subnet-name-id").value = this.state.name;
+            document.getElementById("cidr-block-id").value = this.state.CidrBlock;
+            document.getElementById("drop-head-id").innerHTML = this.state.SubnetType; 
+        })
+    }
     document.getElementById('drop-head-id').addEventListener('click',()=>{
       document.getElementById('drop-id').classList.toggle('hide');
       // console.log("hhhh");
@@ -27,7 +36,7 @@ export default class Subnet extends Component {
       // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
-        InstanceType:e.target.innerHTML
+        SubnetType:e.target.innerHTML
       });
     })  
   }
@@ -57,18 +66,16 @@ export default class Subnet extends Component {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
-      for (var i = 0; i <= store.length - 1; i++) {
-        if (store[i].id === selectedID) {
-          console.log("hhhh");
-          store[i].properties = this.state
-        }
-      }
+      // for (var i = 0; i <= store.length - 1; i++) {
+      //   if (store[i].id === selectedID) {
+      //     console.log("hhhh");
+      //     store[i].properties = this.state
+      //   }
+      // }
+      store[selectedID].properties = this.state;
       console.log("inside the save button", store);
       this.props.saveStore(store);  
-      document.getElementById("cidr-block-id").value = "";
-      // document.getElementById("subnet-vpc-id").value = "";
-      document.getElementById("subnet-name-id").value = "";
-      document.getElementById("drop-head-id").innerHTML = "select a Subnet Type";
+      this.props.remove();
       document.getElementById('properties').style.right = "-314px"; 
 
     }
@@ -87,7 +94,7 @@ export default class Subnet extends Component {
             </select> */}
           <div className="drop-down-container">
             <div className="drop-head" id="drop-head-id">
-              select a Subnet Type
+              Public
             </div>
             <div className="drop-down hide" id="drop-id">
               <div className="drop-down-item">Public</div>

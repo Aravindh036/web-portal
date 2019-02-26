@@ -21,6 +21,22 @@ export default class DatabaseServer extends Component {
     this.state.y = this.props.y;
   }
   componentDidMount(){
+    var store = this.props.store();
+    var selectedID = this.props.getSelected();
+    document.getElementById("drop-head-image").innerHTML = this.state.Engine;
+    document.getElementById('drop-head-id').innerHTML = this.state.DBInstanceClass;
+    if(Object.keys(store[selectedID].properties).length !== 0){
+      this.setState({...store[selectedID].properties},()=>{
+        console.log(this.state.Engine);
+        document.getElementById("dbname-id").value = this.state.name;
+        document.getElementById("db-security-groups-id").value = this.state.VPCSecurityGroups;
+        document.getElementById("allocated-storage-id").value = this.state.AllocatedStorage; 
+        document.getElementById("drop-head-image").innerHTML = this.state.Engine;
+        document.getElementById("master-username-id").value = this.state.MasterUsername;
+        document.getElementById("master-password-id").value = this.state.MasterUserPassword;
+        document.getElementById('drop-head-id').innerHTML = this.state.DBInstanceClass;
+      })
+    }
     document.getElementById('drop-head-id').addEventListener('click',()=>{
       document.getElementById('drop-id').classList.toggle('hide');
       // console.log("hhhh");
@@ -31,7 +47,7 @@ export default class DatabaseServer extends Component {
       // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
-        InstanceType:e.target.innerHTML
+        DBInstanceClass:e.target.innerHTML
       });
     })  
     document.getElementById('drop-head-image').addEventListener('click',()=>{
@@ -44,7 +60,7 @@ export default class DatabaseServer extends Component {
       // console.log(e.target.innerHTML);
       document.getElementById('drop-head-image').innerHTML = e.target.innerHTML;
       this.setState({
-        ImageID:e.target.innerHTML
+        Engine:e.target.innerHTML
       });
     })
   }
@@ -92,21 +108,16 @@ export default class DatabaseServer extends Component {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
-      for (var i = 0; i <= store.length - 1; i++) {
-        if (store[i].id === selectedID) {
-          console.log("hhhh");
-          store[i].properties = this.state
-        }
-      }
+      // for (var i = 0; i <= store.length - 1; i++) {
+      //   if (store[i].id === selectedID) {
+      //     console.log("hhhh");
+      //     store[i].properties = this.state
+      //   }
+      // }
+      store[selectedID].properties = this.state;
       console.log("inside the save button", store);
       this.props.saveStore(store);
-      document.getElementById("db-security-groups-id").value = "";
-      document.getElementById("allocated-storage-id").value = "";
-      document.getElementById("drop-head-image").innerHTML = "select a Engine";
-      document.getElementById("drop-head-id").innerHTML = "select a Instance Type";
-      document.getElementById("master-password-id").value = "";
-      document.getElementById("master-username-id").value = "";
-      document.getElementById("dbname-id").value = "";
+      this.props.remove();
       document.getElementById('properties').style.right = "-314px"; 
 
     }
@@ -129,14 +140,14 @@ export default class DatabaseServer extends Component {
           </select> */}
           <div className="drop-down-container">
             <div className="drop-head" id="drop-head-id">
-              select a Instance Type
+              {this.state.DBInstanceClass}
             </div>
             <div className="drop-down hide" id="drop-id">
-              <div className="drop-down-item">t2.nano</div>
-              <div className="drop-down-item">t2.micro</div>
-              <div className="drop-down-item">t2.small</div>
-              <div className="drop-down-item">t2.medium</div>
-              <div className="drop-down-item">t2.large</div>
+              <div className="drop-down-item">db.t2.nano</div>
+              <div className="drop-down-item">db.t2.micro</div>
+              <div className="drop-down-item">db.t2.small</div>
+              <div className="drop-down-item">db.t2.medium</div>
+              <div className="drop-down-item">db.t2.large</div>
             </div>
           </div>
           {/* <input onBlur={this.getEngine} type="text" placeholder="Engine" id="engine-id" /> */}
@@ -149,7 +160,7 @@ export default class DatabaseServer extends Component {
           </select> */}
           <div className="drop-down-container">
               <div className="drop-head" id="drop-head-image">
-                select a Engine
+                {this.state.Engine}
               </div>
               <div className="drop-down hide" id="drop-image">
                 <div className="drop-down-item">MySQL</div>

@@ -17,6 +17,19 @@ export default class SecurityGroup extends Component {
     this.state.x = this.props.x;
     this.state.y = this.props.y;
   }
+
+  componentDidMount(){
+    var store = this.props.store();
+    var selectedID = this.props.getSelected();
+    if(Object.keys(store[selectedID].properties).length !== 0){
+        this.setState({...store[selectedID].properties},()=>{
+            document.getElementById("groupname-id").value = this.state.GroupName;
+            document.getElementById("group-description-id").value = this.state.GroupDescription;
+            document.getElementById("port-id").value = this.state.Port; 
+        })
+    }
+  }
+
   getGroupName = (e)=>{
     this.setState({
       GroupName:e.target.value
@@ -42,17 +55,16 @@ export default class SecurityGroup extends Component {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
-      for (var i = 0; i <= store.length - 1; i++) {
-        if (store[i].id === selectedID) {
-          console.log("hhhh");
-          store[i].properties = this.state
-        }
-      }
+      // for (var i = 0; i <= store.length - 1; i++) {
+      //   if (store[i].id === selectedID) {
+      //     console.log("hhhh");
+      //     store[i].properties = this.state
+      //   }
+      // }
+      store[selectedID].properties = this.state;
       console.log("inside the save button", store);
       this.props.saveStore(store);
-      document.getElementById("groupname-id").value = "";
-      document.getElementById("group-description-id").value = "";
-      document.getElementById("port-id").value = "";
+      this.props.remove();
       document.getElementById('properties').style.right = "-314px"; 
     }
   }

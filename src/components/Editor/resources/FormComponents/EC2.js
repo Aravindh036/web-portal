@@ -9,7 +9,7 @@ export default class EC2 extends Component {
     AvailabilityZone: "",
     KeyName: "",
     InstanceType:"t2.nano",
-    ImageID:"ami-041114ddee4a98333",
+    ImageID:"Amazon Linux 2 AMI",
     SubnetName:"",
     SecurityGroup:"",
     Backup:false,
@@ -17,12 +17,61 @@ export default class EC2 extends Component {
     x:0,
     y:0
   }
+  ami_id = {
+    "mumbai":{
+      "Amazon Linux 2 AMI":"ami-0b4e9d7246704847c",
+      "Amazon Linux AMI 2018.03.0":"ami-0ad42f4f66f6c1cc9",
+      "Ubuntu Server 18.04":"ami-0d773a3b7bb2bb1c1",
+      "Windows Server 2019 Base":"ami-0c26d71e2b3583a67",
+      "Windows Server 2016 Base":"ami-0be56865bcf08da0d"
+    },
+    "us-east-1a":{
+      "Amazon Linux 2 AMI":"ami-04bfee437f38a691e",
+      "Amazon Linux AMI 2018.03.0":"ami-0080e4c5bc078760e",
+      "Ubuntu Server 18.04":"ami-0ac019f4fcb7cb7e6",
+      "Windows Server 2019 Base":"ami-0410d3d3bd6d555f4",
+      "Windows Server 2016 Base":"ami-0bf148826ef491d16"
+    }
+  }
+  instance_id = {
+    "mumbai":{
+      "ami-0b4e9d7246704847c":"Amazon Linux 2 AMI",
+      "ami-0ad42f4f66f6c1cc9":"Amazon Linux AMI 2018.03.0",
+      "ami-0d773a3b7bb2bb1c1":"Ubuntu Server 18.04",
+      "ami-0c26d71e2b3583a67":"Windows Server 2019 Base",
+      "ami-0be56865bcf08da0d":"Windows Server 2016 Base"
+    },
+    "us-east-1a":{
+      "ami-04bfee437f38a691e":"Amazon Linux 2 AMI",
+      "ami-0080e4c5bc078760e":"Amazon Linux AMI 2018.03.0",
+      "ami-0ac019f4fcb7cb7e6":"Ubuntu Server 18.04",
+      "ami-0410d3d3bd6d555f4":"Windows Server 2019 Base",
+      "ami-0bf148826ef491d16":"Windows Server 2016 Base"
+    }
+  }
   constructor(props){
     super(props);
     this.state.x = this.props.x;
     this.state.y = this.props.y;
   }
   componentDidMount(){
+    var store = this.props.store();
+    var selectedID = this.props.getSelected();
+    document.getElementById('drop-head-id').innerHTML = this.state.InstanceType;
+    document.getElementById('drop-head-image').innerHTML = this.state.ImageID;
+    if(Object.keys(store[selectedID].properties).length !== 0){
+      console.log("mount",store[selectedID].properties);
+      this.setState({...store[selectedID].properties},()=>{
+        console.log("updated",this.state)
+        document.getElementById("ec2-name-id").value = this.state.name;
+        document.getElementById("keyname-id").value = this.state.KeyName;
+        document.getElementById("availability-id").value = this.state.AvailabilityZone; 
+        document.getElementById("ec2-subnet-id").value = this.state.SubnetName;
+        document.getElementById("security-groups-id").value = this.state.SecurityGroup;
+        document.getElementById('drop-head-id').innerHTML = this.state.InstanceType;
+        document.getElementById('drop-head-image').innerHTML = this.instance_id[this.state.AvailabilityZone][this.state.ImageID];
+      })
+    }
     document.getElementById('drop-head-id').addEventListener('click',()=>{
       document.getElementById('drop-id').classList.toggle('hide');
       // console.log("hhhh");
@@ -39,7 +88,7 @@ export default class EC2 extends Component {
     document.getElementById('drop-head-image').addEventListener('click',()=>{
       document.getElementById('drop-image').classList.toggle('hide');
       // console.log("hhhh");
-    }) ;
+    });
     
     document.getElementById('drop-image').addEventListener('click',(e)=>{
       document.getElementById("drop-image").classList.toggle('hide');
@@ -49,9 +98,6 @@ export default class EC2 extends Component {
         ImageID:e.target.innerHTML
       });
     })
-    var store = this.props.store();
-    var selectedID = this.props.getSelected();
-    console.log(store,selectedID);
   }
   getName = (e) => {
     this.setState({
@@ -100,14 +146,12 @@ export default class EC2 extends Component {
       //     store[i].properties = this.state
       //   }
       // }
-      store[selectedID].properties = this.state;
-      console.log("inside the save button", store);
+      this.setState({ImageID:this.ami_id[this.state.AvailabilityZone][this.state.ImageID]},()=>{
+        store[selectedID].properties = this.state;
+        console.log("inside the save button", store);
+        this.props.remove();
+      })
       this.props.saveStore(store);
-      document.getElementById("ec2-name-id").value = "";
-      document.getElementById("keyname-id").value = "";
-      document.getElementById("availability-id").value = ""; 
-      document.getElementById("ec2-subnet-id").value = "";
-      document.getElementById("security-groups-id").value = "";
       document.getElementById('properties').style.right = "-314px"; 
     }
   }
@@ -144,11 +188,14 @@ export default class EC2 extends Component {
             </select> */}
             <div className="drop-down-container">
               <div className="drop-head" id="drop-head-image">
-              Select a Image ID
+              Select Machine Type
               </div>
               <div className="drop-down hide" id="drop-image">
-                <div className="drop-down-item">Windows</div>
-                <div className="drop-down-item">Linux</div>
+                <div className="drop-down-item">Amazon Linux 2 AMI</div>
+                <div className="drop-down-item">Amazon Linux AMI 2018.03.0</div>
+                <div className="drop-down-item">Ubuntu Server 18.04</div>
+                <div className="drop-down-item">Windows Server 2019 Base</div>
+                <div className="drop-down-item">Windows Server 2016 Base</div>
               </div>
             </div>
             <div className="automatic-shutdown">

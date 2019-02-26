@@ -16,7 +16,18 @@ export default class DBSubnet extends Component {
         super(props);
         this.state.x = this.props.x;
         this.state.y = this.props.y;
-      }
+    }
+    componentDidMount(){
+        var store = this.props.store();
+        var selectedID = this.props.getSelected();
+        if(Object.keys(store[selectedID].properties).length !== 0){
+            this.setState({...store[selectedID].properties},()=>{
+                document.getElementById("alarm-name-id").value = this.state.name;
+                document.getElementById("dbsubnet-des-id").value = this.state.description;
+                document.getElementById("dbsubnet-id").value = this.state.subnetIDs; 
+            })
+        }
+    }
     getName=(e)=>{
         this.setState({
             name:e.target.value
@@ -34,22 +45,19 @@ export default class DBSubnet extends Component {
     }
     saveForm = () => {
         if ((this.state.name !== "") && (this.state.subnetIDs !== "")) {
-          var store = this.props.store();
-          var selectedID = this.props.getSelected();
-          for (var i = 0; i <= store.length - 1; i++) {
-            if (store[i].id === selectedID) {
-              console.log("hhhh");
-              store[i].properties = this.state;
-            }
-          }
-          console.log("inside the save button", store);
-          this.props.saveStore(store);
-          document.getElementById("dbsubnet-name-id").value = "";
-          document.getElementById("dbsubnet-id").value = "";
-          document.getElementById("dbsubnet-des-id").value = "";
-          document.getElementById("dbsubnet-ids").value = "";
-      document.getElementById('properties').style.right = "-314px"; 
-
+            var store = this.props.store();
+            var selectedID = this.props.getSelected();
+            // for (var i = 0; i <= store.length - 1; i++) {
+            //   if (store[i].id === selectedID) {
+            //     console.log("hhhh");
+            //     store[i].properties = this.state
+            //   }
+            // }
+            store[selectedID].properties = this.state;
+            console.log("inside the save button", store);
+            this.props.saveStore(store);
+            this.props.remove();
+            document.getElementById('properties').style.right = "-314px"; 
         }
       }
     render() {

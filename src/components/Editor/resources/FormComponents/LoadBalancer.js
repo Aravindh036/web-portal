@@ -20,6 +20,21 @@ export default class LoadBalancer extends Component {
     this.state.x = this.props.x;
     this.state.y = this.props.y;
   }
+  componentDidMount(){
+    var store = this.props.store();
+    var selectedID = this.props.getSelected();
+    if(Object.keys(store[selectedID].properties).length !== 0){
+        this.setState({...store[selectedID].properties},()=>{
+            document.getElementById("loadbalancer-name-id").value = this.state.LoadBalancerName;
+            document.getElementById("instance-port-id").value = this.state.InstancePort;
+            document.getElementById("loadbalancer-port-id").value = this.state.LoadBalancerPort; 
+            document.getElementById("policyname-id").value = this.state.PolicyNames;
+            document.getElementById("protocol-id").value = this.state.Protocol;
+            document.getElementById("security-group-id").value = this.state.SecurityGroup; 
+            document.getElementById("subnet-name-id").value = this.state.Subnet; 
+        })
+    }
+  }
   getInstancePort=(e)=>{
     this.setState({
       InstancePort: e.target.value
@@ -62,21 +77,16 @@ export default class LoadBalancer extends Component {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
-      for (var i = 0; i <= store.length - 1; i++) {
-        if (store[i].id === selectedID) {
-          console.log("hhhh");
-          store[i].properties = this.state;
-        }
-      }
+      // for (var i = 0; i <= store.length - 1; i++) {
+      //   if (store[i].id === selectedID) {
+      //     console.log("hhhh");
+      //     store[i].properties = this.state
+      //   }
+      // }
+      store[selectedID].properties = this.state;
       console.log("inside the save button", store);
       this.props.saveStore(store);
-      document.getElementById("instance-port-id").value = "";
-      document.getElementById("loadbalancer-port-id").value = "";
-      document.getElementById("policyname-id").value = "";
-      document.getElementById("protocol-id").value = "";
-      document.getElementById("loadbalancer-name-id").value = "";
-      document.getElementById("security-group-id").value = "";
-      document.getElementById("subnet-name-id").value = "";
+      this.props.remove();      
       document.getElementById('properties').style.right = "-314px"; 
 
     // }
