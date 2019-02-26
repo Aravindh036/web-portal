@@ -6,9 +6,16 @@ import delete_icon from '../../../assets/delete.png';
 import preview from '../../../assets/preview.png';
 
 class Card extends Component {
+
+    select = ()=>{
+        sessionStorage.setItem('json',this.props.json);
+        sessionStorage.setItem('title',this.props.title);
+        document.location = "editor"
+    }
+
     render() {
         return (
-            <div className="card-container" >
+            <div onClick={this.select} className="card-container" >
                 <div className="card-preview">
                     <img src={preview} alt="P"/>
                 </div>

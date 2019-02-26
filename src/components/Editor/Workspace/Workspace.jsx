@@ -12,6 +12,37 @@ import sg from '../../../assets/sg.png';
 
 class Workspace extends Component {
 
+    componentDidMount(){
+        this.json = sessionStorage.getItem('json');
+        this.email = sessionStorage.getItem('email');
+        this.title = sessionStorage.getItem('title');
+        console.log(this.json);
+        if(!this.email || !this.title){
+            document.location = "/";
+        }
+        if(this.json !== "null"){
+            this.json_render(this.json);
+        }
+    }
+
+    json_render = (json_str)=>{
+        var json = JSON.parse(json_str);
+        for(var i in json){
+            var component = json[i];
+            var x = component.properties.x;
+            var y = component.properties.y;
+            var type = component.serviceName;
+            var prop = {
+                id : i,
+                x : x,
+                y : y,
+                type : type
+            }
+            this.draw(prop)
+        }
+    }
+
+
     down = (e)=>{
         this.down_pos_x = e.pageX;
         this.down_pos_y = e.pageY;
@@ -50,6 +81,58 @@ class Workspace extends Component {
         e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
         document.getElementById("properties").style.right = "0px";
         this.props.changeProperty(e.target.className,e.target.offsetLeft,e.target.offsetTop);   
+    }
+
+    draw = (prop)=>{
+        var type = prop.type;
+        var workspace = document.getElementById('workspace');
+        var image = document.createElement("img");
+        image.id = prop.id;
+        image.setAttribute("class",type);
+        image.style.left = prop.x + "px";
+        image.style.top = prop.y + "px";
+        image.style.width = "90px"
+        image.style.position = "absolute";
+        image.style.transition = "all 0.02s";
+        image.addEventListener("mousedown",this.down);
+        image.addEventListener("dblclick",this.dblclick);
+        image.addEventListener("click",this.click);
+        image.addEventListener('contextmenu', event => event.preventDefault());
+        image.draggable = false;
+        if(type === "instance"){
+            image.setAttribute("src",instance);
+            image.setAttribute("title","Instance");
+        }
+        else if(type === "dbinstance"){
+            image.setAttribute("src",dbinstance);
+            image.setAttribute("title","DB Instance");
+
+        }
+        else if(type === "cwatch"){
+            image.setAttribute("src",cwatch);
+            image.setAttribute("title","Cloud Watch");
+
+        }
+        else if(type === "subnet"){
+            image.setAttribute("src",subnet);
+            image.setAttribute("title","Subnet");
+
+        }
+        else if(type === "dbsubnet"){
+            image.setAttribute("src",dbsubnet);
+            image.setAttribute("title","DB Subnet");
+
+        }
+        else if(type === "lbalancer"){
+            image.setAttribute("src",lbalancer);
+            image.setAttribute("title","Load Balancer");
+
+        }
+        else if(type === "sg"){
+            image.setAttribute("src",sg);
+            image.setAttribute("title","Security Group");
+        }
+        workspace.appendChild(image);
     }
 
     drop = (e)=>{
@@ -114,6 +197,7 @@ class Workspace extends Component {
                 if(x>0 && y>0 && x+this.drag_elem.width<workspace.clientWidth && y+this.drag_elem.height<workspace.clientHeight){
                     this.drag_elem.style.left = x + "px";
                     this.drag_elem.style.top = y + "px";
+                    this.props.update_position(this.drag_elem.id,x,y);
                 }
             }
         }

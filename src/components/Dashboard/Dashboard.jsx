@@ -14,6 +14,10 @@ class Dashboard extends Component {
     }
     componentDidMount = () => {
         var that = this;
+        this.email = sessionStorage.getItem('email');
+        if(!this.email){
+            document.location = '';
+        }
         fetch('http://localhost:2019/dashboard/r.eniyanilavan@gmail.com',{
             method:"GET",
         })
@@ -31,7 +35,7 @@ class Dashboard extends Component {
             var arr = res.archs;
             var projects = arr.map(pro => {
                 var date = (new Date(pro.doc).toDateString());
-                return <Card title={pro.name} doc={date} />
+                return <Card title={pro.name} doc={date} json={pro.json} />
             });
             that.setState({
                 projects: projects
@@ -43,6 +47,11 @@ class Dashboard extends Component {
             // document.location.reload();
         })
     }
+
+    new = ()=>{
+        
+    }
+
     render() {
         return (
             <div className="dashboard-container" >
@@ -61,7 +70,7 @@ class Dashboard extends Component {
                 <div className="project-container">
                     <div className="project-heading">My Projects</div>
                     <div className="project-listview" id="list-id" >
-                        <div className="card-container override-card">
+                        <div onClick={this.new} className="card-container override-card">
                             <div className="add-project">
                                 <div className="add-symbol">
                                     <img src={plus} alt="+" />

@@ -40,7 +40,8 @@ class Login extends Component {
         })
         .then(res=>{
             if(res.status === 200){
-                document.location = "editor"
+                sessionStorage.setItem('email',email)
+                document.location = "/dashboard"
             }
             else if(res.status === 403){
                 text.innerHTML = "*email or password wrong";

@@ -52,6 +52,19 @@ class Editor extends Component {
             return <Subnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
     }
+
+    componentDidMount(){
+        this.json = JSON.parse(sessionStorage.getItem('json'));
+        this.email = sessionStorage.getItem('email');
+        this.title = sessionStorage.getItem('title');
+        console.log(this.json);
+        if(!this.email || !this.title){
+            document.location = "/";
+        }
+        if(this.json !== "null"){
+            count = this.json;
+        }
+    }
     deploy=()=>{
         if(Object.keys(count).length === 0){
             alert('no service to build');
@@ -125,6 +138,14 @@ class Editor extends Component {
         }
     }
 
+    update_position = (id,x,y)=>{
+        console.log("before",count);
+        count[id].properties.x = x;
+        count[id].properties.y = y;
+        console.log("after",count);
+
+    }
+
     cloud_save = ()=>{
         fetch('http://localhost:2019/save',{
             method:"POST",
@@ -138,6 +159,7 @@ class Editor extends Component {
         .then(res=>{
             if(res.status === 200){
                 alert("save successful");
+                sessionStorage.setItem('json',JSON.stringify(count))
             }
             else{
                 alert("try again later");
@@ -196,6 +218,7 @@ class Editor extends Component {
                             </div>
                             <div id="under-line-id" className="under-line"></div>
                         </div>
+                        <label>{sessionStorage.getItem("title")}</label>
                         <div className="buttons-container">
                             <button onClick={this.cloud_save} className="save" ><img src={save} alt="⬆️" /> </button>
                             <button className="upload"> <img src={upload} alt="⬆️" /> </button>
@@ -203,7 +226,7 @@ class Editor extends Component {
                             <button className="deploy" onClick={this.deploy} onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
+                    {this.state.workflow === true ? <Workspace update_position={this.update_position} updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
                 {/* <div id="properties" className="properties">

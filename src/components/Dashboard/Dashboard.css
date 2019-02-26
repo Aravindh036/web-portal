@@ -95,7 +95,7 @@
     justify-content: center;
     flex-direction: column;
     background-color: transparent!important;
-    border: dashed 1px #21F9CF;
+    /* border: dashed 1px #21F9CF; */
     cursor: pointer;
 }
 
