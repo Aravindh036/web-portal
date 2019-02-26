@@ -91,7 +91,11 @@
 
 
 .override-card{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     background-color: transparent!important;
+    cursor: pointer;
 }
 
 .override-card:hover{
