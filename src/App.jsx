@@ -3,6 +3,9 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './App.css';
 import Editor from './components/Editor/Editor';
 import Login from './components/Login/Login';
+import Dashboard from './components/Dashboard/Dashboard';
+import Card from './components/Dashboard/Card/Card';
+
 
 class App extends Component {
   render() {
@@ -12,6 +15,8 @@ class App extends Component {
           <Switch>
             <Route path="/login" component={Login}/>
             <Route path="/editor" component={Editor}/>
+            <Route path="/dashboard" component={Dashboard}/>
+            <Route path="/card" component={Card}/>
           </Switch>
         </Router>
       </div>
