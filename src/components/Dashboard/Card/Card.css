@@ -20,6 +20,11 @@
     color: #21F9CF;
 }
 
+.delete-card img:hover{
+    width: 26px;
+    cursor: pointer;
+}
+
 .card-preview img{
     width: 100%;
 }

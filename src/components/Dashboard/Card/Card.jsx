@@ -14,8 +14,8 @@ class Card extends Component {
                 </div>
                 <div className="card-details">
                     <div className="project-details">
-                        <div className="card-name">Untitled-1</div>
-                        <div className="card-date">Last Modified :  07/08/2019</div>
+                        <div className="card-name">{this.props.title}</div>
+                        <div className="card-date">Created On :  {this.props.doc}</div>
                     </div>
                     <div className="delete-card">
                         <img src={delete_icon} alt="🗑️"/>
