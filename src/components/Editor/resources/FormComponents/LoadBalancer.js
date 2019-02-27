@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import arrow from '../../../../assets/drop@2x.png'
 
 import './FormComponents.css';
 
@@ -31,9 +32,24 @@ export default class LoadBalancer extends Component {
             document.getElementById("policyname-id").value = this.state.PolicyNames;
             document.getElementById("protocol-id").value = this.state.Protocol;
             document.getElementById("security-group-id").value = this.state.SecurityGroup; 
-            document.getElementById("subnet-name-id").value = this.state.Subnet; 
+            // document.getElementById("subnet-name-id").value = this.state.Subnet; 
         })
     }
+    document.getElementById('drop-head-subnet').addEventListener('click', () => {
+      document.getElementById('drop-subnet').classList.toggle('hide');
+      // console.log("hhhh");
+    });
+
+    document.getElementById('drop-subnet').addEventListener('click', (e) => {
+      document.getElementById("drop-subnet").classList.toggle('hide');
+      // console.log(e.target.innerHTML);
+      if (!e.target.innerHTML.includes("No subnets created")) {
+        document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
+        this.setState({
+          Subnet: e.target.innerHTML
+        });
+      }
+    })
   }
   getInstancePort=(e)=>{
     this.setState({
@@ -128,6 +144,19 @@ export default class LoadBalancer extends Component {
     //     console.log("selected", selected);
     //   }
     // }
+    var subnet = this.props.getSubnet();
+    var subnetDropdown = "";
+    if (subnet.length !== 0) {
+      subnetDropdown = subnet.map(sub => {
+        return <div className="drop-down-item">{sub.id}</div>
+      })
+    }
+    else {
+      subnet = [1];
+      subnetDropdown = subnet.map(empty => {
+        return <div className="drop-down-item">No subnets created</div>
+      })
+    }
     return (
       <div className="ec2-form " id="load-balancer-form-id">
         <div className="form-elements">
@@ -137,7 +166,19 @@ export default class LoadBalancer extends Component {
             <input id="policyname-id" type="text" placeholder="PolicyNames" onBlur={this.getPolicyNames} />
             <input id="protocol-id" type="text" placeholder="Protocol" onBlur={this.getProtocol} />
             <input id="security-group-id" type="text" placeholder="SecurityGroups" onBlur={this.getSecurityGroup}/>
-            <input id="subnet-name-id" type="text" placeholder="SubnetName" onBlur={this.getSubnetName}/>
+            {/* <input id="subnet-name-id" type="text" placeholder="SubnetName" onBlur={this.getSubnetName}/> */}
+            <div className="drop-down-container">
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-subnet">
+                Select a Subnet
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+            </div>
+            <div className="drop-down hide" id="drop-subnet">
+              {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+              {subnetDropdown}
+            </div>
+          </div>
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>

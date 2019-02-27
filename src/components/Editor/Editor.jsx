@@ -24,7 +24,7 @@ import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 import deploy from '../YAMLParser';
 
-var count={},current_element_id=null,yaml="Deploy for yaml";
+var count={},current_element_id=null,yaml="Deploy for yaml",subnet=[];
 class Editor extends Component {
     static properties = null;
     state = {
@@ -32,7 +32,7 @@ class Editor extends Component {
         code: false,
         instance:(x,y)=>{
             console.log("hello");
-            return <EC2 x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
+            return <EC2 x={x} y={y} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
         cwatch:(x,y)=>{
             return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/> 
@@ -44,7 +44,7 @@ class Editor extends Component {
             return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
         lbalancer:(x,y)=>{
-            return <LoadBalancer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
+            return <LoadBalancer x={x} y={y} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
         sg:(x,y)=>{
             return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  remove = {this.removeproperties}/>
@@ -67,6 +67,9 @@ class Editor extends Component {
         if(this.json !== null){
             count = this.json;
         }
+    }
+    getSubnet=()=>{
+        return subnet;
     }
     deploy=()=>{
         if(Object.keys(count).length === 0){
@@ -110,6 +113,11 @@ class Editor extends Component {
 
         //     }
         // })
+        if(title==="subnet"){
+            subnet.push({
+                id:id,
+            })
+        }
         count[id] = {
             id:id,
             serviceName:title,
