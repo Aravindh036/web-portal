@@ -12,55 +12,55 @@ export default class DatabaseServer extends Component {
     Engine: "MySQL",
     MasterUsername: "",
     MasterUserPassword: "",
-    x:0,
-    y:0
+    x: 0,
+    y: 0
   }
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state.x = this.props.x;
     this.state.y = this.props.y;
   }
-  componentDidMount(){
+  componentDidMount() {
     var store = this.props.store();
     var selectedID = this.props.getSelected();
     document.getElementById("drop-head-image").innerHTML = this.state.Engine;
     document.getElementById('drop-head-id').innerHTML = this.state.DBInstanceClass;
-    if(Object.keys(store[selectedID].properties).length !== 0){
-      this.setState({...store[selectedID].properties},()=>{
+    if (Object.keys(store[selectedID].properties).length !== 0) {
+      this.setState({ ...store[selectedID].properties }, () => {
         console.log(this.state.Engine);
         document.getElementById("dbname-id").value = this.state.DBName;
         document.getElementById("db-security-groups-id").value = this.state.VPCSecurityGroups;
-        document.getElementById("allocated-storage-id").value = this.state.AllocatedStorage; 
+        document.getElementById("allocated-storage-id").value = this.state.AllocatedStorage;
         document.getElementById("drop-head-image").innerHTML = this.state.Engine;
         document.getElementById("master-username-id").value = this.state.MasterUsername;
         document.getElementById("master-password-id").value = this.state.MasterUserPassword;
         document.getElementById('drop-head-id').innerHTML = this.state.DBInstanceClass;
       })
     }
-    document.getElementById('drop-head-id').addEventListener('click',()=>{
+    document.getElementById('drop-head-id').addEventListener('click', () => {
       document.getElementById('drop-id').classList.toggle('hide');
       // console.log("hhhh");
-    }) ;
-    
-    document.getElementById('drop-id').addEventListener('click',(e)=>{
+    });
+
+    document.getElementById('drop-id').addEventListener('click', (e) => {
       document.getElementById("drop-id").classList.toggle('hide');
       // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
-        DBInstanceClass:e.target.innerHTML
+        DBInstanceClass: e.target.innerHTML
       });
-    })  
-    document.getElementById('drop-head-image').addEventListener('click',()=>{
+    })
+    document.getElementById('drop-head-image').addEventListener('click', () => {
       document.getElementById('drop-image').classList.toggle('hide');
       // console.log("hhhh");
-    }) ;
-    
-    document.getElementById('drop-image').addEventListener('click',(e)=>{
+    });
+
+    document.getElementById('drop-image').addEventListener('click', (e) => {
       document.getElementById("drop-image").classList.toggle('hide');
       // console.log(e.target.innerHTML);
       document.getElementById('drop-head-image').innerHTML = e.target.innerHTML;
       this.setState({
-        Engine:e.target.innerHTML
+        Engine: e.target.innerHTML
       });
     })
   }
@@ -104,7 +104,13 @@ export default class DatabaseServer extends Component {
   }
 
   saveForm = () => {
-    if ((this.state.DBName !== "") && (this.state.DBSecurityGroups !== "") && (this.state.AllocatedStorage !== "") && (this.state.Engine !== "") && (this.state.MasterUsername !== "") && (this.state.MasterUserPassword !== "")) {
+    if (this.state.DBName === "") {
+      alert("Give a name for the RDS Instance!!");
+    }
+    else if (this.state.DBInstanceClass !== "") {
+      alert("Give the Instance class");
+    }
+    if ((this.state.DBName !== "") && (this.state.DBInstanceClass !== "")) {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
@@ -118,7 +124,7 @@ export default class DatabaseServer extends Component {
       console.log("inside the save button", store);
       this.props.saveStore(store);
       this.props.remove();
-      document.getElementById('properties').style.right = "-314px"; 
+      document.getElementById('properties').style.right = "-314px";
 
     }
   }
@@ -159,17 +165,17 @@ export default class DatabaseServer extends Component {
             <option value="SQL Server">SQL Server</option>
           </select> */}
           <div className="drop-down-container">
-              <div className="drop-head" id="drop-head-image">
-                {this.state.Engine}
-              </div>
-              <div className="drop-down hide" id="drop-image">
-                <div className="drop-down-item">MySQL</div>
-                <div className="drop-down-item">MariaDB</div>
-                <div className="drop-down-item">PostgreSQL</div>
-                <div className="drop-down-item">Oracle</div>
-                <div className="drop-down-item">SQL Server</div>
-              </div>
+            <div className="drop-head" id="drop-head-image">
+              {this.state.Engine}
             </div>
+            <div className="drop-down hide" id="drop-image">
+              <div className="drop-down-item">MySQL</div>
+              <div className="drop-down-item">MariaDB</div>
+              <div className="drop-down-item">PostgreSQL</div>
+              <div className="drop-down-item">Oracle</div>
+              <div className="drop-down-item">SQL Server</div>
+            </div>
+          </div>
           <input onBlur={this.getMasterUsername} type="text" placeholder="MasterUsername" id="master-username-id" />
           <input onBlur={this.getMasterUserPassword} type="password" id="master-password-id" placeholder="MasterUserPassword" />
         </div>

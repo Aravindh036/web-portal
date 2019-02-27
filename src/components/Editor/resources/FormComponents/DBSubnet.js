@@ -6,45 +6,54 @@ import './FormComponents.css';
 
 export default class DBSubnet extends Component {
     state = {
-        name:"",
-        description:"",
-        subnetIDs:"",
-        x:0,
-        y:0
+        name: "",
+        description: "",
+        subnetIDs: "",
+        x: 0,
+        y: 0
     }
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state.x = this.props.x;
         this.state.y = this.props.y;
     }
-    componentDidMount(){
+    componentDidMount() {
         var store = this.props.store();
         var selectedID = this.props.getSelected();
-        if(Object.keys(store[selectedID].properties).length !== 0){
-            this.setState({...store[selectedID].properties},()=>{
+        if (Object.keys(store[selectedID].properties).length !== 0) {
+            this.setState({ ...store[selectedID].properties }, () => {
                 document.getElementById("alarm-name-id").value = this.state.name;
                 document.getElementById("dbsubnet-des-id").value = this.state.description;
-                document.getElementById("dbsubnet-id").value = this.state.subnetIDs; 
+                document.getElementById("dbsubnet-id").value = this.state.subnetIDs;
             })
         }
     }
-    getName=(e)=>{
+    getName = (e) => {
         this.setState({
-            name:e.target.value
+            name: e.target.value
         });
     }
-    getDescription=(e)=>{
+    getDescription = (e) => {
         this.setState({
-            description:e.target.value
+            description: e.target.value
         });
     }
-    getsubnetIDs=(e)=>{
+    getsubnetIDs = (e) => {
         this.setState({
-            subnetIDs:e.target.value
+            subnetIDs: e.target.value
         });
     }
     saveForm = () => {
-        if ((this.state.name !== "") && (this.state.subnetIDs !== "")) {
+        if (this.state.name === "") {
+            alert("Give a name for the DB subnet!!");
+        }
+        else if (this.state.description !== "") {
+            alert("Give a Description for the DBSubnet");
+        }
+        else if (this.state.subnetIDs !== "") {
+            alert("Give SubnetIDs to be connected!!");
+        }
+        if ((this.state.name !== "") && (this.state.subnetIDs !== "") && (this.state.description !== "")) {
             var store = this.props.store();
             var selectedID = this.props.getSelected();
             // for (var i = 0; i <= store.length - 1; i++) {
@@ -57,9 +66,9 @@ export default class DBSubnet extends Component {
             console.log("inside the save button", store);
             this.props.saveStore(store);
             this.props.remove();
-            document.getElementById('properties').style.right = "-314px"; 
+            document.getElementById('properties').style.right = "-314px";
         }
-      }
+    }
     render() {
         return (
             <div className="ec2-form " id="dbsubnet-form-id">

@@ -136,7 +136,13 @@ export default class EC2 extends Component {
     });
   }
   saveForm = () => {
-    if ((this.state.name !== "") && (this.state.AvailabilityZone !== "") && (this.state.KeyName !== "")) {
+    if(this.state.name===""){
+      alert("Give a name for the Instance!!");
+    }
+    else if(this.state.AvailabilityZone!==""){
+      alert("Give the availability zone for the instance");
+    }
+    if ((this.state.name !== "") && (this.state.AvailabilityZone !== "")) {
       // console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
