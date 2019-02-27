@@ -17,7 +17,7 @@ class ResourcesType extends Component {
         else if(e.target.innerHTML === "DB Instance"){
             e.dataTransfer.setData("type","dbinstance");
         }
-        else if(e.target.innerHTML === "Clous Watch"){
+        else if(e.target.innerHTML === "Cloud Watch"){
             e.dataTransfer.setData("type","cwatch");
         }
         else if(e.target.innerHTML === "Subnet"){
@@ -41,7 +41,7 @@ class ResourcesType extends Component {
         else if(e.target.innerHTML === "DB Instance"){
             this.image.src = dbinstance;
         }
-        else if(e.target.innerHTML === "Clous Watch"){
+        else if(e.target.innerHTML === "Cloud Watch"){
             this.image.src = cwatch;
         }
         else if(e.target.innerHTML === "Subnet"){
@@ -66,7 +66,7 @@ class ResourcesType extends Component {
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">DB Subnet</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Security Group</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Load Balancer</div>
-                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Clous Watch</div>
+                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Cloud Watch</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Lambda Function</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Bot</div>
             </div>

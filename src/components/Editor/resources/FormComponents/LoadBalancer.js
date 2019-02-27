@@ -72,6 +72,9 @@ export default class LoadBalancer extends Component {
   }
   
   saveForm = () => {
+    if(this.state.LoadBalancerName===""){
+      alert("Give a name for the Loadbalancer!!");
+    }
     // console.log("gegege",this.state);
     // if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
       console.log(this.state);
