@@ -195,3 +195,13 @@
     align-items: center;
     margin: 10px 0;
   }
+
+  .arrow{
+    position: absolute;
+    top: 15px;
+    right: 7px;
+  }
+
+  .arrow img{
+    width: 10px;
+  }

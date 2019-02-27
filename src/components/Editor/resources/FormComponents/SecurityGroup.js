@@ -51,6 +51,13 @@ export default class SecurityGroup extends Component {
   //   });
   // }
   saveForm = () => {
+    if(this.state.GroupName===""){
+      alert("Give a name for the SecurityGroup");
+    }
+    else if(this.state.GroupDescription===""){
+      alert("Give a description for the group");
+    }
+    
     if ((this.state.GroupName !== "") && (this.state.GroupDescription !== "") ) {
       console.log(this.state);
       var store = this.props.store();

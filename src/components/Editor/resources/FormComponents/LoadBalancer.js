@@ -74,9 +74,25 @@ export default class LoadBalancer extends Component {
   saveForm = () => {
     if(this.state.LoadBalancerName===""){
       alert("Give a name for the Loadbalancer!!");
+      return;
+    }
+    else if (this.state.InstancePort===""){
+      alert("Mention the instance port");
+      return;
+
+    }
+    else if (this.state.LoadBalancerPort===""){
+      alert("Mention the loadbalancer port");
+      return;
+
+    }
+    else if(this.state.Protocol===""){
+      alert("Mention the protocol");
+      return;
+
     }
     // console.log("gegege",this.state);
-    // if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
+    if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
       console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
@@ -92,7 +108,7 @@ export default class LoadBalancer extends Component {
       this.props.remove();      
       document.getElementById('properties').style.right = "-314px"; 
 
-    // }
+    }
   }
   render() {
     // const id = this.props.getSelected();

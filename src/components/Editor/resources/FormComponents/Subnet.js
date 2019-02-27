@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import arrow from '../../../../assets/drop@2x.png'
 
 import './FormComponents.css';
 
@@ -62,6 +63,12 @@ export default class Subnet extends Component {
   }
   saveForm = () => {
     // console.log("hello");
+    if(this.state.name===""){
+      alert("Give a name for the Subnet!!!");
+    }
+    else if(this.state.CidrBlock===""){
+      alert("Specify the Cidr address");
+    }
     if ((this.state.CidrBlock !== "")) {
       console.log(this.state);
       var store = this.props.store();
@@ -93,9 +100,12 @@ export default class Subnet extends Component {
               <option value="false">Private</option>
             </select> */}
           <div className="drop-down-container">
+          <div className="drop-tag">
             <div className="drop-head" id="drop-head-id">
               Public
             </div>
+            <div className="arrow"><img src={arrow} alt="⥮"/></div>
+          </div>
             <div className="drop-down hide" id="drop-id">
               <div className="drop-down-item">Public</div>
               <div className="drop-down-item">Private</div>

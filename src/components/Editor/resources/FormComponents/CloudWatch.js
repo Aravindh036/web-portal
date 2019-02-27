@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import arrow from '../../../../assets/drop@2x.png'
+
 import './FormComponents.css';
 
 export default class CloudWatch extends Component {
@@ -57,7 +59,7 @@ export default class CloudWatch extends Component {
             console.log(operator);
             this.setState({
                 ComparisonOperator: operator
-            },()=>{
+            }, () => {
                 console.log(this.state.ComparisonOperator);
             });
         })
@@ -93,16 +95,27 @@ export default class CloudWatch extends Component {
         });
     }
     saveForm = () => {
-        if(this.state.name===""){
+        if (this.state.name === "") {
             alert("Give a name for the Alarm!!");
-          }
-          else if(this.state.EvaluationPeriods!==""){
+            return;
+        }
+        else if (this.state.EvaluationPeriods === "") {
             alert("Give the Evaluation period for the Alarm");
-          }
-          else if(this.state.Threshold!==""){
+            return;
+
+        }
+        else if (this.state.Threshold === "") {
             alert("Give the threshold value for triggering the Alarm");
-          }
-        if ((this.state.CidrBlock !== "") && (this.state.VpcId !== "")) {
+            return;
+
+        }
+        else if (this.state.ComparisonOperator === "") {
+            alert("Mention the comparison operator");
+        }
+        else if(this.state.Email===""){
+            alert("Mention the mail id to get the alarm notification");
+        }
+        if ((this.state.name !== "") && (this.state.EvaluationPeriods !== "") && (this.state.Threshold !== "") && (this.state.ComparisonOperator !== "") && (this.state.Email !== "")) {
             console.log(this.state);
             var store = this.props.store();
             var selectedID = this.props.getSelected();
@@ -128,8 +141,11 @@ export default class CloudWatch extends Component {
                     <input type="email" name="email-id" id="mail-id" onBlur={this.getMail} placeholder="Email" />
                     <input type="number" id="period-id" placeholder="Periods (secs)" onBlur={this.getPeriod} />
                     <div className="drop-down-container">
-                        <div className="drop-head" id="drop-head-id">
-                            select a Comparison Operator
+                        <div className="drop-tag">
+                            <div className="drop-head" id="drop-head-id">
+                                select a Comparison Operator
+                        </div>
+                            <div className="arrow"><img src={arrow} alt="⥮" /></div>
                         </div>
                         <div className="drop-down hide" id="drop-id">
                             <div className="drop-down-item"> >= Threshold</div>
