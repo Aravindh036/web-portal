@@ -185,7 +185,7 @@ class Workspace extends Component {
             image.setAttribute("title","Security Group");
         }
         workspace.appendChild(image);
-        this.props.updateStore(type,image.id);
+        this.props.updateStore(type,image.id,e.pageX-workspace.offsetLeft,e.pageY-workspace.offsetTop);
     }
 
     mouseover = (e)=>{
@@ -220,6 +220,7 @@ class Workspace extends Component {
     click = (e)=>{
         if(this.down_pos_x === e.pageX && this.down_pos_y === e.pageY){
             this.select_elem = e.target;
+            this.props.remove()
             this.props.changeProperty(e.target.className,e.target.offsetLeft,e.target.offsetTop);
             e.target.style.border = "1px solid rgba(33,249,207,0.5)";
             e.target.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";

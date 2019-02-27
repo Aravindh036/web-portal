@@ -6,10 +6,10 @@ import './FormComponents.css';
 export default class EC2 extends Component {
   state = {
     name: "",
-    AvailabilityZone: "",
+    AvailabilityZone: "us-east-1a",
     KeyName: "",
     InstanceType:"t2.nano",
-    ImageID:"Amazon Linux 2 AMI",
+    ImageID:"ami-04bfee437f38a691e",
     SubnetName:"",
     SecurityGroup:"",
     Backup:false,
@@ -95,7 +95,7 @@ export default class EC2 extends Component {
       // console.log(e.target.innerHTML);
       document.getElementById('drop-head-image').innerHTML = e.target.innerHTML;
       this.setState({
-        ImageID:e.target.innerHTML
+        ImageID:this.ami_id[this.state.AvailabilityZone][e.target.innerHTML]
       });
     })
   }

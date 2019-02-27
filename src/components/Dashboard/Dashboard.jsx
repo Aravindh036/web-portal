@@ -8,6 +8,8 @@ import user from '../../assets/user.png';
 import plus from '../../assets/plus.png';
 import { reject } from 'q';
 
+import Modal from './Modal/Modal';
+
 class Dashboard extends Component {
     state = {
         projects: null
@@ -16,7 +18,7 @@ class Dashboard extends Component {
         var that = this;
         this.email = sessionStorage.getItem('email');
         if(!this.email){
-            document.location = '';
+            document.location = '/';
         }
         fetch('http://localhost:2019/dashboard/r.eniyanilavan@gmail.com',{
             method:"GET",
@@ -26,7 +28,7 @@ class Dashboard extends Component {
                 return res.json()
             }
             else{
-                alert("Something went wrong")
+                // alert("Something went wrong")
                 throw 404;
             }
         })
@@ -35,7 +37,7 @@ class Dashboard extends Component {
             var arr = res.archs;
             var projects = arr.map(pro => {
                 var date = (new Date(pro.doc).toDateString());
-                return <Card title={pro.name} doc={date} json={pro.json} />
+                return <Card title={pro.name} doc={date} json={pro.json} preview={pro.preview}/>
             });
             that.setState({
                 projects: projects
@@ -47,11 +49,12 @@ class Dashboard extends Component {
             // document.location.reload();
         })
     }
-
-    new = ()=>{
-        
+    
+    modal=()=>{
+        console.log(document.getElementById('modal-id'));
+        document.getElementById('modal-id').classList.toggle('hide-modal');
+        document.getElementById('backdrop-id').classList.toggle('hide');
     }
-
     render() {
         return (
             <div className="dashboard-container" >
@@ -70,7 +73,7 @@ class Dashboard extends Component {
                 <div className="project-container">
                     <div className="project-heading">My Projects</div>
                     <div className="project-listview" id="list-id" >
-                        <div onClick={this.new} className="card-container override-card">
+                        <div className="card-container override-card" onClick={this.modal} >
                             <div className="add-project">
                                 <div className="add-symbol">
                                     <img src={plus} alt="+" />
@@ -80,8 +83,9 @@ class Dashboard extends Component {
                         </div>
                         {this.state.projects}
                     </div>
-
+                    <Modal modal={this.modal} />    
                 </div>
+                <div className="backdrop hide" id="backdrop-id" onClick={this.modal}></div>
             </div>
         );
     }

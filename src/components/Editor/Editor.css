@@ -226,3 +226,17 @@
     border-bottom: 5px solid #21F9CF;
     border-radius: 2px;
 }
+
+.arch-title{
+    padding: 10px 20px;
+    border-radius: 50px;
+    background-color: rgba(129, 124, 150, 0.35);
+}
+
+.arch-title:hover{
+    cursor: pointer;
+}
+
+.arch-title:focus{
+    cursor: text
+}

@@ -55,13 +55,14 @@ class Editor extends Component {
 
     componentDidMount(){
         this.json = JSON.parse(sessionStorage.getItem('json'));
+        console.log(this.json,"hi");
         this.email = sessionStorage.getItem('email');
         this.title = sessionStorage.getItem('title');
         console.log(this.json);
         if(!this.email || !this.title){
             document.location = "/";
         }
-        if(this.json !== "null"){
+        if(this.json !== null){
             count = this.json;
         }
     }
@@ -98,7 +99,7 @@ class Editor extends Component {
     getSelected=()=>{
         return current_element_id;
     }
-    updateStore=(title,id)=>{
+    updateStore=(title,id,x,y)=>{
         console.log(title);
         // count.push({
         //     id:id,
@@ -110,7 +111,8 @@ class Editor extends Component {
         count[id] = {
             serviceName:title,
             properties:{
-
+                x : x,
+                y : y
             }
         }
         console.log(count);
@@ -147,12 +149,16 @@ class Editor extends Component {
     }
 
     cloud_save = ()=>{
+        var canvas = document.createElement('div');
+        var workspace = document.getElementById('workspace').cloneNode(true);
+        canvas.appendChild(workspace);
         fetch('http://localhost:2019/save',{
             method:"POST",
             body:JSON.stringify({
                 "json":JSON.stringify(count),
-                "name":"template1",
-                "email":"r.eniyanilavan@gmail.com"
+                "name":this.title,
+                "email":this.email,
+                "svg":canvas.innerHTML
             }),
             headers:{"Content-Type":"application/json"}
         })
@@ -218,7 +224,7 @@ class Editor extends Component {
                             </div>
                             <div id="under-line-id" className="under-line"></div>
                         </div>
-                        <label>{sessionStorage.getItem("title")}</label>
+                        <label contentEditable={true} className="arch-title">{sessionStorage.getItem("title")}</label>
                         <div className="buttons-container">
                             <button onClick={this.cloud_save} className="save" ><img src={save} alt="⬆️" /> </button>
                             <button className="upload"> <img src={upload} alt="⬆️" /> </button>
@@ -226,7 +232,7 @@ class Editor extends Component {
                             <button className="deploy" onClick={this.deploy} onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace update_position={this.update_position} updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
+                    {this.state.workflow === true ? <Workspace remove = {this.removeproperties} update_position={this.update_position} updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
                 {/* <div id="properties" className="properties">

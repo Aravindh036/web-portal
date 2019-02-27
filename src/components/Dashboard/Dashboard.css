@@ -101,4 +101,20 @@
 
 .override-card:hover{
     border: 1px solid #21F9CF!important;
+    transform: scale(1)!important;
+}
+
+
+.backdrop{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.825);
+}
+
+.hide{
+    display: none;
+    opacity: 0;
 }

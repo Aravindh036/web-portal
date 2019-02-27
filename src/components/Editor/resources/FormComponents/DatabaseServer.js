@@ -28,7 +28,7 @@ export default class DatabaseServer extends Component {
     if(Object.keys(store[selectedID].properties).length !== 0){
       this.setState({...store[selectedID].properties},()=>{
         console.log(this.state.Engine);
-        document.getElementById("dbname-id").value = this.state.name;
+        document.getElementById("dbname-id").value = this.state.DBName;
         document.getElementById("db-security-groups-id").value = this.state.VPCSecurityGroups;
         document.getElementById("allocated-storage-id").value = this.state.AllocatedStorage; 
         document.getElementById("drop-head-image").innerHTML = this.state.Engine;

@@ -9,12 +9,17 @@
     color: #BFBFBF;
     transition: all 0.2s ease;
     margin: 20px;
+    transform: scale(1.01);
 }
-
+.card-preview{
+    background-image: url(../../../assets/workspace_bg.png);
+    background-color: #2C2A37;
+    border-radius: 10px;
+    height: 70%;
+}
 .card-container:hover{
     border: 1px solid #21F9CF;
-    transform: scale(1.01);
-    perspective: 10px;
+    transform: scale(1.02);
 }
 
 .card-container:hover .card-name{
@@ -26,9 +31,9 @@
     cursor: pointer;
 }
 
-.card-preview img{
+/* .card-preview img{
     width: 100%;
-}
+} */
 
 .card-details{
     margin: 15px 0 0 0;
