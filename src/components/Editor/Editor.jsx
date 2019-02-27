@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import html2canvas from 'html2canvas';
 
 import logo from '../../assets/logo.png';
 import setting from '../../assets/settings.png';
@@ -52,6 +53,7 @@ class Editor extends Component {
             return <Subnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
         },
     }
+
 
     componentDidMount(){
         this.json = JSON.parse(sessionStorage.getItem('json'));
@@ -149,31 +151,32 @@ class Editor extends Component {
     }
 
     cloud_save = ()=>{
-        var canvas = document.createElement('div');
-        var workspace = document.getElementById('workspace').cloneNode(true);
-        canvas.appendChild(workspace);
-        fetch('http://localhost:2019/save',{
-            method:"POST",
-            body:JSON.stringify({
-                "json":JSON.stringify(count),
-                "name":this.title,
-                "email":this.email,
-                "svg":canvas.innerHTML
-            }),
-            headers:{"Content-Type":"application/json"}
-        })
-        .then(res=>{
-            if(res.status === 200){
-                alert("save successful");
-                sessionStorage.setItem('json',JSON.stringify(count))
-            }
-            else{
-                alert("try again later");
-            }
-        })
-        .catch(err=>{
-            console.log(err.message);
-        })
+        var that = this;
+        html2canvas(document.getElementById('workspace'))
+        .then(function(canvas) {
+            fetch('http://localhost:2019/save',{
+                method:"POST",
+                body:JSON.stringify({
+                    "json":JSON.stringify(count),
+                    "name":that.title,
+                    "email":that.email,
+                    "svg":canvas.toDataURL('image/png')
+                }),
+                headers:{"Content-Type":"application/json"}
+            })
+            .then(res=>{
+                if(res.status === 200){
+                    alert("save successful");
+                    sessionStorage.setItem('json',JSON.stringify(count))
+                }
+                else{
+                    alert("try again later");
+                }
+            })
+            .catch(err=>{
+                console.log(err.message);
+            })
+        });
     }
 
     download=()=>{

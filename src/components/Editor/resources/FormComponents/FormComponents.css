@@ -44,9 +44,10 @@
 
 /* custom toggler */
 .switch{
-  margin-top: 5px;
+    margin-top: 5px;
     position:relative;
     display:inline-block;
+    vertical-align: top;
     width:58px;
     height:20px;
     border-radius:50px;
