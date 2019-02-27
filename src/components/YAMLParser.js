@@ -1,54 +1,61 @@
 let yaml, tab = "  ", tab1 = " ";
 const subnet = {
-    Public : true,
-    Private : false
+    Public: true,
+    Private: false
 }
 var lambda = false;
 const generate = {
     'sg': (obj) => {
-        if(!obj.properties.GroupName){
+        if (!obj.properties.GroupName) {
             alert("No name for security group configure the security group(s) to continue");
             throw "hi";
         }
         var ports = [];
         ports = obj.properties.Port.split(",");
         console.log(ports);
-        yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}SecurityGroupIngress:\n`
+        var port = `${tab}${tab}${tab}SecurityGroupIngress:\n`;
         for (var i in ports) {
-            yaml += `${tab}${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0\n${tab}${tab}${tab}${tab}${tab}FromPort: ${ports[i]}\n${tab}${tab}${tab}${tab}${tab}IpProtocol: tcp\n${tab}${tab}${tab}${tab}${tab}ToPort: ${ports[i]}\n`
+            port += `${tab}${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0\n${tab}${tab}${tab}${tab}${tab}FromPort: ${ports[i]}\n${tab}${tab}${tab}${tab}${tab}IpProtocol: tcp\n${tab}${tab}${tab}${tab}${tab}ToPort: ${ports[i]}\n`
         }
-        yaml += `${tab}`
-        // console.log(obj);
+        port = port ? port : '';
+        console.log()
+        yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${ports}${tab}`
     },
     'dbinstance': (obj) => {
-        if(!obj.properties.DBName){
+        if (!obj.properties.DBName) {
             alert("No name for DB instance configure the DB instance(s) to continue");
             throw "hi";
         }
-        yaml += `${obj.properties.DBName}:\n${tab}${tab}Type: AWS::RDS::DBInstance\n${tab}${tab}Properties:\n${tab}${tab}${tab}DBName: ${obj.properties.DBName}\n${tab}${tab}${tab}VPCSecurityGroups: \n${tab}${tab}${tab}${tab}- !Ref ${obj.properties.DBSecurityGroups}\n${tab}${tab}${tab}AllocatedStorage: ${obj.properties.AllocatedStorage}\n${tab}${tab}${tab}DBInstanceClass: ${obj.properties.DBInstanceClass}\n${tab}${tab}${tab}Engine: ${obj.properties.Engine}\n${tab}${tab}${tab}MasterUsername: ${obj.properties.MasterUsername}\n${tab}${tab}${tab}MasterUserPassword: ${obj.properties.MasterUserPassword}\n${tab}`
+        var masterusername = obj.properties.MasterUsername ? `MasterUsername: ${obj.properties.MasterUsername}\n${tab}${tab}${tab}` : '';
+        var MasterUserPassword = obj.properties.MasterUserPassword ? `${tab}${tab}${tab}${masterusername}MasterUserPassword: ${obj.properties.MasterUserPassword}\n` : '';
+        var vpcsecuritygroup = obj.properties.DBSecurityGroups ? `VPCSecurityGroups: \n${tab}${tab}${tab}${tab}- !Ref ${obj.properties.DBSecurityGroups}\n${tab}${tab}${tab}` : '';
+        var allocatedstorage = obj.properties.AllocatedStorage ? `AllocatedStorage: ${obj.properties.AllocatedStorage}\n${tab}${tab}${tab}` : '';
+        yaml += `${obj.properties.DBName}:\n${tab}${tab}Type: AWS::RDS::DBInstance\n${tab}${tab}Properties:\n${tab}${tab}${tab}DBName: ${obj.properties.DBName}\n${tab}${tab}${tab}${vpcsecuritygroup}${allocatedstorage}DBInstanceClass: ${obj.properties.DBInstanceClass}\n${tab}${tab}${tab}Engine: ${obj.properties.Engine}\n${MasterUserPassword}${tab}`
         // console.log(obj);
     },
     'lbalancer': (obj) => {
-        if(!obj.properties.LoadBalancerName){
+        if (!obj.properties.LoadBalancerName) {
             alert("No name for Load balencer configure the Load balencer(s) to continue");
             throw "hi";
         }
-        yaml += `${obj.properties.LoadBalancerName}:\n${tab}${tab}Type: AWS::ElasticLoadBalancing::LoadBalancer\n${tab}${tab}Properties:\n${tab}${tab}${tab}LoadBalancerName: ${obj.properties.LoadBalancerName}\n${tab}${tab}${tab}Subnets:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.Subnet}\n${tab}${tab}${tab}SecurityGroups:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n${tab}${tab}${tab}Listeners:\n${tab}${tab}${tab}-${tab1}LoadBalancerPort: ${obj.properties.LoadBalancerPort}\n${tab}${tab}${tab}${tab}InstancePort: ${obj.properties.InstancePort}\n${tab}${tab}${tab}${tab}Protocol: ${obj.properties.Protocol}\n${tab}`
+        var subnet = obj.properties.Subnet ? `Subnets:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.Subnet}\n${tab}${tab}${tab}`:'';
+        var securitygroup = obj.properties.SecurityGroup ? `SecurityGroups:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n${tab}${tab}${tab}`:'';
+        yaml += `${obj.properties.LoadBalancerName}:\n${tab}${tab}Type: AWS::ElasticLoadBalancing::LoadBalancer\n${tab}${tab}Properties:\n${tab}${tab}${tab}LoadBalancerName: ${obj.properties.LoadBalancerName}\n${tab}${tab}${tab}${subnet}${securitygroup}Listeners:\n${tab}${tab}${tab}-${tab1}LoadBalancerPort: ${obj.properties.LoadBalancerPort}\n${tab}${tab}${tab}${tab}InstancePort: ${obj.properties.InstancePort}\n${tab}${tab}${tab}${tab}Protocol: ${obj.properties.Protocol}\n${tab}`
         // console.log(obj);
     },
     'subnet': (obj) => {
-        if(!obj.properties.name){
+        if (!obj.properties.name) {
             alert("No name for Subnet configure the Subnet(s) to continue");
             throw "hi";
         }
         yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Subnet\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}AvailabilityZone: "us-east-1a"\n${tab}${tab}${tab}MapPublicIpOnLaunch: ${subnet[obj.properties.SubnetType]}\n${tab}`
-        if(subnet[obj.properties.SubnetType]){
+        if (subnet[obj.properties.SubnetType]) {
             yaml += `${obj.properties.name}RouteTableAssociation:\n${tab}${tab}Type: AWS::EC2::SubnetRouteTableAssociation\n${tab}${tab}Properties:\n${tab}${tab}${tab}RouteTableId: !Ref RouteTable\n${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.name}\n${tab}`
         }
         console.log(obj);
     },
     'dbsubnet': (obj) => {
-        if(!obj.properties.name){
+        if (!obj.properties.name) {
             alert("No name for DB Subnet configure the DB Subnet(s) to continue");
             throw "hi";
         }
@@ -56,12 +63,16 @@ const generate = {
         console.log(obj);
     },
     'instance': (obj) => {
-        if(!obj.properties.name){
+        if (!obj.properties.name) {
             alert("No name for instance configure the instance(s) to continue");
             throw "hi";
         }
-        var subnet = obj.properties.SubnetName?`${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.SubnetName}\n`:``;
-        yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Instance\n${tab}${tab}Properties:\n${tab}${tab}${tab}ImageId: ${obj.properties.ImageID}\n${tab}${tab}${tab}AvailabilityZone: ${obj.properties.AvailabilityZone}\n${tab}${tab}${tab}KeyName: ${obj.properties.KeyName}\n${tab}${tab}${tab}InstanceType: ${obj.properties.InstanceType}\n${subnet}${tab}${tab}${tab}SecurityGroupIds:\n${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n`
+        var subnet = obj.properties.SubnetName ? `${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.SubnetName}\n` : ``;
+        console.log('keyname', obj.properties.keyname);
+        var keyname = obj.properties.KeyName ? `KeyName: ${obj.properties.KeyName}\n${tab}${tab}${tab}` : '';
+        var imageid = obj.properties.ImageID ? `ImageId: ${obj.properties.ImageID}\n${tab}${tab}${tab}` : '';
+        var securitygroup = obj.properties.SecurityGroup ? `${subnet}${tab}${tab}${tab}SecurityGroupIds:\n${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n` : '';
+        yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Instance\n${tab}${tab}Properties:\n${tab}${tab}${tab}${imageid}AvailabilityZone: ${obj.properties.AvailabilityZone}\n${tab}${tab}${tab}${keyname}InstanceType: ${obj.properties.InstanceType}\n${securitygroup}`
         // console.log(obj);
         if (obj.properties.ImageID === "ami-e24b7d9d") {
             yaml += `${tab}${tab}${tab}UserData:\n${tab}${tab}${tab}${tab}Fn::Base64: !Sub |\n${tab}${tab}${tab}${tab}${tab}sudo su\n${tab}${tab}${tab}${tab}${tab}yum install httpd -y\n${tab}${tab}${tab}${tab}${tab}systemctl enable httpd\n${tab}${tab}${tab}${tab}${tab}systemctl start httpd\n${tab}`
@@ -81,12 +92,13 @@ const generate = {
         }
     },
     'cwatch': (obj) => {
-        if(!obj.properties.name){
+        if (!obj.properties.name) {
             alert("No name for cloud watch configure the cloud watch(s) to continue");
             throw "hi";
         }
+        var dimensions = obj.properties.InstanceName ? `${tab}${tab}${tab}Dimensions:\n${tab}${tab}${tab}${tab}- Name: !Ref ${obj.properties.InstanceName}\n${tab}${tab}${tab}${tab}  Value:\n${tab}${tab}${tab}${tab}  ${tab}Ref: ${obj.properties.InstanceName}\n`:'';
         yaml += `SNSTopic:\n${tab}${tab}Type: AWS::SNS::Topic\n${tab}${tab}Properties:\n${tab}${tab}${tab}DisplayName: SampleSNS\n${tab}${tab}${tab}TopicName: SampleSNS\n${tab}${tab}${tab}Subscription:\n${tab}${tab}${tab}${tab}- Endpoint: ${obj.properties.Email}\n${tab}${tab}${tab}${tab}  Protocol: email\n${tab}`
-        yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::CloudWatch::Alarm\n${tab}${tab}Properties:\n${tab}${tab}${tab}AlarmDescription: CPU alarm for my instance\n${tab}${tab}${tab}AlarmActions:\n${tab}${tab}${tab}${tab}- Ref: SNSTopic\n${tab}${tab}${tab}MetricName: CPUUtilization\n${tab}${tab}${tab}Namespace: AWS/EC2\n${tab}${tab}${tab}Statistic: Average\n${tab}${tab}${tab}Period: ${obj.properties.Period}\n${tab}${tab}${tab}DatapointsToAlarm: 2\n${tab}${tab}${tab}EvaluationPeriods: ${obj.properties.EvaluationPeriods}\n${tab}${tab}${tab}Threshold: ${obj.properties.Threshold}\n${tab}${tab}${tab}ComparisonOperator: GreaterThanThreshold\n${tab}${tab}${tab}Dimensions:\n${tab}${tab}${tab}${tab}- Name: !Ref ${obj.properties.InstanceName}\n${tab}${tab}${tab}${tab}  Value:\n${tab}${tab}${tab}${tab}  ${tab}Ref: ${obj.properties.InstanceName}\n${tab}`;
+        yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::CloudWatch::Alarm\n${tab}${tab}Properties:\n${tab}${tab}${tab}AlarmDescription: CPU alarm for my instance\n${tab}${tab}${tab}AlarmActions:\n${tab}${tab}${tab}${tab}- Ref: SNSTopic\n${tab}${tab}${tab}MetricName: CPUUtilization\n${tab}${tab}${tab}Namespace: AWS/EC2\n${tab}${tab}${tab}Statistic: Average\n${tab}${tab}${tab}Period: ${obj.properties.Period}\n${tab}${tab}${tab}DatapointsToAlarm: 2\n${tab}${tab}${tab}EvaluationPeriods: ${obj.properties.EvaluationPeriods}\n${tab}${tab}${tab}Threshold: ${obj.properties.Threshold}\n${tab}${tab}${tab}ComparisonOperator: GreaterThanThreshold\n${dimensions}${tab}`;
     }
 }
 
@@ -101,27 +113,28 @@ export default function deploy(sample) {
             temp = true;
         }
         if ((sample[i].serviceName === "subnet") && (routeTableTemp !== true)) {
-            if(subnet[sample[i].properties.SubnetType])
-            yaml += routeTableConfig;
+            if (subnet[sample[i].properties.SubnetType])
+                yaml += routeTableConfig;
             routeTableTemp = true;
         }
         console.log(sample[i])
-        try{
+        try {
             generate[sample[i].serviceName](sample[i]);
         }
-        catch(e){
+        catch (e) {
             console.log(e);
-            if(e === "hi"){
+            if (e === "hi") {
                 return "";
             }
             alert("Check your design");
         }
     }
     // console.log(yaml);
-    if(lambda){
+    if (lambda) {
         yaml += `LambdaExecutionRole:\n${tab}${tab}Type: AWS::IAM::Role\n${tab}${tab}Properties:\n${tab}${tab}${tab}AssumeRolePolicyDocument:\n${tab}${tab}${tab}${tab}Version: '2012-10-17'\n${tab}${tab}${tab}${tab}Statement:\n${tab}${tab}${tab}${tab}- Effect: Allow\n${tab}${tab}${tab}${tab}  Principal:\n${tab}${tab}${tab}${tab}${tab}  Service:\n${tab}${tab}${tab}${tab}${tab}  - lambda.amazonaws.com\n${tab}${tab}${tab}${tab}  Action:\n${tab}${tab}${tab}${tab}  - sts:AssumeRole\n${tab}${tab}${tab}Path: "/"\n${tab}${tab}${tab}Policies:\n${tab}${tab}${tab}- PolicyName: root\n${tab}${tab}${tab}  PolicyDocument:\n${tab}${tab}${tab}${tab}  Version: '2012-10-17'\n${tab}${tab}${tab}${tab}  Statement:\n${tab}${tab}${tab}${tab}  - Effect: Allow\n${tab}${tab}${tab}${tab}    Action:\n${tab}${tab}${tab}${tab}    - "logs:*"\n${tab}${tab}${tab}${tab}    Resource: arn:aws:logs:::*\n${tab}`
     }
     temp = false;
     routeTableTemp = false;
+    console.log(yaml);
     return yaml;
 }

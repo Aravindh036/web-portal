@@ -109,6 +109,7 @@ class Editor extends Component {
         //     }
         // })
         count[id] = {
+            id:id,
             serviceName:title,
             properties:{
                 x : x,

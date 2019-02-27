@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+ 
+import arrow from '../../../../assets/drop@2x.png'
 import './FormComponents.css';
 
 
@@ -139,7 +140,7 @@ export default class EC2 extends Component {
     if(this.state.name===""){
       alert("Give a name for the Instance!!");
     }
-    else if(this.state.AvailabilityZone!==""){
+    else if(this.state.AvailabilityZone===""){
       alert("Give the availability zone for the instance");
     }
     if ((this.state.name !== "") && (this.state.AvailabilityZone !== "")) {
@@ -177,9 +178,12 @@ export default class EC2 extends Component {
               <option value="t2.large">t2.large</option>
             </select> */}
             <div className="drop-down-container">
+            <div className="drop-tag">
               <div className="drop-head" id="drop-head-id">
                 select a Instance Type
               </div>
+              <div className="arrow"><img src={arrow} alt="⥮"/></div>
+            </div>
               <div className="drop-down hide" id="drop-id">
                 <div className="drop-down-item">t2.nano</div>
                 <div className="drop-down-item">t2.micro</div>
@@ -193,8 +197,11 @@ export default class EC2 extends Component {
               <option value="ami-0f9cf087c1f27d9b1 ">Linux</option>
             </select> */}
             <div className="drop-down-container">
+              <div className="drop-tag">
               <div className="drop-head" id="drop-head-image">
-              Select Machine Type
+                Select a InstanceType
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮"/></div>
               </div>
               <div className="drop-down hide" id="drop-image">
                 <div className="drop-down-item">Amazon Linux 2 AMI</div>

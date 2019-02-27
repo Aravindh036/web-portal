@@ -47,10 +47,10 @@ export default class DBSubnet extends Component {
         if (this.state.name === "") {
             alert("Give a name for the DB subnet!!");
         }
-        else if (this.state.description !== "") {
+        else if (this.state.description === "") {
             alert("Give a Description for the DBSubnet");
         }
-        else if (this.state.subnetIDs !== "") {
+        else if (this.state.subnetIDs === "") {
             alert("Give SubnetIDs to be connected!!");
         }
         if ((this.state.name !== "") && (this.state.subnetIDs !== "") && (this.state.description !== "")) {
@@ -75,7 +75,7 @@ export default class DBSubnet extends Component {
                 <div className="form-elements">
                     <input type="text" placeholder="DBSubnet Name" id="alarm-name-id" onBlur={this.getName} />
                     <input type="text" placeholder="DBSubnet Description" id="dbsubnet-des-id" onBlur={this.getDescription} />
-                    <input type="text" placeholder="DBSubnet ID(s)" id="dbsubnet-id" onBlur={this.getsubnetIDs} />
+                    <input type="text" placeholder="Subnet ID(s)" id="dbsubnet-id" onBlur={this.getsubnetIDs} />
                 </div>
                 <button onClick={this.saveForm} >Save</button>
             </div>

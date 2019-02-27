@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import arrow from '../../../../assets/drop@2x.png'
 
 import './FormComponents.css';
 
@@ -106,9 +107,11 @@ export default class DatabaseServer extends Component {
   saveForm = () => {
     if (this.state.DBName === "") {
       alert("Give a name for the RDS Instance!!");
+      return;
     }
-    else if (this.state.DBInstanceClass !== "") {
+    else if (this.state.DBInstanceClass === "") {
       alert("Give the Instance class");
+      return;
     }
     if ((this.state.DBName !== "") && (this.state.DBInstanceClass !== "")) {
       console.log(this.state);
@@ -125,7 +128,6 @@ export default class DatabaseServer extends Component {
       this.props.saveStore(store);
       this.props.remove();
       document.getElementById('properties').style.right = "-314px";
-
     }
   }
   render() {
@@ -145,8 +147,11 @@ export default class DatabaseServer extends Component {
             <option value="db.t2.xlarge">db.t2.xlarge</option>
           </select> */}
           <div className="drop-down-container">
-            <div className="drop-head" id="drop-head-id">
-              {this.state.DBInstanceClass}
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-id">
+                {this.state.DBInstanceClass}
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
             </div>
             <div className="drop-down hide" id="drop-id">
               <div className="drop-down-item">db.t2.nano</div>
@@ -165,9 +170,12 @@ export default class DatabaseServer extends Component {
             <option value="SQL Server">SQL Server</option>
           </select> */}
           <div className="drop-down-container">
+          <div className="drop-tag">
             <div className="drop-head" id="drop-head-image">
               {this.state.Engine}
             </div>
+            <div className="arrow"><img src={arrow} alt="⥮"/></div>
+          </div>
             <div className="drop-down hide" id="drop-image">
               <div className="drop-down-item">MySQL</div>
               <div className="drop-down-item">MariaDB</div>
