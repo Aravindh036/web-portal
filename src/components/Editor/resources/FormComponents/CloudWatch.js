@@ -25,7 +25,7 @@ export default class CloudWatch extends Component {
         var store = this.props.store();
         var selectedID = this.props.getSelected();
         if (Object.keys(store[selectedID].properties).length !== 0) {
-            console.log("mount", store[selectedID].properties);
+            // console.log("mount", store[selectedID].properties);
             this.setState({ ...store[selectedID].properties }, () => {
                 document.getElementById("alarm-name-id").value = this.state.name;
                 document.getElementById("instance-name-id").value = this.state.InstanceName;
@@ -56,7 +56,7 @@ export default class CloudWatch extends Component {
             else if (e.target.innerHTML.includes('&lt;')) {
                 operator = "LessThanThreshold";
             }
-            console.log(operator);
+            // console.log(operator);
             this.setState({
                 ComparisonOperator: operator
             }, () => {
@@ -116,7 +116,7 @@ export default class CloudWatch extends Component {
             alert("Mention the mail id to get the alarm notification");
         }
         if ((this.state.name !== "") && (this.state.EvaluationPeriods !== "") && (this.state.Threshold !== "") && (this.state.ComparisonOperator !== "") && (this.state.Email !== "")) {
-            console.log(this.state);
+            // console.log(this.state);
             var store = this.props.store();
             var selectedID = this.props.getSelected();
             // for (var i = 0; i <= store.length - 1; i++) {
@@ -126,7 +126,7 @@ export default class CloudWatch extends Component {
             //   }
             // }
             store[selectedID].properties = this.state;
-            console.log("inside the save button", store);
+            // console.log("inside the save button", store);
             this.props.saveStore(store);
             document.getElementById('properties').style.right = "-314px";
             this.props.remove();

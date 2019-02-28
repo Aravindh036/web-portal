@@ -68,7 +68,7 @@ export default class EC2 extends Component {
         document.getElementById("keyname-id").value = this.state.KeyName;
         document.getElementById("availability-id").value = this.state.AvailabilityZone;
         // document.getElementById("ec2-subnet-id").value = this.state.SubnetName;
-        document.getElementById("security-groups-id").value = this.state.SecurityGroup;
+        // document.getElementById("security-groups-id").value = this.state.SecurityGroup;
         document.getElementById('drop-head-id').innerHTML = this.state.InstanceType;
         document.getElementById('drop-head-image').innerHTML = this.instance_id[this.state.AvailabilityZone][this.state.ImageID];
       })
@@ -111,6 +111,21 @@ export default class EC2 extends Component {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
           SubnetName: e.target.innerHTML
+        });
+      }
+    })
+    document.getElementById('drop-head-security').addEventListener('click', () => {
+      document.getElementById('drop-security').classList.toggle('hide');
+      console.log("vauva");
+    });
+
+    document.getElementById('drop-security').addEventListener('click', (e) => {
+      document.getElementById("drop-security").classList.toggle('hide');
+      // console.log(e.target.innerHTML);
+      if (!e.target.innerHTML.includes("No security group created")) {
+        document.getElementById('drop-head-security').innerHTML = e.target.innerHTML;
+        this.setState({
+          SecurityGroup: e.target.innerHTML
         });
       }
     })
@@ -181,9 +196,10 @@ export default class EC2 extends Component {
     // if(store.properties===undefined){
     var subnet = this.props.getSubnet();
     var subnetDropdown = "";
-    if (subnet.length !== 0) {
-      subnetDropdown = subnet.map(sub => {
-        return <div className="drop-down-item">{sub.id}</div>
+    console.log(subnet,"hiiiiiiii");
+    if (Object.values(subnet).length !== 0) {
+      subnetDropdown = Object.values(subnet).map(sub => {
+        return <div className="drop-down-item">{sub.properties.name}</div>
       })
     }
     else {
@@ -192,6 +208,20 @@ export default class EC2 extends Component {
         return <div className="drop-down-item">No subnets created</div>
       })
     }
+    var security = this.props.getSecurity();
+    var securitygroup = "";
+    if (Object.values(security).length !== 0) {
+      securitygroup = Object.values(security).map(sub => {
+        return <div className="drop-down-item">{sub.properties.GroupName}</div>
+      })
+    }
+    else {
+      security = [1];
+      securitygroup = security.map(empty => {
+        return <div className="drop-down-item">No Security Group created</div>
+      })
+    }
+    console.log("security",securitygroup);
     console.log("helloeee", subnetDropdown);
     return (
       <div className="ec2-form" id="ec2-form-id">
@@ -271,7 +301,19 @@ export default class EC2 extends Component {
               {subnetDropdown}
             </div>
           </div>
-          <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} />
+          {/* <input type="text" placeholder="SecurityGroups" id="security-groups-id" onBlur={this.getSecurityGroup} /> */}
+          <div className="drop-down-container">
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-security">
+                Select a Security Group
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+            </div>
+            <div className="drop-down hide" id="drop-security">
+              {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+              {securitygroup}
+            </div>
+          </div>
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>
