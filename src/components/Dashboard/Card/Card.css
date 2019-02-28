@@ -16,6 +16,7 @@
     background-color: #2C2A37;
     border-radius: 10px;
     height: 70%;
+    width: 100%;
 }
 .card-container:hover{
     border: 1px solid #21F9CF;

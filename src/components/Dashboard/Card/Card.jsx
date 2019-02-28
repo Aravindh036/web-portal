@@ -14,29 +14,14 @@ class Card extends Component {
     }
 
     componentDidMount(){
-        var svg = ()=>{
-            // console.log(this.props.title);
-            return (
-`<svg top=0
-    width="100%"
-    height="100%"
-viewBox = '0 0 1223 583'>
-    <foreignObject x=0 y=0 width='100%' height='110%'>
-        ${this.props.preview === null?`<div width='100%'></div>`:this.props.preview}
-    </foreignObject>
-</svg>`
-            )
-        };
-        var svg_elem = svg();
-        var canvas = this.preview;
-        canvas.innerHTML = svg_elem;
+        
     }
 
     render() {
         return (
             <div onClick={this.select} className="card-container" >
                 <div ref={ref=>this.preview=ref} className="card-preview">
-                    
+                    <img width="100%" height="100%" src = {this.props.preview} alt="P"/>
                 </div>
                 <div className="card-details">
                     <div className="project-details">

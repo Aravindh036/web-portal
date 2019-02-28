@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import html2canvas from 'html2canvas';
 
 import logo from '../../assets/logo.png';
 import setting from '../../assets/settings.png';
@@ -53,14 +54,15 @@ class Editor extends Component {
         },
     }
 
-    componentDidMount() {
+
+    componentDidMount(){
         this.json = JSON.parse(sessionStorage.getItem('json'));
         // console.log(this.json,"hi");
         this.email = sessionStorage.getItem('email');
         this.title = sessionStorage.getItem('title');
-        // console.log(this.json);
-        if (!this.email || !this.title) {
-            // document.location = "/";
+        console.log(this.json);
+        if(!this.email || !this.title){
+            document.location = "/";
         }
         if (this.json !== null) {
             count = this.json;
@@ -135,14 +137,14 @@ class Editor extends Component {
             security[id] = {
                 id: id,
                 properties: {
-                    name: `security-${Object.keys(subnet).length + 1}`
+                    GroupName: `security-${Object.keys(security).length + 1}`
                 }
             }
             count[id] = {
                 id: id,
                 serviceName: title,
                 properties: {
-                    name: `security-${Object.keys(subnet).length}`,
+                    GroupName: `security-${Object.keys(security).length}`,
                     x: x,
                     y: y
                 }
@@ -191,32 +193,33 @@ class Editor extends Component {
 
     }
 
-    cloud_save = () => {
-        var canvas = document.createElement('div');
-        var workspace = document.getElementById('workspace').cloneNode(true);
-        canvas.appendChild(workspace);
-        fetch('http://localhost:2019/save', {
-            method: "POST",
-            body: JSON.stringify({
-                "json": JSON.stringify(count),
-                "name": this.title,
-                "email": this.email,
-                "svg": canvas.innerHTML
-            }),
-            headers: { "Content-Type": "application/json" }
-        })
-            .then(res => {
-                if (res.status === 200) {
+    cloud_save = ()=>{
+        var that = this;
+        html2canvas(document.getElementById('workspace'))
+        .then(function(canvas) {
+            fetch('http://localhost:2019/save',{
+                method:"POST",
+                body:JSON.stringify({
+                    "json":JSON.stringify(count),
+                    "name":that.title,
+                    "email":that.email,
+                    "svg":canvas.toDataURL('image/png')
+                }),
+                headers:{"Content-Type":"application/json"}
+            })
+            .then(res=>{
+                if(res.status === 200){
                     alert("save successful");
-                    sessionStorage.setItem('json', JSON.stringify(count))
+                    sessionStorage.setItem('json',JSON.stringify(count))
                 }
-                else {
+                else{
                     alert("try again later");
                 }
             })
-            .catch(err => {
+            .catch(err=>{
                 console.log(err.message);
             })
+        });
     }
 
     download = () => {
