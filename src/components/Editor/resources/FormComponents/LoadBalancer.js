@@ -127,28 +127,11 @@ export default class LoadBalancer extends Component {
     }
   }
   render() {
-    // const id = this.props.getSelected();
-    // console.log("id",id);
-    // if ((id === null) || (id!=="load-balancer-form-id")) {
-    //   return <div></div>;
-    // }
-    // if(id==="load-balancer-form-id"){
-    //   var store = this.props.store(), selected;
-    //   var selectedID = this.props.getSelected();
-    //   console.log(store);
-    //   for (var i = 0; i <= store.length - 1; i++) {
-    //     if (store[i].id === selectedID) {
-    //       console.log("hhhh");
-    //       selected = store[i];
-    //     }
-    //     console.log("selected", selected);
-    //   }
-    // }
     var subnet = this.props.getSubnet();
-    var subnetDropdown = "";
+    var subnetDropdown = "",i;
     if (subnet.length !== 0) {
-      subnetDropdown = subnet.map(sub => {
-        return <div className="drop-down-item">{sub.id}</div>
+      subnetDropdown = Object.values(subnet).map(sub => {
+        return <div className="drop-down-item">{sub.properties.name}</div>
       })
     }
     else {

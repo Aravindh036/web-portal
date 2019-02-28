@@ -15,7 +15,7 @@ class Card extends Component {
 
     componentDidMount(){
         var svg = ()=>{
-            console.log(this.props.title);
+            // console.log(this.props.title);
             return (
 `<svg top=0
     width="100%"

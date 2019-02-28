@@ -9,37 +9,37 @@ export default class Subnet extends Component {
     CidrBlock: "",
     SubnetType: "Public",
     // VpcId:"",
-    x:0,
-    y:0
+    x: 0,
+    y: 0
   }
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state.x = this.props.x;
     this.state.y = this.props.y;
   }
-  componentDidMount(){
+  componentDidMount() {
     var store = this.props.store();
     var selectedID = this.props.getSelected();
-    if(Object.keys(store[selectedID].properties).length !== 0){
-        this.setState({...store[selectedID].properties},()=>{
-            document.getElementById("subnet-name-id").value = this.state.name;
-            document.getElementById("cidr-block-id").value = this.state.CidrBlock;
-            document.getElementById("drop-head-id").innerHTML = this.state.SubnetType; 
-        })
+    if (Object.keys(store[selectedID].properties).length !== 0) {
+      this.setState({ ...store[selectedID].properties }, () => {
+        document.getElementById("subnet-name-id").value = this.state.name;
+        document.getElementById("cidr-block-id").value = this.state.CidrBlock;
+        document.getElementById("drop-head-id").innerHTML = this.state.SubnetType;
+      })
     }
-    document.getElementById('drop-head-id').addEventListener('click',()=>{
+    document.getElementById('drop-head-id').addEventListener('click', () => {
       document.getElementById('drop-id').classList.toggle('hide');
       // console.log("hhhh");
-    }) ;
-    
-    document.getElementById('drop-id').addEventListener('click',(e)=>{
+    });
+
+    document.getElementById('drop-id').addEventListener('click', (e) => {
       document.getElementById("drop-id").classList.toggle('hide');
       // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
-        SubnetType:e.target.innerHTML
+        SubnetType: e.target.innerHTML
       });
-    })  
+    })
   }
   getCidrBlock = (e) => {
     this.setState({
@@ -63,15 +63,16 @@ export default class Subnet extends Component {
   }
   saveForm = () => {
     // console.log("hello");
-    if(this.state.name===""){
+    if (this.state.name === "") {
       alert("Give a name for the Subnet!!!");
     }
-    else if(this.state.CidrBlock===""){
+    else if (this.state.CidrBlock === "") {
       alert("Specify the Cidr address");
     }
     if ((this.state.CidrBlock !== "")) {
       console.log(this.state);
       var store = this.props.store();
+      var subnet = this.props.getSubnet();
       var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
@@ -80,16 +81,15 @@ export default class Subnet extends Component {
       //   }
       // }
       store[selectedID].properties = this.state;
+      subnet[selectedID].properties = this.state;
       console.log("inside the save button", store);
-      this.props.saveStore(store);  
+      this.props.saveStore(store);
       this.props.remove();
-      document.getElementById('properties').style.right = "-314px"; 
-
+      document.getElementById('properties').style.right = "-314px";
+      console.log("subnete", subnet);
     }
   }
   render() {
-    // const id = this.props.currentComponent();
-    // console.log("id",id);
     return (
       <div className="ec2-form " id="private-subnet-form-id">
         <div className="form-elements">
@@ -100,12 +100,12 @@ export default class Subnet extends Component {
               <option value="false">Private</option>
             </select> */}
           <div className="drop-down-container">
-          <div className="drop-tag">
-            <div className="drop-head" id="drop-head-id">
-              Public
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-id">
+                Public
             </div>
-            <div className="arrow"><img src={arrow} alt="⥮"/></div>
-          </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+            </div>
             <div className="drop-down hide" id="drop-id">
               <div className="drop-down-item">Public</div>
               <div className="drop-down-item">Private</div>

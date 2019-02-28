@@ -51,7 +51,7 @@ class Dashboard extends Component {
     }
     
     modal=()=>{
-        console.log(document.getElementById('modal-id'));
+        // console.log(document.getElementById('modal-id'));
         document.getElementById('modal-id').classList.toggle('hide-modal');
         document.getElementById('backdrop-id').classList.toggle('hide');
     }

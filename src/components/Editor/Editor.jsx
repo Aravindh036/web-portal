@@ -23,87 +23,90 @@ import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 import deploy from '../YAMLParser';
 
-var count={},current_element_id=null,yaml="Deploy for yaml",subnet=[];
+var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {};
 class Editor extends Component {
     static properties = null;
     state = {
         workflow: true,
         code: false,
-        instance:(x,y)=>{
-            console.log("hello");
-            return <EC2 x={x} y={y} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
+        instance: (x, y) => {
+            // console.log("hello");
+            return <EC2 x={x} y={y} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
-        cwatch:(x,y)=>{
-            return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/> 
+        cwatch: (x, y) => {
+            return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
-        dbsubnet:(x,y)=>{
-            return <DBSubnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
+        dbsubnet: (x, y) => {
+            return <DBSubnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
-        dbinstance:(x,y)=>{
-            return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
+        dbinstance: (x, y) => {
+            return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
-        lbalancer:(x,y)=>{
-            return <LoadBalancer x={x} y={y} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
+        lbalancer: (x, y) => {
+            return <LoadBalancer x={x} y={y} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
-        sg:(x,y)=>{
-            return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected}  remove = {this.removeproperties}/>
+        sg: (x, y) => {
+            return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
-        subnet:(x,y)=>{
-            return <Subnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove = {this.removeproperties}/>
+        subnet: (x, y) => {
+            return <Subnet getSubnet={this.getSubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.json = JSON.parse(sessionStorage.getItem('json'));
-        console.log(this.json,"hi");
+        // console.log(this.json,"hi");
         this.email = sessionStorage.getItem('email');
         this.title = sessionStorage.getItem('title');
-        console.log(this.json);
-        if(!this.email || !this.title){
+        // console.log(this.json);
+        if (!this.email || !this.title) {
             // document.location = "/";
         }
-        if(this.json !== null){
+        if (this.json !== null) {
             count = this.json;
         }
     }
-    getSubnet=()=>{
+    getSubnet = () => {
         return subnet;
     }
-    deploy=()=>{
-        if(Object.keys(count).length === 0){
+    getSecurity=()=>{
+        return security;
+    }
+    deploy = () => {
+        if (Object.keys(count).length === 0) {
             alert('no service to build');
             return;
         }
-        yaml =deploy(count);
-        console.log(yaml);
-        fetch('http://localhost:2019/deploy',{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({yaml:yaml})
+        yaml = deploy(count);
+        // console.log(yaml);
+        fetch('http://localhost:2019/deploy', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ yaml: yaml })
         })
     }
-    removeproperties = ()=>{
+    removeproperties = () => {
         Editor.properties = null;
-        console.log("remove",count);
+        // console.log("remove",count);
         this.forceUpdate()
     }
-    saveStore=(store)=>{
+    saveStore = (store) => {
         // count = store;
     }
-    store=()=>{
+    store = () => {
         return count;
     }
     changeImage = () => {
 
     }
-    currentID=(id)=>{
+    currentID = (id) => {
         current_element_id = id;
     }
-    getSelected=()=>{
+    getSelected = () => {
         return current_element_id;
     }
-    updateStore=(title,id,x,y)=>{
-        console.log(title);
+    updateStore = (title, id, x, y) => {
+        // console.log(title);
         // count.push({
         //     id:id,
         //     serviceName:title,
@@ -111,20 +114,51 @@ class Editor extends Component {
 
         //     }
         // })
-        if(title==="subnet"){
-            subnet.push({
-                id:id,
-            })
-        }
-        count[id] = {
-            id:id,
-            serviceName:title,
-            properties:{
-                x : x,
-                y : y
+        if (title === "subnet") {
+            subnet[id] = {
+                id: id,
+                properties: {
+                    name: `subnet-${Object.keys(subnet).length + 1}`
+                }
+            }
+            count[id] = {
+                id: id,
+                serviceName: title,
+                properties: {
+                    name: `subnet-${Object.keys(subnet).length}`,
+                    x: x,
+                    y: y
+                }
             }
         }
-        console.log(count);
+        else if (title === "sg") {
+            security[id] = {
+                id: id,
+                properties: {
+                    name: `security-${Object.keys(subnet).length + 1}`
+                }
+            }
+            count[id] = {
+                id: id,
+                serviceName: title,
+                properties: {
+                    name: `security-${Object.keys(subnet).length}`,
+                    x: x,
+                    y: y
+                }
+            }
+        }
+        else {
+            count[id] = {
+                id: id,
+                serviceName: title,
+                properties: {
+                    x: x,
+                    y: y
+                }
+            }
+        }
+        // console.log(count);
     }
     workflowPressed = (e) => {
         if (this.state.workflow !== true) {
@@ -135,8 +169,8 @@ class Editor extends Component {
             document.getElementById('under-line-id').classList.toggle('move-right');
         }
     }
-    changeProperty = (resource,x,y) =>{
-        Editor.properties = this.state[resource](x,y);
+    changeProperty = (resource, x, y) => {
+        Editor.properties = this.state[resource](x, y);
         this.forceUpdate();
     }
     codePressed = (e) => {
@@ -149,44 +183,44 @@ class Editor extends Component {
         }
     }
 
-    update_position = (id,x,y)=>{
-        console.log("before",count);
+    update_position = (id, x, y) => {
+        // console.log("before",count);
         count[id].properties.x = x;
         count[id].properties.y = y;
-        console.log("after",count);
+        // console.log("after",count);
 
     }
 
-    cloud_save = ()=>{
+    cloud_save = () => {
         var canvas = document.createElement('div');
         var workspace = document.getElementById('workspace').cloneNode(true);
         canvas.appendChild(workspace);
-        fetch('http://localhost:2019/save',{
-            method:"POST",
-            body:JSON.stringify({
-                "json":JSON.stringify(count),
-                "name":this.title,
-                "email":this.email,
-                "svg":canvas.innerHTML
+        fetch('http://localhost:2019/save', {
+            method: "POST",
+            body: JSON.stringify({
+                "json": JSON.stringify(count),
+                "name": this.title,
+                "email": this.email,
+                "svg": canvas.innerHTML
             }),
-            headers:{"Content-Type":"application/json"}
+            headers: { "Content-Type": "application/json" }
         })
-        .then(res=>{
-            if(res.status === 200){
-                alert("save successful");
-                sessionStorage.setItem('json',JSON.stringify(count))
-            }
-            else{
-                alert("try again later");
-            }
-        })
-        .catch(err=>{
-            console.log(err.message);
-        })
+            .then(res => {
+                if (res.status === 200) {
+                    alert("save successful");
+                    sessionStorage.setItem('json', JSON.stringify(count))
+                }
+                else {
+                    alert("try again later");
+                }
+            })
+            .catch(err => {
+                console.log(err.message);
+            })
     }
 
-    download=()=>{
-        if(Object.keys(count).length === 0){
+    download = () => {
+        if (Object.keys(count).length === 0) {
             alert('no service to build');
             return;
         }
@@ -194,12 +228,12 @@ class Editor extends Component {
         yaml = deploy(count);
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(yaml));
         element.setAttribute('download', "template.yaml");
-      
+
         element.style.display = 'none';
         document.body.appendChild(element);
-      
+
         element.click();
-      
+
         document.body.removeChild(element);
     }
     render() {
@@ -241,7 +275,7 @@ class Editor extends Component {
                             <button className="deploy" onClick={this.deploy} onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace remove = {this.removeproperties} update_position={this.update_position} updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
+                    {this.state.workflow === true ? <Workspace remove={this.removeproperties} update_position={this.update_position} updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
                     {this.state.code === true ? <div className="code-space">Code</div> : null}
                 </div>
                 {/* <div id="properties" className="properties">
