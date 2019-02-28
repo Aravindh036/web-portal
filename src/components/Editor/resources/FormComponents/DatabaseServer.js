@@ -53,18 +53,20 @@ export default class DatabaseServer extends Component {
         DBInstanceClass: e.target.innerHTML
       });
     })
-    document.getElementById('drop-head-image').addEventListener('click', () => {
-      document.getElementById('drop-image').classList.toggle('hide');
+    document.getElementById('drop-head-subnet').addEventListener('click', () => {
+      document.getElementById('drop-subnet').classList.toggle('hide');
       // console.log("hhhh");
     });
 
-    document.getElementById('drop-image').addEventListener('click', (e) => {
-      document.getElementById("drop-image").classList.toggle('hide');
+    document.getElementById('drop-subnet').addEventListener('click', (e) => {
+      document.getElementById("drop-subnet").classList.toggle('hide');
       // console.log(e.target.innerHTML);
-      document.getElementById('drop-head-image').innerHTML = e.target.innerHTML;
-      this.setState({
-        Engine: e.target.innerHTML
-      });
+      if (!e.target.innerHTML.includes("No DB Subnets created")) {
+        document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
+        this.setState({
+          DBSubnet: e.target.innerHTML
+        });
+      }
     })
   }
   getDBSecurityGroups = (e) => {
@@ -135,11 +137,37 @@ export default class DatabaseServer extends Component {
   render() {
     // const id = this.props.currentComponent();
     // console.log("id", id);
+    var subnet = this.props.getDBsubnet();
+    var subnetDropdown = "";
+    console.log(subnet,"hiiiiiiii");
+    if (Object.values(subnet).length !== 0) {
+      subnetDropdown = Object.values(subnet).map(sub => {
+        return <div className="drop-down-item">{sub.properties.name}</div>
+      })
+    }
+    else {
+      subnet = [1];
+      subnetDropdown = subnet.map(empty => {
+        return <div className="drop-down-item">No DB Subnets created</div>
+      })
+    }
     return (
       <div className="ec2-form " id="database-server-form-id">
         <div className="form-elements">
           <input type="text" placeholder="DBName" id="dbname-id" onBlur={this.getDBName} />
           <input onBlur={this.getDBSecurityGroups} type="text" placeholder="DBSecurityGroups" id="db-security-groups-id" />
+          <div className="drop-down-container">
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-subnet">
+                Select a Subnet
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+            </div>
+            <div className="drop-down hide" id="drop-subnet">
+              {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+              {subnetDropdown}
+            </div>
+          </div>
           <input onBlur={this.getAllocatedStorage} type="number" placeholder="AllocatedStorage" id="allocated-storage-id" />
           {/* <select onChange={this.getDBInstanceClass} name="DBInstanceClass" id="db-instance-class-id">
             <option value="db.t2.micro">db.t2.micro</option>

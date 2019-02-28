@@ -8,7 +8,7 @@ export default class Subnet extends Component {
     name: "",
     CidrBlock: "",
     SubnetType: "Public",
-    // VpcId:"",
+    VpcId:"",
     x: 0,
     y: 0
   }
@@ -39,6 +39,21 @@ export default class Subnet extends Component {
       this.setState({
         SubnetType: e.target.innerHTML
       });
+    })
+    document.getElementById('drop-head-vpc').addEventListener('click', () => {
+      document.getElementById('drop-vpc').classList.toggle('hide');
+      // console.log("hhhh");
+    });
+
+    document.getElementById('drop-vpc').addEventListener('click', (e) => {
+      document.getElementById("drop-vpc").classList.toggle('hide');
+      // console.log(e.target.innerHTML);
+      if (!e.target.innerHTML.includes("No vpcs created")) {
+        document.getElementById('drop-head-vpc').innerHTML = e.target.innerHTML;
+        this.setState({
+          SubnetName: e.target.innerHTML
+        });
+      }
     })
   }
   getCidrBlock = (e) => {
@@ -109,6 +124,18 @@ export default class Subnet extends Component {
             <div className="drop-down hide" id="drop-id">
               <div className="drop-down-item">Public</div>
               <div className="drop-down-item">Private</div>
+            </div>
+          </div>
+          <div className="drop-down-container">
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-vpc">
+                Select a VPC
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+            </div>
+            <div className="drop-down hide" id="drop-vpc">
+              {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+              {subnetDropdown}
             </div>
           </div>
           {/* <input onBlur={this.getVpcId} type="text" placeholder="VpcId" id="subnet-vpc-id"/> */}

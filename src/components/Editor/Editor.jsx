@@ -39,10 +39,10 @@ class Editor extends Component {
             return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         dbsubnet: (x, y) => {
-            return <DBSubnet getDBsubnet={this.getDBsubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <DBSubnet getSubnet={this.getSubnet} getDBsubnet={this.getDBsubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         dbinstance: (x, y) => {
-            return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <DatabaseServer getDBsubnet={this.getDBsubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         lbalancer: (x, y) => {
             return <LoadBalancer x={x} y={y} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
