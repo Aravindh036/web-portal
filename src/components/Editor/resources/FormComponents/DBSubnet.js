@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './FormComponents.css';
+import arrow from '../../../../assets/drop@2x.png'
 
 
 
@@ -24,9 +25,24 @@ export default class DBSubnet extends Component {
             this.setState({ ...store[selectedID].properties }, () => {
                 document.getElementById("alarm-name-id").value = this.state.name;
                 document.getElementById("dbsubnet-des-id").value = this.state.description;
-                document.getElementById("dbsubnet-id").value = this.state.subnetIDs;
+                // document.getElementById("dbsubnet-id").value = this.state.subnetIDs;
             })
         }
+        document.getElementById('drop-head-subnet').addEventListener('click', () => {
+            document.getElementById('drop-subnet').classList.toggle('hide');
+            // console.log("hhhh");
+          });
+      
+          document.getElementById('drop-subnet').addEventListener('click', (e) => {
+            document.getElementById("drop-subnet").classList.toggle('hide');
+            // console.log(e.target.innerHTML);
+            if (!e.target.innerHTML.includes("No subnets created")) {
+              document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
+              this.setState({
+                SubnetName: e.target.innerHTML
+              });
+            }
+          })
     }
     getName = (e) => {
         this.setState({
@@ -72,12 +88,38 @@ export default class DBSubnet extends Component {
         }
     }
     render() {
+        var subnet = this.props.getSubnet();
+        var subnetDropdown = "";
+        console.log(subnet,"hiiiiiiii");
+        if (Object.values(subnet).length !== 0) {
+          subnetDropdown = Object.values(subnet).map(sub => {
+            return <div className="drop-down-item">{sub.properties.name}</div>
+          })
+        }
+        else {
+          subnet = [1];
+          subnetDropdown = subnet.map(empty => {
+            return <div className="drop-down-item">No subnets created</div>
+          })
+        }
         return (
             <div className="ec2-form " id="dbsubnet-form-id">
                 <div className="form-elements">
                     <input type="text" placeholder="DBSubnet Name" id="alarm-name-id" onBlur={this.getName} />
                     <input type="text" placeholder="DBSubnet Description" id="dbsubnet-des-id" onBlur={this.getDescription} />
-                    <input type="text" placeholder="Subnet ID(s)" id="dbsubnet-id" onBlur={this.getsubnetIDs} />
+                    {/* <input type="text" placeholder="Subnet ID(s)" id="dbsubnet-id" onBlur={this.getsubnetIDs} /> */}
+                    <div className="drop-down-container">
+                        <div className="drop-tag">
+                            <div className="drop-head" id="drop-head-subnet">
+                                Select a Subnet
+                            </div>
+                        <div className="arrow"><img src={arrow} alt="⥮" /></div>
+                        </div>
+                        <div className="drop-down hide" id="drop-subnet">
+                        {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+                        {subnetDropdown}
+                        </div>
+                    </div>
                 </div>
                 <button onClick={this.saveForm} >Save</button>
             </div>

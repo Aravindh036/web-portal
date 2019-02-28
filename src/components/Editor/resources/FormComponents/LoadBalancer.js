@@ -58,7 +58,7 @@ export default class LoadBalancer extends Component {
     document.getElementById('drop-security').addEventListener('click', (e) => {
       document.getElementById("drop-security").classList.toggle('hide');
       // console.log(e.target.innerHTML);
-      if (!e.target.innerHTML.includes("No security group created")) {
+      if (!e.target.innerHTML.includes("No Security Group created")) {
         document.getElementById('drop-head-security').innerHTML = e.target.innerHTML;
         this.setState({
           SecurityGroup: e.target.innerHTML
