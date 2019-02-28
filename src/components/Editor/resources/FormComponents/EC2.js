@@ -67,6 +67,8 @@ export default class EC2 extends Component {
         document.getElementById("ec2-name-id").value = this.state.name;
         document.getElementById("keyname-id").value = this.state.KeyName;
         document.getElementById("availability-id").value = this.state.AvailabilityZone;
+        document.getElementById('checkbox-e').checked = this.state.EventLog;
+        document.getElementById('checkbox-b').checked = this.state.Backup;
         // document.getElementById("ec2-subnet-id").value = this.state.SubnetName;
         // document.getElementById("security-groups-id").value = this.state.SecurityGroup;
         document.getElementById('drop-head-id').innerHTML = this.state.InstanceType;
@@ -272,7 +274,7 @@ export default class EC2 extends Component {
           <div className="automatic-shutdown">
             <div className="conatiner">
               <label className="switch">
-                <input type="checkbox" id="checkbox" onChange={this.getBackup} />
+                <input type="checkbox" id="checkbox-b" onChange={this.getBackup} />
                 <span className="slider round"></span>
               </label>
             </div>
@@ -281,7 +283,7 @@ export default class EC2 extends Component {
           <div className="event-log">
             <div className="conatiner">
               <label className="switch">
-                <input type="checkbox" id="checkbox" onChange={this.getEventLog} />
+                <input type="checkbox" id="checkbox-e" onChange={this.getEventLog} />
                 <span className="slider round"></span>
               </label>
             </div>
