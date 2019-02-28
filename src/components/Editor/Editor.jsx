@@ -15,6 +15,7 @@ import './Editor.css';
 import Workspace from './Workspace/Workspace';
 
 import EC2 from './resources/FormComponents/EC2';
+import Vpc from './resources/FormComponents/Vpc';
 import CloudWatch from './resources/FormComponents/CloudWatch';
 import DBSubnet from './resources/FormComponents/DBSubnet';
 import DatabaseServer from './resources/FormComponents/DatabaseServer';
@@ -24,7 +25,7 @@ import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 import deploy from '../YAMLParser';
 
-var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {};
+var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {}, vpc = {};
 class Editor extends Component {
     static properties = null;
     state = {
@@ -52,6 +53,9 @@ class Editor extends Component {
         subnet: (x, y) => {
             return <Subnet getSubnet={this.getSubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
+        vpc: (x, y) => {
+            return <Vpc getVpc={this.getVpc} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+        },
     }
 
 
@@ -71,6 +75,11 @@ class Editor extends Component {
     getSubnet = () => {
         return subnet;
     }
+
+    getVpc = () => {
+        return vpc;
+    }
+
     getSecurity=()=>{
         return security;
     }
@@ -145,6 +154,23 @@ class Editor extends Component {
                 serviceName: title,
                 properties: {
                     GroupName: `security-${Object.keys(security).length}`,
+                    x: x,
+                    y: y
+                }
+            }
+        }
+        else if (title === "vpc") {
+            vpc[id] = {
+                id: id,
+                properties: {
+                    GroupName: `vpc-${Object.keys(vpc).length + 1}`
+                }
+            }
+            count[id] = {
+                id: id,
+                serviceName: title,
+                properties: {
+                    GroupName: `vpc-${Object.keys(vpc).length}`,
                     x: x,
                     y: y
                 }

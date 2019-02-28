@@ -6,6 +6,7 @@ import dbsubnet from '../../../assets/dbsubnet.png';
 import cwatch from '../../../assets/cwatch.png';
 import lbalancer from '../../../assets/lbalance.png';
 import sg from '../../../assets/sg.png';
+import vpc from '../../../assets/vpc.png';
 
 
 
@@ -183,6 +184,10 @@ class Workspace extends Component {
         else if(type === "sg"){
             image.setAttribute("src",sg);
             image.setAttribute("title","Security Group");
+        }
+        else if(type === "vpc"){
+            image.setAttribute("src",vpc);
+            image.setAttribute("title","VPC");
         }
         workspace.appendChild(image);
         this.props.updateStore(type,image.id,e.pageX-workspace.offsetLeft,e.pageY-workspace.offsetTop);

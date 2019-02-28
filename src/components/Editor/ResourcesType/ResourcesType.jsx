@@ -8,6 +8,7 @@ import dbsubnet from '../../../assets/dbsubnet.png';
 import cwatch from '../../../assets/cwatch.png';
 import lbalancer from '../../../assets/lbalance.png';
 import sg from '../../../assets/sg.png';
+import vpc from '../../../assets/vpc.png';
 class ResourcesType extends Component {
     image = document.createElement("img");
     dragstart = (e)=>{
@@ -23,7 +24,7 @@ class ResourcesType extends Component {
         else if(e.target.innerHTML === "Subnet"){
             e.dataTransfer.setData("type","subnet");
         }
-        else if(e.target.innerHTML === "DB Subnet"){
+        else if(e.target.innerHTML === "DB Subnet Group"){
             e.dataTransfer.setData("type","dbsubnet");
         }
         else if(e.target.innerHTML === "Load Balancer"){
@@ -31,6 +32,9 @@ class ResourcesType extends Component {
         }
         else if(e.target.innerHTML === "Security Group"){
             e.dataTransfer.setData("type","sg");
+        }
+        else if(e.target.innerHTML === "VPC"){
+            e.dataTransfer.setData("type","vpc");
         }
         e.dataTransfer.setDragImage(this.image,10,10)
     }
@@ -47,7 +51,7 @@ class ResourcesType extends Component {
         else if(e.target.innerHTML === "Subnet"){
             this.image.src = subnet;
         }
-        else if(e.target.innerHTML === "DB Subnet"){
+        else if(e.target.innerHTML === "DB Subnet Group"){
             this.image.src = dbsubnet;
         }
         else if(e.target.innerHTML === "Load Balancer"){
@@ -56,16 +60,20 @@ class ResourcesType extends Component {
         else if(e.target.innerHTML === "Security Group"){
             this.image.src = sg;
         }
+        else if(e.target.innerHTML === "VPC"){
+            this.image.src = vpc;
+        }
     }
     render() {
         return (
             <div className="resource-container" >
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Instance</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">DB Instance</div>
-                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Subnet</div>
-                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">DB Subnet</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Security Group</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Load Balancer</div>
+                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">VPC</div>
+                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Subnet</div>
+                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">DB Subnet Group</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Cloud Watch</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Lambda Function</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Bot</div>
