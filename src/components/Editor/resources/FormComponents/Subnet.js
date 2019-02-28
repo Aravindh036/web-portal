@@ -51,7 +51,7 @@ export default class Subnet extends Component {
       if (!e.target.innerHTML.includes("No vpcs created")) {
         document.getElementById('drop-head-vpc').innerHTML = e.target.innerHTML;
         this.setState({
-          SubnetName: e.target.innerHTML
+          VpcId: e.target.innerHTML
         });
       }
     })
@@ -105,6 +105,20 @@ export default class Subnet extends Component {
     }
   }
   render() {
+    var subnet = this.props.getVpc();
+    var subnetDropdown = "";
+    console.log(subnet,"hiiiiiiii",subnet);
+    if (Object.values(subnet).length !== 0) {
+      subnetDropdown = Object.values(subnet).map(sub => {
+        return <div className="drop-down-item">{sub.properties.GroupName}</div>
+      })
+    }
+    else {
+      subnet = [1];
+      subnetDropdown = subnet.map(empty => {
+        return <div className="drop-down-item">No VPC(s) created</div>
+      })
+    }
     return (
       <div className="ec2-form " id="private-subnet-form-id">
         <div className="form-elements">
