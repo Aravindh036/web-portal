@@ -51,7 +51,7 @@ export default class Subnet extends Component {
       if (!e.target.innerHTML.includes("No vpcs created")) {
         document.getElementById('drop-head-vpc').innerHTML = e.target.innerHTML;
         this.setState({
-          VpcId: e.target.innerHTML
+          VpcId: e.target.id
         });
       }
     })
@@ -110,7 +110,7 @@ export default class Subnet extends Component {
     console.log(subnet,"hiiiiiiii",subnet);
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
-        return <div className="drop-down-item">{sub.properties.GroupName}</div>
+        return <div id={sub.id} className="drop-down-item">{sub.properties.GroupName}</div>
       })
     }
     else {

@@ -109,7 +109,7 @@ const generate = {
     }
 }
 
-const vpc = `VPC:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: 172.31.0.0/16\n${tab}${tab}${tab}EnableDnsSupport: true\n${tab}${tab}${tab}EnableDnsHostnames: true\n${tab}${tab}${tab}InstanceTenancy: default\n${tab}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}InternetGatewayId: !Ref InternetGateway\n${tab}`;
+// const vpc = `VPC:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: 172.31.0.0/16\n${tab}${tab}${tab}EnableDnsSupport: true\n${tab}${tab}${tab}EnableDnsHostnames: true\n${tab}${tab}${tab}InstanceTenancy: default\n${tab}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}InternetGatewayId: !Ref InternetGateway\n${tab}`;
 const routeTableConfig = `RouteTable:\n${tab}${tab}Type: AWS::EC2::RouteTable\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}InternetRoute:\n${tab}${tab}Type: AWS::EC2::Route\n${tab}${tab}DependsOn: VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}DestinationCidrBlock: 0.0.0.0/0\n${tab}${tab}${tab}GatewayId: !Ref InternetGateway\n${tab}${tab}${tab}RouteTableId: !Ref RouteTable\n${tab}`;
 let temp = false, routeTableTemp = false;
 export default function deploy(sample) {

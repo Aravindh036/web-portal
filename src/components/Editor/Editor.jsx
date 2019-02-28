@@ -25,7 +25,7 @@ import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 import deploy from '../YAMLParser';
 
-var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {}, vpc = {}, dbSubnet={};
+var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {}, vpc = {}, dbSubnet={},instance={};
 class Editor extends Component {
     static properties = null;
     state = {
@@ -36,7 +36,7 @@ class Editor extends Component {
             return <EC2 x={x} y={y} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         cwatch: (x, y) => {
-            return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <CloudWatch x={x} y={y} getInstance={this.getInstance} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         dbsubnet: (x, y) => {
             return <DBSubnet getSubnet={this.getSubnet} getDBsubnet={this.getDBsubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
@@ -85,6 +85,9 @@ class Editor extends Component {
     }
     getDBsubnet=()=>{
         return dbSubnet;
+    }
+    getInstance=()=>{
+        return instance;
     }
     deploy = () => {
         if (Object.keys(count).length === 0) {
@@ -183,7 +186,7 @@ class Editor extends Component {
             vpc[id] = {
                 id: id,
                 properties: {
-                    GroupName: `vpc-${Object.keys(vpc).length + 1}`
+                    name: `vpc-${Object.keys(vpc).length + 1}`
                 }
             }
             count[id] = {
@@ -191,6 +194,23 @@ class Editor extends Component {
                 serviceName: title,
                 properties: {
                     name: `vpc-${Object.keys(vpc).length}`,
+                    x: x,
+                    y: y
+                }
+            }
+        }
+        else if (title === "instance") {
+            instance[id] = {
+                id: id,
+                properties: {
+                    name: `instance-${Object.keys(instance).length + 1}`
+                }
+            }
+            count[id] = {
+                id: id,
+                serviceName: title,
+                properties: {
+                    name: `instance-${Object.keys(instance).length}`,
                     x: x,
                     y: y
                 }

@@ -64,7 +64,7 @@ export default class DatabaseServer extends Component {
       if (!e.target.innerHTML.includes("No DB Subnets created")) {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
-          DBSubnet: e.target.innerHTML
+          DBSubnet: e.target.id
         });
       }
     })
@@ -142,7 +142,7 @@ export default class DatabaseServer extends Component {
     console.log(subnet,"hiiiiiiii");
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
-        return <div className="drop-down-item">{sub.properties.name}</div>
+        return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
       })
     }
     else {

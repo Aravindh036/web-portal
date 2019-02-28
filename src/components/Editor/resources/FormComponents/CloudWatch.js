@@ -28,7 +28,7 @@ export default class CloudWatch extends Component {
             // console.log("mount", store[selectedID].properties);
             this.setState({ ...store[selectedID].properties }, () => {
                 document.getElementById("alarm-name-id").value = this.state.name;
-                document.getElementById("instance-name-id").value = this.state.InstanceName;
+                // document.getElementById("instance-name-id").value = this.state.InstanceName;
                 document.getElementById("period-id").value = this.state.Period;
                 document.getElementById("evaluation-period-id").value = this.state.EvaluationPeriods;
                 document.getElementById("threshold-id").value = this.state.Threshold;
@@ -63,6 +63,21 @@ export default class CloudWatch extends Component {
                 console.log(this.state.ComparisonOperator);
             });
         })
+        document.getElementById('drop-head-subnet').addEventListener('click', () => {
+            document.getElementById('drop-subnet').classList.toggle('hide');
+            // console.log("hhhh");
+          });
+      
+          document.getElementById('drop-subnet').addEventListener('click', (e) => {
+            document.getElementById("drop-subnet").classList.toggle('hide');
+            // console.log(e.target.innerHTML);
+            if (!e.target.innerHTML.includes("No Instance created")) {
+              document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
+              this.setState({
+                SubnetName: e.target.id
+              });
+            }
+          })
     }
     getName = (e) => {
         this.setState({
@@ -133,11 +148,37 @@ export default class CloudWatch extends Component {
         }
     }
     render() {
+        var subnet = this.props.getInstance();
+        var subnetDropdown = "";
+        console.log(subnet,"hiiiiiiii");
+        if (Object.values(subnet).length !== 0) {
+          subnetDropdown = Object.values(subnet).map(sub => {
+            return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
+          })
+        }
+        else {
+          subnet = [1];
+          subnetDropdown = subnet.map(empty => {
+            return <div className="drop-down-item">No Instance created</div>
+          })
+        }
         return (
             <div className="ec2-form" id="cloud-watch-form-id">
                 <div className="form-elements">
                     <input type="text" placeholder="AlarmName" id="alarm-name-id" onBlur={this.getName} />
-                    <input type="text" placeholder="InstanceName" id="instance-name-id" onBlur={this.getInstanceName} />
+                    {/* <input type="text" placeholder="InstanceName" id="instance-name-id" onBlur={this.getInstanceName} /> */}
+                    <div className="drop-down-container">
+                        <div className="drop-tag">
+                        <div className="drop-head" id="drop-head-subnet">
+                            Select a Instance
+                        </div>
+                        <div className="arrow"><img src={arrow} alt="⥮" /></div>
+                        </div>
+                        <div className="drop-down hide" id="drop-subnet">
+                        {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+                        {subnetDropdown}
+                        </div>
+                    </div>
                     <input type="email" name="email-id" id="mail-id" onBlur={this.getMail} placeholder="Email" />
                     <input type="number" id="period-id" placeholder="Periods (secs)" onBlur={this.getPeriod} />
                     <div className="drop-down-container">
