@@ -140,7 +140,7 @@ class Workspace extends Component {
         var type = e.dataTransfer.getData("type");
         var workspace = document.getElementById('workspace');
         var image = document.createElement("img");
-        image.id = type + (Math.random()).toPrecision(4);
+        image.id = type + Math.floor((Math.random()).toPrecision(4)*10000);
         image.setAttribute("class",type);
         image.style.left = e.pageX-workspace.offsetLeft + "px";
         image.style.top = e.pageY-workspace.offsetTop + "px";

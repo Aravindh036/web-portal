@@ -19,7 +19,7 @@ const generate = {
         }
         port = port ? port : '';
         console.log()
-        yaml += `${obj.properties.GroupName}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${ports}${tab}`
+        yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${port}${tab}`
     },
     'dbinstance': (obj) => {
         if (!obj.properties.DBName) {
@@ -48,9 +48,9 @@ const generate = {
             alert("No name for Subnet configure the Subnet(s) to continue");
             throw "hi";
         }
-        yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::Subnet\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}AvailabilityZone: "us-east-1a"\n${tab}${tab}${tab}MapPublicIpOnLaunch: ${subnet[obj.properties.SubnetType]}\n${tab}`
+        yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::Subnet\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n${tab}${tab}${tab}AvailabilityZone: "us-east-1a"\n${tab}${tab}${tab}MapPublicIpOnLaunch: ${subnet[obj.properties.SubnetType]}\n${tab}`
         if (subnet[obj.properties.SubnetType]) {
-            yaml += `${obj.properties.name}RouteTableAssociation:\n${tab}${tab}Type: AWS::EC2::SubnetRouteTableAssociation\n${tab}${tab}Properties:\n${tab}${tab}${tab}RouteTableId: !Ref RouteTable\n${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.name}\n${tab}`
+            yaml += `${obj.id}RouteTableAssociation:\n${tab}${tab}Type: AWS::EC2::SubnetRouteTableAssociation\n${tab}${tab}Properties:\n${tab}${tab}${tab}RouteTableId: !Ref ${obj.properties.VpcId}RouteTable\n${tab}${tab}${tab}SubnetId: !Ref ${obj.id}\n${tab}`
         }
         console.log(obj);
     },
@@ -105,12 +105,10 @@ const generate = {
             alert("No name for VPC configure the VPC(s) to continue");
             throw "hi";
         }
-        yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}EnableDnsSupport: ${obj.properties.DNS}\n${tab}${tab}${tab}EnableDnsHostnames: ${obj.properties.DNShost}\n${tab}${tab}${tab}InstanceTenancy: ${obj.properties.InstanceTenancy}`;
+        yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}EnableDnsSupport: ${obj.properties.DNS}\n${tab}${tab}${tab}EnableDnsHostnames: ${obj.properties.DNShost}\n${tab}${tab}${tab}InstanceTenancy: ${obj.properties.InstanceTenancy}\n${tab}`;
     }
 }
 
-const vpc = `VPC:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: 172.31.0.0/16\n${tab}${tab}${tab}EnableDnsSupport: true\n${tab}${tab}${tab}EnableDnsHostnames: true\n${tab}${tab}${tab}InstanceTenancy: default\n${tab}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}${tab}${tab}InternetGatewayId: !Ref InternetGateway\n${tab}`;
-const routeTableConfig = `RouteTable:\n${tab}${tab}Type: AWS::EC2::RouteTable\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref VPC\n${tab}InternetRoute:\n${tab}${tab}Type: AWS::EC2::Route\n${tab}${tab}DependsOn: VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}DestinationCidrBlock: 0.0.0.0/0\n${tab}${tab}${tab}GatewayId: !Ref InternetGateway\n${tab}${tab}${tab}RouteTableId: !Ref RouteTable\n${tab}`;
 let temp = false, routeTableTemp = false;
 export default function deploy(sample) {
     yaml = `AWSTemplateFormatVersion: 2010-09-09\nDescription: Ec2 block device mapping\nResources:\n${tab}`;
@@ -120,11 +118,13 @@ export default function deploy(sample) {
             temp = true;
         }
         if ((sample[i].serviceName === "subnet") && (routeTableTemp !== true)) {
-            if (subnet[sample[i].properties.SubnetType])
+            if (subnet[sample[i].properties.SubnetType]){
                 var obj = sample[i];
-                yaml += routeTableConfig;
-                yaml += `\n${tab}${obj.id}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}${obj.id}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n${tab}${tab}${tab}InternetGatewayId: !Ref ${obj.id}InternetGateway\n${tab}`
+                console.log(obj)
+                yaml += `${obj.properties.VpcId}RouteTable:\n${tab}${tab}Type: AWS::EC2::RouteTable\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n${tab}${obj.properties.VpcId}InternetRoute:\n${tab}${tab}Type: AWS::EC2::Route\n${tab}${tab}DependsOn: ${obj.id}VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}DestinationCidrBlock: 0.0.0.0/0\n${tab}${tab}${tab}GatewayId: !Ref ${obj.id}InternetGateway\n${tab}${tab}${tab}RouteTableId: !Ref ${obj.properties.VpcId}RouteTable\n${tab}`;
+                yaml += `${obj.id}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}${obj.id}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n${tab}${tab}${tab}InternetGatewayId: !Ref ${obj.id}InternetGateway\n${tab}`
                 routeTableTemp = true;
+            }
         }
         console.log(sample[i])
         try {

@@ -92,12 +92,12 @@ class Editor extends Component {
             return;
         }
         yaml = deploy(count);
-        // console.log(yaml);
-        fetch('http://localhost:2019/deploy', {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ yaml: yaml })
-        })
+        console.log(yaml);
+        // fetch('http://localhost:2019/deploy', {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({ yaml: yaml })
+        // })
     }
     removeproperties = () => {
         Editor.properties = null;
