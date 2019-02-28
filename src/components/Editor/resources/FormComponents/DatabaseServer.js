@@ -8,6 +8,8 @@ export default class DatabaseServer extends Component {
   state = {
     DBName: "",
     VPCSecurityGroups: "",
+    DBSecurityGroups:"",
+    DBSubnet:"",
     AllocatedStorage: "",
     DBInstanceClass: "db.t2.micro",
     Engine: "MySQL",

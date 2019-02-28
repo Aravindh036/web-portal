@@ -31,7 +31,7 @@ export default class LoadBalancer extends Component {
             document.getElementById("loadbalancer-port-id").value = this.state.LoadBalancerPort; 
             document.getElementById("policyname-id").value = this.state.PolicyNames;
             document.getElementById("protocol-id").value = this.state.Protocol;
-            document.getElementById("security-group-id").value = this.state.SecurityGroup; 
+            // document.getElementById("security-group-id").value = this.state.SecurityGroup; 
             // document.getElementById("subnet-name-id").value = this.state.Subnet; 
         })
     }
@@ -47,6 +47,21 @@ export default class LoadBalancer extends Component {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
           Subnet: e.target.innerHTML
+        });
+      }
+    })
+    document.getElementById('drop-head-security').addEventListener('click', () => {
+      document.getElementById('drop-security').classList.toggle('hide');
+      console.log("vauva");
+    });
+
+    document.getElementById('drop-security').addEventListener('click', (e) => {
+      document.getElementById("drop-security").classList.toggle('hide');
+      // console.log(e.target.innerHTML);
+      if (!e.target.innerHTML.includes("No security group created")) {
+        document.getElementById('drop-head-security').innerHTML = e.target.innerHTML;
+        this.setState({
+          SecurityGroup: e.target.innerHTML
         });
       }
     })
@@ -129,7 +144,7 @@ export default class LoadBalancer extends Component {
   render() {
     var subnet = this.props.getSubnet();
     var subnetDropdown = "",i;
-    if (subnet.length !== 0) {
+    if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
         return <div className="drop-down-item">{sub.properties.name}</div>
       })
@@ -140,6 +155,19 @@ export default class LoadBalancer extends Component {
         return <div className="drop-down-item">No subnets created</div>
       })
     }
+    var security = this.props.getSecurity();
+    var securitygroup = "";
+    if (Object.values(security).length !== 0) {
+      securitygroup = Object.values(security).map(sub => {
+        return <div className="drop-down-item">{sub.properties.GroupName}</div>
+      })
+    }
+    else {
+      security = [1];
+      securitygroup = security.map(empty => {
+        return <div className="drop-down-item">No Security Group created</div>
+      })
+    }
     return (
       <div className="ec2-form " id="load-balancer-form-id">
         <div className="form-elements">
@@ -148,7 +176,19 @@ export default class LoadBalancer extends Component {
             <input id="loadbalancer-port-id" type="text" placeholder="LoadBalancerPort" onBlur={this.getLoadBalancerPort} />
             <input id="policyname-id" type="text" placeholder="PolicyNames" onBlur={this.getPolicyNames} />
             <input id="protocol-id" type="text" placeholder="Protocol" onBlur={this.getProtocol} />
-            <input id="security-group-id" type="text" placeholder="SecurityGroups" onBlur={this.getSecurityGroup}/>
+            {/* <input id="security-group-id" type="text" placeholder="SecurityGroups" onBlur={this.getSecurityGroup}/> */}
+            <div className="drop-down-container">
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-security">
+                Select a Security Group
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+            </div>
+            <div className="drop-down hide" id="drop-security">
+              {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+              {securitygroup}
+            </div>
+          </div>
             {/* <input id="subnet-name-id" type="text" placeholder="SubnetName" onBlur={this.getSubnetName}/> */}
             <div className="drop-down-container">
             <div className="drop-tag">

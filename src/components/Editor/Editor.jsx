@@ -24,7 +24,7 @@ import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 import deploy from '../YAMLParser';
 
-var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {};
+var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {},dbSubnet={};
 class Editor extends Component {
     static properties = null;
     state = {
@@ -38,13 +38,13 @@ class Editor extends Component {
             return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         dbsubnet: (x, y) => {
-            return <DBSubnet x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <DBSubnet getDBsubnet={this.getDBsubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         dbinstance: (x, y) => {
             return <DatabaseServer x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         lbalancer: (x, y) => {
-            return <LoadBalancer x={x} y={y} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <LoadBalancer x={x} y={y} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         sg: (x, y) => {
             return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
@@ -62,7 +62,7 @@ class Editor extends Component {
         this.title = sessionStorage.getItem('title');
         console.log(this.json);
         if(!this.email || !this.title){
-            document.location = "/";
+            // document.location = "/";
         }
         if (this.json !== null) {
             count = this.json;
@@ -73,6 +73,9 @@ class Editor extends Component {
     }
     getSecurity=()=>{
         return security;
+    }
+    getDBsubnet=()=>{
+        return dbSubnet;
     }
     deploy = () => {
         if (Object.keys(count).length === 0) {
@@ -145,6 +148,23 @@ class Editor extends Component {
                 serviceName: title,
                 properties: {
                     GroupName: `security-${Object.keys(security).length}`,
+                    x: x,
+                    y: y
+                }
+            }
+        }
+        else if(title==="dbsubnet"){
+            dbSubnet[id] = {
+                id: id,
+                properties: {
+                    name: `dbSubnet-${Object.keys(dbSubnet).length + 1}`
+                }
+            }
+            count[id] = {
+                id: id,
+                serviceName: title,
+                properties: {
+                    name: `dbSubnet-${Object.keys(dbSubnet).length}`,
                     x: x,
                     y: y
                 }

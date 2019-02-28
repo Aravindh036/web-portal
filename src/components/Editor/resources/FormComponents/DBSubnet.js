@@ -55,6 +55,7 @@ export default class DBSubnet extends Component {
         }
         if ((this.state.name !== "") && (this.state.subnetIDs !== "") && (this.state.description !== "")) {
             var store = this.props.store();
+            var dbSubnet = this.props.getDBsubnet();
             var selectedID = this.props.getSelected();
             // for (var i = 0; i <= store.length - 1; i++) {
             //   if (store[i].id === selectedID) {
@@ -63,6 +64,7 @@ export default class DBSubnet extends Component {
             //   }
             // }
             store[selectedID].properties = this.state;
+            dbSubnet[selectedID].properties = this.state;
             console.log("inside the save button", store);
             this.props.saveStore(store);
             this.props.remove();

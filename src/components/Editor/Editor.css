@@ -204,7 +204,7 @@
     position: fixed;
     top: 80px;
     right: -314px;
-    width: 314px;
+    width: 324px;
     height: calc(100vh - 80px);
     display: flex;
     align-items: flex-start;
@@ -226,6 +226,7 @@
     border-bottom: 5px solid #21F9CF;
     border-radius: 2px;
 }
+
 
 .arch-title{
     padding: 10px 20px;
