@@ -99,6 +99,13 @@ const generate = {
         var dimensions = obj.properties.InstanceName ? `${tab}${tab}${tab}Dimensions:\n${tab}${tab}${tab}${tab}- Name: !Ref ${obj.properties.InstanceName}\n${tab}${tab}${tab}${tab}  Value:\n${tab}${tab}${tab}${tab}  ${tab}Ref: ${obj.properties.InstanceName}\n`:'';
         yaml += `SNSTopic:\n${tab}${tab}Type: AWS::SNS::Topic\n${tab}${tab}Properties:\n${tab}${tab}${tab}DisplayName: SampleSNS\n${tab}${tab}${tab}TopicName: SampleSNS\n${tab}${tab}${tab}Subscription:\n${tab}${tab}${tab}${tab}- Endpoint: ${obj.properties.Email}\n${tab}${tab}${tab}${tab}  Protocol: email\n${tab}`
         yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::CloudWatch::Alarm\n${tab}${tab}Properties:\n${tab}${tab}${tab}AlarmDescription: CPU alarm for my instance\n${tab}${tab}${tab}AlarmActions:\n${tab}${tab}${tab}${tab}- Ref: SNSTopic\n${tab}${tab}${tab}MetricName: CPUUtilization\n${tab}${tab}${tab}Namespace: AWS/EC2\n${tab}${tab}${tab}Statistic: Average\n${tab}${tab}${tab}Period: ${obj.properties.Period}\n${tab}${tab}${tab}DatapointsToAlarm: 2\n${tab}${tab}${tab}EvaluationPeriods: ${obj.properties.EvaluationPeriods}\n${tab}${tab}${tab}Threshold: ${obj.properties.Threshold}\n${tab}${tab}${tab}ComparisonOperator: GreaterThanThreshold\n${dimensions}${tab}`;
+    },
+    'vpc': (obj) => {
+        if (!obj.properties.name) {
+            alert("No name for VPC configure the VPC(s) to continue");
+            throw "hi";
+        }
+        yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}EnableDnsSupport: ${obj.properties.DNS}\n${tab}${tab}${tab}EnableDnsHostnames: ${obj.properties.DNShost}\n${tab}${tab}${tab}InstanceTenancy: ${obj.properties.InstanceTenancy}`;
     }
 }
 
@@ -109,13 +116,15 @@ export default function deploy(sample) {
     yaml = `AWSTemplateFormatVersion: 2010-09-09\nDescription: Ec2 block device mapping\nResources:\n${tab}`;
     for (let i in sample) {
         if (((sample[i].serviceName === "subnet") || (sample[i].serviceName === "sg")) && (temp === false)) {
-            yaml += vpc;
+            // yaml += vpc;
             temp = true;
         }
         if ((sample[i].serviceName === "subnet") && (routeTableTemp !== true)) {
             if (subnet[sample[i].properties.SubnetType])
+                var obj = sample[i];
                 yaml += routeTableConfig;
-            routeTableTemp = true;
+                yaml += `\n${tab}${obj.id}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}${obj.id}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n${tab}${tab}${tab}InternetGatewayId: !Ref ${obj.id}InternetGateway\n${tab}`
+                routeTableTemp = true;
         }
         console.log(sample[i])
         try {
