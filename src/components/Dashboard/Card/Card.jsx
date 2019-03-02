@@ -21,7 +21,7 @@ class Card extends Component {
         return (
             <div onClick={this.select} className="card-container" >
                 <div ref={ref=>this.preview=ref} className="card-preview">
-                    <img width="100%" height="100%" src = {this.props.preview} alt="P"/>
+                    <img width="100%" height="100%" src = {this.props.preview} alt="No preview available"/>
                 </div>
                 <div className="card-details">
                     <div className="project-details">

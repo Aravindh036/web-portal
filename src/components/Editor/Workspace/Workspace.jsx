@@ -19,7 +19,7 @@ class Workspace extends Component {
         this.title = sessionStorage.getItem('title');
         // console.log(this.json);
         if(!this.email || !this.title){
-            // document.location = "/";
+            document.location = "/";
         }
         if(this.json !== "null"){
             this.json_render(this.json);

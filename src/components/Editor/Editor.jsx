@@ -25,7 +25,7 @@ import Subnet from './resources/FormComponents/Subnet';
 import Properties from './resources/Properties/Properties';
 import deploy from '../YAMLParser';
 
-var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {}, vpc = {}, dbSubnet={};
+var count = {}, current_element_id = null, yaml = "Deploy for yaml", subnet = {}, security = {}, vpc = {}, dbSubnet={},instance={}, log = 0, log_array=[];
 class Editor extends Component {
     static properties = null;
     state = {
@@ -33,10 +33,10 @@ class Editor extends Component {
         code: false,
         instance: (x, y) => {
             // console.log("hello");
-            return <EC2 x={x} y={y} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <EC2 x={x} y={y} incLog = {this.incLog} decLog = {this.decLog} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         cwatch: (x, y) => {
-            return <CloudWatch x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <CloudWatch x={x} y={y} getInstance={this.getInstance} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         dbsubnet: (x, y) => {
             return <DBSubnet getSubnet={this.getSubnet} getDBsubnet={this.getDBsubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
@@ -48,7 +48,7 @@ class Editor extends Component {
             return <LoadBalancer x={x} y={y} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         sg: (x, y) => {
-            return <SecurityGroup x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <SecurityGroup x={x} y={y} getVpc={this.getVpc} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         subnet: (x, y) => {
             return <Subnet getVpc={this.getVpc} getSubnet={this.getSubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
@@ -66,10 +66,27 @@ class Editor extends Component {
         this.title = sessionStorage.getItem('title');
         console.log(this.json);
         if(!this.email || !this.title){
-            // document.location = "/";
+            document.location = "/";
         }
         if (this.json !== null) {
             count = this.json;
+        }
+    }
+    incLog = (id)=>{
+        log++;
+        id.replace(/-\.@\^/g,"_")
+        log_array.push(id)
+    }
+    decLog = (id)=>{
+        id.replace(/-\.@\^/g,"_")
+        if(log>0){
+            log--;
+            log_array = log_array.filter((elem,index,arr)=>{
+                if(elem === id){
+                    return false;
+                }
+                return true;
+            })
         }
     }
     getSubnet = () => {
@@ -86,18 +103,32 @@ class Editor extends Component {
     getDBsubnet=()=>{
         return dbSubnet;
     }
+    getInstance=()=>{
+        return instance;
+    }
     deploy = () => {
         if (Object.keys(count).length === 0) {
             alert('no service to build');
             return;
         }
-        yaml = deploy(count);
-        console.log(yaml);
-        // fetch('http://localhost:2019/deploy', {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({ yaml: yaml })
-        // })
+        yaml = deploy(count,this.email);
+        // console.log(yaml);
+        console.log(log);
+        var log_flag = false
+        if(log>0){
+            log_flag = true;
+        }
+        fetch('http://localhost:2019/deploy', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                yaml: yaml,
+                email:this.email ,
+                title:this.title,
+                log:log_flag,
+                log_array:log_array
+            })
+        })
     }
     removeproperties = () => {
         Editor.properties = null;
@@ -183,7 +214,7 @@ class Editor extends Component {
             vpc[id] = {
                 id: id,
                 properties: {
-                    GroupName: `vpc-${Object.keys(vpc).length + 1}`
+                    name: `vpc-${Object.keys(vpc).length + 1}`
                 }
             }
             count[id] = {
@@ -191,6 +222,23 @@ class Editor extends Component {
                 serviceName: title,
                 properties: {
                     name: `vpc-${Object.keys(vpc).length}`,
+                    x: x,
+                    y: y
+                }
+            }
+        }
+        else if (title === "instance") {
+            instance[id] = {
+                id: id,
+                properties: {
+                    name: `instance-${Object.keys(instance).length + 1}`
+                }
+            }
+            count[id] = {
+                id: id,
+                serviceName: title,
+                properties: {
+                    name: `instance-${Object.keys(instance).length}`,
                     x: x,
                     y: y
                 }
@@ -274,7 +322,7 @@ class Editor extends Component {
             return;
         }
         var element = document.createElement('a');
-        yaml = deploy(count);
+        yaml = deploy(count,this.email);
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(yaml));
         element.setAttribute('download', "template.yaml");
 

@@ -46,7 +46,7 @@ export default class LoadBalancer extends Component {
       if (!e.target.innerHTML.includes("No subnets created")) {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
-          Subnet: e.target.innerHTML
+          Subnet: e.target.id
         });
       }
     })
@@ -61,7 +61,7 @@ export default class LoadBalancer extends Component {
       if (!e.target.innerHTML.includes("No Security Group created")) {
         document.getElementById('drop-head-security').innerHTML = e.target.innerHTML;
         this.setState({
-          SecurityGroup: e.target.innerHTML
+          SecurityGroup: e.target.id
         });
       }
     })
@@ -146,7 +146,7 @@ export default class LoadBalancer extends Component {
     var subnetDropdown = "",i;
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
-        return <div className="drop-down-item">{sub.properties.name}</div>
+        return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
       })
     }
     else {
@@ -159,13 +159,13 @@ export default class LoadBalancer extends Component {
     var securitygroup = "";
     if (Object.values(security).length !== 0) {
       securitygroup = Object.values(security).map(sub => {
-        return <div className="drop-down-item">{sub.properties.GroupName}</div>
+        return <div id={sub.id} className="drop-down-item">{sub.properties.GroupName}</div>
       })
     }
     else {
       security = [1];
       securitygroup = security.map(empty => {
-        return <div className="drop-down-item">No Security Group created</div>
+        return <div  className="drop-down-item">No Security Group created</div>
       })
     }
     return (

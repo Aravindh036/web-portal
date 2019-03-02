@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import arrow from '../../../../assets/drop@2x.png';
 
 import './FormComponents.css';
 
@@ -6,6 +7,7 @@ import './FormComponents.css';
 export default class SecurityGroup extends Component {
   state={
     GroupName:"",
+    VpcId:"",
     GroupDescription:"",
     Port:"",
     x:0,
@@ -28,6 +30,21 @@ export default class SecurityGroup extends Component {
             document.getElementById("port-id").value = this.state.Port; 
         })
     }
+    document.getElementById('drop-head-vpc').addEventListener('click', () => {
+      document.getElementById('drop-vpc').classList.toggle('hide');
+      // console.log("hhhh");
+    });
+
+    document.getElementById('drop-vpc').addEventListener('click', (e) => {
+      document.getElementById("drop-vpc").classList.toggle('hide');
+      // console.log(e.target.innerHTML);
+      if (!e.target.innerHTML.includes("No vpcs created")) {
+        document.getElementById('drop-head-vpc').innerHTML = e.target.innerHTML;
+        this.setState({
+          VpcId: e.target.id
+        });
+      }
+    })
   }
 
   getGroupName = (e)=>{
@@ -76,8 +93,20 @@ export default class SecurityGroup extends Component {
     }
   }
   render() {
-    // const id = this.props.currentComponent();
-    // console.log("id",id);
+    var subnet = this.props.getVpc();
+    var subnetDropdown = "";
+    console.log(subnet,"hiiiiiiii",subnet);
+    if (Object.values(subnet).length !== 0) {
+      subnetDropdown = Object.values(subnet).map(sub => {
+        return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
+      })
+    }
+    else {
+      subnet = [1];
+      subnetDropdown = subnet.map(empty => {
+        return <div className="drop-down-item">No VPC(s) created</div>
+      })
+    }
     return (
       <div className="ec2-form " id="security-group-form-id">
         <div className="form-elements">
@@ -85,6 +114,18 @@ export default class SecurityGroup extends Component {
             <input type="text"placeholder="GroupDescription" id="group-description-id" onBlur={this.getGroupDescription} />
             {/* <input type="text" placeholder="VpcId" id="vpc-id" onBlur={this.getVpcId} /> */}
             <input type="text" placeholder="Port(s)" id="port-id" onBlur={this.getPort}/>
+            <div className="drop-down-container">
+            <div className="drop-tag">
+              <div className="drop-head" id="drop-head-vpc">
+                Select a VPC
+              </div>
+              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+            </div>
+            <div className="drop-down hide" id="drop-vpc">
+              {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+              {subnetDropdown}
+            </div>
+          </div>
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>

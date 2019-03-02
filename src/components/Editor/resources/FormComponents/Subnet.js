@@ -110,7 +110,7 @@ export default class Subnet extends Component {
     console.log(subnet,"hiiiiiiii",subnet);
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
-        return <div id = {sub.id} className="drop-down-item">{sub.properties.name}</div>
+        return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
       })
     }
     else {

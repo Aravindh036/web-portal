@@ -24,14 +24,14 @@ export default class EC2 extends Component {
       "Amazon Linux AMI 2018.03.0": "ami-0ad42f4f66f6c1cc9",
       "Ubuntu Server 18.04": "ami-0d773a3b7bb2bb1c1",
       "Windows Server 2019 Base": "ami-0c26d71e2b3583a67",
-      "Windows Server 2016 Base": "ami-0be56865bcf08da0d"
+      "Windows DL Server 2016 Base": "ami-08f782d6f57e6ba1f"
     },
     "us-east-1a": {
       "Amazon Linux 2 AMI": "ami-04bfee437f38a691e",
       "Amazon Linux AMI 2018.03.0": "ami-0080e4c5bc078760e",
       "Ubuntu Server 18.04": "ami-0ac019f4fcb7cb7e6",
       "Windows Server 2019 Base": "ami-0410d3d3bd6d555f4",
-      "Windows Server 2016 Base": "ami-0bf148826ef491d16"
+      "Windows DL Server 2016 Base": "ami-0f199047669d0e8de"
     }
   }
   instance_id = {
@@ -40,14 +40,14 @@ export default class EC2 extends Component {
       "ami-0ad42f4f66f6c1cc9": "Amazon Linux AMI 2018.03.0",
       "ami-0d773a3b7bb2bb1c1": "Ubuntu Server 18.04",
       "ami-0c26d71e2b3583a67": "Windows Server 2019 Base",
-      "ami-0be56865bcf08da0d": "Windows Server 2016 Base"
+      "ami-08f782d6f57e6ba1f": "Windows DL Server 2016 Base"
     },
     "us-east-1a": {
       "ami-04bfee437f38a691e": "Amazon Linux 2 AMI",
       "ami-0080e4c5bc078760e": "Amazon Linux AMI 2018.03.0",
       "ami-0ac019f4fcb7cb7e6": "Ubuntu Server 18.04",
       "ami-0410d3d3bd6d555f4": "Windows Server 2019 Base",
-      "ami-0bf148826ef491d16": "Windows Server 2016 Base"
+      "ami-0f199047669d0e8de": "Windows DL Server 2016 Base"
     }
   }
   constructor(props) {
@@ -71,6 +71,7 @@ export default class EC2 extends Component {
         document.getElementById('checkbox-b').checked = this.state.Backup;
         // document.getElementById("ec2-subnet-id").value = this.state.SubnetName;
         // document.getElementById("security-groups-id").value = this.state.SecurityGroup;
+        document.getElementById('drop-head-security').innerHTML = this.state.SecurityGroup?this.state.SecurityGroup:"Select a security group";
         document.getElementById('drop-head-id').innerHTML = this.state.InstanceType;
         document.getElementById('drop-head-image').innerHTML = this.instance_id[this.state.AvailabilityZone][this.state.ImageID];
       })
@@ -112,7 +113,7 @@ export default class EC2 extends Component {
       if (!e.target.innerHTML.includes("No subnets created")) {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
-          SubnetName: e.target.innerHTML
+          SubnetName: e.target.id
         });
       }
     })
@@ -127,7 +128,7 @@ export default class EC2 extends Component {
       if (!e.target.innerHTML.includes("No security group created")) {
         document.getElementById('drop-head-security').innerHTML = e.target.innerHTML;
         this.setState({
-          SecurityGroup: e.target.innerHTML
+          SecurityGroup: e.target.id
         });
       }
     })
@@ -166,6 +167,13 @@ export default class EC2 extends Component {
   getEventLog = (e) => {
     this.setState({
       EventLog: !this.state.EventLog
+    },()=>{
+      if(this.state.EventLog){
+        this.props.incLog(this.state.name);
+      }
+      else{
+        this.props.decLog(this.state.name);
+      }
     });
   }
   saveForm = () => {
@@ -185,11 +193,9 @@ export default class EC2 extends Component {
       //     store[i].properties = this.state
       //   }
       // }
-      this.setState({ ImageID: this.ami_id[this.state.AvailabilityZone][this.state.ImageID] }, () => {
-        store[selectedID].properties = this.state;
-        console.log("inside the save button", store);
-        this.props.remove();
-      })
+      store[selectedID].properties = this.state;
+      console.log("inside the save button", store);
+      this.props.remove();
       this.props.saveStore(store);
       document.getElementById('properties').style.right = "-314px";
     }
@@ -201,7 +207,7 @@ export default class EC2 extends Component {
     console.log(subnet,"hiiiiiiii");
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
-        return <div className="drop-down-item">{sub.properties.name}</div>
+        return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
       })
     }
     else {
@@ -214,7 +220,7 @@ export default class EC2 extends Component {
     var securitygroup = "";
     if (Object.values(security).length !== 0) {
       securitygroup = Object.values(security).map(sub => {
-        return <div className="drop-down-item">{sub.properties.GroupName}</div>
+        return <div id={sub.id} className="drop-down-item">{sub.properties.GroupName}</div>
       })
     }
     else {
@@ -269,7 +275,7 @@ export default class EC2 extends Component {
               <div className="drop-down-item">Amazon Linux AMI 2018.03.0</div>
               <div className="drop-down-item">Ubuntu Server 18.04</div>
               <div className="drop-down-item">Windows Server 2019 Base</div>
-              <div className="drop-down-item">Windows Server 2016 Base</div>
+              <div className="drop-down-item">Windows DL Server 2016 Base</div>
             </div>
           </div>
           <div className="automatic-shutdown">
