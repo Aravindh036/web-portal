@@ -68,6 +68,9 @@ export default class EC2 extends Component {
         document.getElementById("keyname-id").value = this.state.KeyName;
         document.getElementById("availability-id").value = this.state.AvailabilityZone;
         document.getElementById('checkbox-e').checked = this.state.EventLog;
+        if(this.state.EventLog){
+          this.props.incLog(this.state.name);
+        }
         document.getElementById('checkbox-b').checked = this.state.Backup;
         // document.getElementById("ec2-subnet-id").value = this.state.SubnetName;
         // document.getElementById("security-groups-id").value = this.state.SecurityGroup;

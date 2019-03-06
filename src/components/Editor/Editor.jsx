@@ -316,6 +316,10 @@ class Editor extends Component {
         });
     }
 
+    log = ()=>{
+        document.location = '/dashboard'
+    }
+
     download = () => {
         if (Object.keys(count).length === 0) {
             alert('no service to build');
@@ -337,7 +341,7 @@ class Editor extends Component {
         return (
             <div className="editor-container">
                 <div className="sidebar">
-                    <div className="image-container">
+                    <div onClick={this.log} className="image-container">
                         <img src={logo} alt="su" />
                         <div className="name">
                             <span>su </span>

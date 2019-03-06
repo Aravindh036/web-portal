@@ -24,6 +24,11 @@ class Workspace extends Component {
         if(this.json !== "null"){
             this.json_render(this.json);
         }
+        window.addEventListener("keypress",this.delete);
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener("keypress",this.delete);
     }
 
     json_render = (json_str)=>{
@@ -133,7 +138,15 @@ class Workspace extends Component {
             image.setAttribute("src",sg);
             image.setAttribute("title","Security Group");
         }
+        else if(type === "vpc"){
+            image.setAttribute("src",vpc);
+            image.setAttribute("title","VPC");
+        }
         workspace.appendChild(image);
+    }
+
+    delete = (e)=>{
+        // alert(e.keyCode);
     }
 
     drop = (e)=>{
