@@ -6,6 +6,7 @@
     background-color: #7B7986;
     border-radius: 4px;
     color: #AFECE1;
+    font-size:15px;
 }
 
 .form-elements input::placeholder{

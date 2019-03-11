@@ -64,7 +64,6 @@ class Editor extends Component {
         // console.log(this.json,"hi");
         this.email = sessionStorage.getItem('email');
         this.title = sessionStorage.getItem('title');
-        console.log(this.json);
         if(!this.email || !this.title){
             document.location = "/";
         }

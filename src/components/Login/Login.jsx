@@ -152,18 +152,18 @@ class Login extends Component {
                                         <div className="password">
                                             <div className="align-start">
                                                 <label>Email</label>
-                                                <input value="eniyanilavan@gmail.com" className = "sig" type="email" />
+                                                <input className = "sig" type="email" />
                                             </div>
                                             <div className="align-start">
                                                 <label>Nick Name</label>
-                                                <input value="Eniyan" className = "sig" type="text" />
+                                                <input className = "sig" type="text" />
                                             </div>
                                         </div>
                                         <span className="pass-match">*user already exists</span>
                                         <div className="password">
                                             <div className="align-start">
                                                 <label>Password</label>
-                                                <input value="eniyan007" className = "sig" type="password" />
+                                                <input className = "sig" type="password" />
                                             </div>
                                             <div className="align-start">
                                                 <label>Confirm Password</label>
@@ -174,11 +174,11 @@ class Login extends Component {
                                         <div className="password">
                                             <div className="align-start">
                                                 <label>IAM - Access Key ID</label>
-                                                <input value="access_key" className = "sig" type="password" />
+                                                <input className = "sig" type="password" />
                                             </div>
                                             <div className="align-start">
                                                 <label>IAM - Secret Access Key</label>
-                                                <input value="secret key" className = "sig" type="password" hidden={false}/>
+                                                <input className = "sig" type="password" hidden={false}/>
                                             </div>
                                         </div>
                                         <button onClick={this.signup} className="form-button">Signup</button>

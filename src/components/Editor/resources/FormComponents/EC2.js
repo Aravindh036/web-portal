@@ -63,6 +63,7 @@ export default class EC2 extends Component {
     if (Object.keys(store[selectedID].properties).length !== 0) {
       console.log("mount", store[selectedID].properties);
       this.setState({ ...store[selectedID].properties }, () => {
+        console.log(store[selectedID].properties);
         console.log("updated", this.state)
         document.getElementById("ec2-name-id").value = this.state.name;
         document.getElementById("keyname-id").value = this.state.KeyName;

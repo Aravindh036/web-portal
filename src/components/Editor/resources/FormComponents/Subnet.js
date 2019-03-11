@@ -20,6 +20,7 @@ export default class Subnet extends Component {
   componentDidMount() {
     var store = this.props.store();
     var selectedID = this.props.getSelected();
+    console.log(store[selectedID]);
     if (Object.keys(store[selectedID].properties).length !== 0) {
       this.setState({ ...store[selectedID].properties }, () => {
         document.getElementById("subnet-name-id").value = this.state.name;

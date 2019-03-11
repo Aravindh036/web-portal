@@ -143,6 +143,7 @@ class Workspace extends Component {
             image.setAttribute("title","VPC");
         }
         workspace.appendChild(image);
+        this.props.updateStore(type,image.id,prop.x-workspace.offsetLeft,prop.y-workspace.offsetTop);
     }
 
     delete = (e)=>{
@@ -159,7 +160,8 @@ class Workspace extends Component {
         image.style.top = e.pageY-workspace.offsetTop + "px";
         image.style.width = "90px"
         image.style.position = "absolute";
-        image.style.transition = "all 0.02s";
+        // image.style.transition = "all 0.02s";
+        // image.style.webkitTransition = "all 0.02s";
         image.addEventListener("mousedown",this.down);
         image.addEventListener("dblclick",this.dblclick);
         image.addEventListener("click",this.click);
