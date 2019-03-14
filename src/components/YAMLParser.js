@@ -11,15 +11,37 @@ const generate = {
             throw "hi";
         }
         var ports = [];
+        var eports = [];
         ports = obj.properties.Port.split(",");
-        console.log(ports);
+        eports = obj.properties.ePort.split(",");
+        var ip = obj.properties.IP.split(",");
+        var protocols = obj.properties.Protocol.split(",");
+        var eip = obj.properties.eIP.split(",");
+        var eprotocols = obj.properties.eProtocol.split(",");
         var port = `${tab}${tab}${tab}SecurityGroupIngress:\n`;
+        var eport = `${tab}${tab}${tab}SecurityGroupEgress:\n`;
         for (var i in ports) {
-            port += `${tab}${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0\n${tab}${tab}${tab}${tab}${tab}FromPort: ${ports[i]}\n${tab}${tab}${tab}${tab}${tab}IpProtocol: tcp\n${tab}${tab}${tab}${tab}${tab}ToPort: ${ports[i]}\n`
+            var from = ports[i].split('-')[0];
+            var to = ports[i].split('-')[1]?ports[i].split('-')[1]:ports[i].split('-')[0];
+            var ip_add = ip[i]?ip[i]:ip[0];
+            var IP = ip_add===""?`\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0`:`\n${tab}${tab}${tab}${tab}${tab}CidrIp: ${ip_add}`;
+            var protocol = protocols[i]?protocols[i]:protocols[0];
+            var protocol_str = protocol===""?`\n${tab}${tab}${tab}${tab}${tab}IpProtocol: http`:`\n${tab}${tab}${tab}${tab}${tab}IpProtocol: ${protocol}`;
+            port += `${tab}${tab}${tab}${tab}-${IP}\n${tab}${tab}${tab}${tab}${tab}FromPort: ${from}${protocol_str}\n${tab}${tab}${tab}${tab}${tab}ToPort: ${to}\n`
+        }
+        for (i in eports) {
+            from = eports[i].split('-')[0];
+            to = eports[i].split('-')[1]?eports[i].split('-')[1]:eports[i].split('-')[0];
+            ip_add = eip[i]?eip[i]:eip[0];
+            IP = ip_add===""?`\n${tab}${tab}${tab}${tab}${tab}CidrIp: 0.0.0.0/0`:`\n${tab}${tab}${tab}${tab}${tab}CidrIp: ${ip_add}`;
+            protocol = eprotocols[i]?eprotocols[i]:eprotocols[0];
+            protocol_str = protocol===""?`\n${tab}${tab}${tab}${tab}${tab}IpProtocol: http`:`\n${tab}${tab}${tab}${tab}${tab}IpProtocol: ${protocol}`;
+            eport += `${tab}${tab}${tab}${tab}-${IP}\n${tab}${tab}${tab}${tab}${tab}FromPort: ${from}${protocol_str}\n${tab}${tab}${tab}${tab}${tab}ToPort: ${to}\n`
         }
         port = port ? port : '';
+        eport = eport ? eport : '';
         var vpc = obj.properties.VpcId?`${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n`:``;
-        yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${vpc}${port}${tab}`
+        yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::SecurityGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}GroupName: ${obj.properties.GroupName}\n${tab}${tab}${tab}GroupDescription: ${obj.properties.GroupDescription}\n${vpc}${port}${eport}${tab}`
     },
     'dbinstance': (obj,email) => {
         if (!obj.properties.DBName) {
@@ -102,8 +124,8 @@ const generate = {
             yaml += `LambdaFunctionForStart${obj.id}:\n${tab}${tab}Type: AWS::Lambda::Function\n${tab}${tab}Properties:\n${tab}${tab}${tab}Code:\n${tab}${tab}${tab}${tab}ZipFile: !Sub |\n${tab}${tab}${tab}${tab}${tab}import boto3\n${tab}${tab}${tab}${tab}${tab}def lambda_handler(event,context):\n${tab}${tab}${tab}${tab}${tab}ec2 = boto3.client('ec2', region_name=Region)\n${tab}${tab}${tab}${tab}${tab}ec2.start_instances(InstanceIds=INSTANCEID)\n${tab}${tab}${tab}Description: Lambda function.\n${tab}${tab}${tab}FunctionName: LambdaFunctionStart${obj.properties.name}\n${tab}${tab}${tab}Handler: index.lambda_handler\n${tab}${tab}${tab}Role : !GetAtt LambdaExecutionRole.Arn\n${tab}${tab}${tab}Runtime: python2.7\n${tab}${tab}${tab}Timeout: 10\n${tab}${tab}${tab}Environment:\n${tab}${tab}${tab}${tab}Variables:\n${tab}${tab}${tab}${tab}${tab}INSTANCEID: !Ref ${obj.id}\n${tab}${tab}${tab}${tab}${tab}Region:\n${tab}${tab}${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}${tab}${tab}- ${obj.id}\n${tab}${tab}${tab}${tab}${tab}${tab}${tab}- AvailabilityZone\n${tab}`;
             yaml += `ScheduledRuleForStart${obj.id}:\n${tab}${tab}Type: AWS::Events::Rule\n${tab}${tab}Properties:\n${tab}${tab}${tab}Description: "ScheduledRule"\n${tab}${tab}${tab}ScheduleExpression: cron(0 6 * * ? *)\n${tab}${tab}${tab}State: "ENABLED"\n${tab}${tab}${tab}Targets: \n${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}Arn:\n${tab}${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}${tab}- LambdaFunctionForStart${obj.id}\n${tab}${tab}${tab}${tab}${tab}${tab}- Arn\n${tab}${tab}${tab}${tab}Id: TargetFunctionV2${obj.properties.name}\n${tab}`;
             yaml += `ScheduledRuleForStop${obj.id}:\n${tab}${tab}Type: AWS::Events::Rule\n${tab}${tab}Properties:\n${tab}${tab}${tab}Description: "ScheduledRule"\n${tab}${tab}${tab}ScheduleExpression: cron(0 18 * * ? *)\n${tab}${tab}${tab}State: "ENABLED"\n${tab}${tab}${tab}Targets: \n${tab}${tab}${tab}-\n${tab}${tab}${tab}${tab}Arn:\n${tab}${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}${tab}- LambdaFunctionForStop${obj.id}\n${tab}${tab}${tab}${tab}${tab}${tab}- Arn\n${tab}${tab}${tab}${tab}Id: TargetFunctionV1${obj.id}\n${tab}`;
-            yaml += `PermissionForEventsToInvokeLambdaStart${obj.id}:\n${tab}${tab}Type: AWS::Lambda::Permission\n${tab}${tab}Properties:\n${tab}${tab}${tab}FunctionName: LambdaFunctionStart${obj.id}\n${tab}${tab}${tab}Action: "lambda:InvokeFunction"\n${tab}${tab}${tab}Principal: "events.amazonaws.com"\n${tab}${tab}${tab}SourceArn:\n${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}- ScheduledRuleForStart${obj.id}\n${tab}${tab}${tab}${tab}${tab}- Arn\n${tab}`;
-            yaml += `PermissionForEventsToInvokeLambdaStop${obj.id}:\n${tab}${tab}Type: AWS::Lambda::Permission\n${tab}${tab}Properties:\n${tab}${tab}${tab}FunctionName: LambdaFunctionStop${obj.id}\n${tab}${tab}${tab}Action: "lambda:InvokeFunction"\n${tab}${tab}${tab}Principal: "events.amazonaws.com"\n${tab}${tab}${tab}SourceArn:\n${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}- ScheduledRuleForStop${obj.id}\n${tab}${tab}${tab}${tab}${tab}- Arn\n${tab}`;
+            yaml += `PermissionForEventsToInvokeLambdaStart${obj.id}:\n${tab}${tab}Type: AWS::Lambda::Permission\n${tab}${tab}Properties:\n${tab}${tab}${tab}FunctionName: LambdaFunctionStart${obj.properties.name}\n${tab}${tab}${tab}Action: "lambda:InvokeFunction"\n${tab}${tab}${tab}Principal: "events.amazonaws.com"\n${tab}${tab}${tab}SourceArn:\n${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}- ScheduledRuleForStart${obj.id}\n${tab}${tab}${tab}${tab}${tab}- Arn\n${tab}`;
+            yaml += `PermissionForEventsToInvokeLambdaStop${obj.id}:\n${tab}${tab}Type: AWS::Lambda::Permission\n${tab}${tab}Properties:\n${tab}${tab}${tab}FunctionName: LambdaFunctionStop${obj.properties.name}\n${tab}${tab}${tab}Action: "lambda:InvokeFunction"\n${tab}${tab}${tab}Principal: "events.amazonaws.com"\n${tab}${tab}${tab}SourceArn:\n${tab}${tab}${tab}${tab}Fn::GetAtt:\n${tab}${tab}${tab}${tab}${tab}- ScheduledRuleForStop${obj.id}\n${tab}${tab}${tab}${tab}${tab}- Arn\n${tab}`;
         }
     },
     'cwatch': (obj,email) => {
@@ -121,6 +143,24 @@ const generate = {
             throw "hi";
         }
         yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::VPC\n${tab}${tab}Properties:\n${tab}${tab}${tab}CidrBlock: ${obj.properties.CidrBlock}\n${tab}${tab}${tab}EnableDnsSupport: ${obj.properties.DNS}\n${tab}${tab}${tab}EnableDnsHostnames: ${obj.properties.getDNShost}\n${tab}${tab}${tab}InstanceTenancy: ${obj.properties.InstanceTenancy}\n${tab}`;
+    },
+    'bot':(obj,email)=>{
+        var properties = {
+            name:obj.properties.name,
+            content:obj.properties.file_content,
+            file_name:obj.properties.file_name,
+        }
+        fetch('http://localhost:2019/bot',{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(properties)
+        })
+        .then(res=>{
+            console.log(res.status);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
 }
 

@@ -1,3 +1,13 @@
+.form-elements{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.file-name{
+  margin-left: 10px;
+}
+
 .form-elements input{
     padding: 5px 10px;
     border: 0;
@@ -24,8 +34,10 @@
   align-items: center;
 }
 
-.ec2-form button{
-  padding: 10px 35px;
+.form-elements button{
+  padding: 5px 10px;
+  border: 0;
+  margin: 10px 0;
   border-radius: 8px;
   border: 0;
   color:#403D4E;
@@ -36,10 +48,16 @@
   cursor: pointer;
 }
 
-.form-elements{
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+.ec2-form button{
+  padding: 10px 35px;
+  border-radius: 8px;
+  border: 0;
+  color:#403D4E;
+  background-color: #25FCCA;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.178);
+  margin-top: 10px;
+  cursor: pointer;
 }
 
 

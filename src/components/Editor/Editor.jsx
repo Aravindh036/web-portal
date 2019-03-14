@@ -16,6 +16,7 @@ import Workspace from './Workspace/Workspace';
 
 import EC2 from './resources/FormComponents/EC2';
 import Vpc from './resources/FormComponents/Vpc';
+import Bot from './resources/FormComponents/Bot';
 import CloudWatch from './resources/FormComponents/CloudWatch';
 import DBSubnet from './resources/FormComponents/DBSubnet';
 import DatabaseServer from './resources/FormComponents/DatabaseServer';
@@ -56,12 +57,16 @@ class Editor extends Component {
         vpc: (x, y) => {
             return <Vpc getVpc={this.getVpc} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
+        bot: (x, y) => {
+            return <Bot getVpc={this.getVpc} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+        },
+        yaml:'Click Deploy to get the code'
     }
 
 
     componentDidMount(){
         this.json = JSON.parse(sessionStorage.getItem('json'));
-        // console.log(this.json,"hi");
+        console.log(this.json,"hi");
         this.email = sessionStorage.getItem('email');
         this.title = sessionStorage.getItem('title');
         if(!this.email || !this.title){
@@ -71,10 +76,15 @@ class Editor extends Component {
             count = this.json;
         }
     }
+    componentDidUpdate(){
+        console.log(this.json);
+    }
     incLog = (id)=>{
-        log++;
-        id.replace(/-\.@\^/g,"_")
-        log_array.push(id)
+        id = id.replace(/-\.@\^/g,"_")
+        if(log_array.indexOf(id) === -1){
+            log++;
+            log_array.push(id)
+        }
     }
     decLog = (id)=>{
         id.replace(/-\.@\^/g,"_")
@@ -91,7 +101,18 @@ class Editor extends Component {
     getSubnet = () => {
         return subnet;
     }
-
+    delete = (id)=>{
+        delete count[id];
+        delete subnet[id];
+        delete security[id];
+        delete vpc[id];
+        delete dbSubnet[id];
+        if(instance[id]){
+            var name = instance[id].properties.name;
+            this.decLog(name);
+        }
+        delete instance[id];
+    }
     getVpc = () => {
         return vpc;
     }
@@ -112,11 +133,14 @@ class Editor extends Component {
         }
         yaml = deploy(count,this.email);
         // console.log(yaml);
-        console.log(log);
+        this.setState({yaml:yaml});
+        // console.log(log);
         var log_flag = false
         if(log>0){
             log_flag = true;
         }
+        sessionStorage.setItem('json',JSON.stringify(count))
+        // console.log(log_array);
         fetch('http://localhost:2019/deploy', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -319,6 +343,14 @@ class Editor extends Component {
         document.location = '/dashboard'
     }
 
+    upload = ()=>{
+        var file_upload = document.createElement('input');
+        file_upload.setAttribute('type','file');
+        file_upload.setAttribute('accept','application/json');
+        file_upload.setAttribute('multiple',false);
+        file_upload.click();
+    }
+
     download = () => {
         if (Object.keys(count).length === 0) {
             alert('no service to build');
@@ -335,6 +367,16 @@ class Editor extends Component {
         element.click();
 
         document.body.removeChild(element);
+        // element = document.createElement('a');
+        // element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(count)));
+        // element.setAttribute('download', "template.json");
+
+        // element.style.display = 'none';
+        // document.body.appendChild(element);
+
+        // element.click();
+
+        // document.body.removeChild(element);
     }
     render() {
         return (
@@ -370,13 +412,13 @@ class Editor extends Component {
                         <label contentEditable={true} className="arch-title">{sessionStorage.getItem("title")}</label>
                         <div className="buttons-container">
                             <button onClick={this.cloud_save} className="save" ><img src={save} alt="⬆️" /> </button>
-                            <button className="upload"> <img src={upload} alt="⬆️" /> </button>
+                            <button className="upload" onClick={this.upload}> <img src={upload} alt="⬆️" /> </button>
                             <button className="download" onClick={this.download} > <img src={download} alt="⬇️" /> </button>
                             <button className="deploy" onClick={this.deploy} onMouseOver={this.changeImage} > <img alt="🚀" /> Deploy</button>
                         </div>
                     </nav>
-                    {this.state.workflow === true ? <Workspace remove={this.removeproperties} update_position={this.update_position} updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
-                    {this.state.code === true ? <div className="code-space">Code</div> : null}
+                    {this.state.workflow === true ? <Workspace delete={this.delete} remove={this.removeproperties} update_position={this.update_position} updateStore={this.updateStore} changeProperty={this.changeProperty} currentID={this.currentID} /> : null}
+                    {this.state.code === true ? <div className="code-space">{this.state.yaml}</div> : null}
                 </div>
                 {/* <div id="properties" className="properties">
                     <div className="properties-container">

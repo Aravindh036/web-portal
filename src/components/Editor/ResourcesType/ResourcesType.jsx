@@ -9,6 +9,8 @@ import cwatch from '../../../assets/cwatch.png';
 import lbalancer from '../../../assets/lbalance.png';
 import sg from '../../../assets/sg.png';
 import vpc from '../../../assets/vpc.png';
+import bot from '../../../assets/bot.png';
+
 class ResourcesType extends Component {
     image = document.createElement("img");
     dragstart = (e)=>{
@@ -35,6 +37,9 @@ class ResourcesType extends Component {
         }
         else if(e.target.innerHTML === "VPC"){
             e.dataTransfer.setData("type","vpc");
+        }
+        else if(e.target.innerHTML === "Bot"){
+            e.dataTransfer.setData("type","bot");
         }
         e.dataTransfer.setDragImage(this.image,10,10)
     }
@@ -63,6 +68,9 @@ class ResourcesType extends Component {
         else if(e.target.innerHTML === "VPC"){
             this.image.src = vpc;
         }
+        else if(e.target.innerHTML === "Bot"){
+            this.image.src = bot;
+        }
     }
     render() {
         return (
@@ -75,8 +83,8 @@ class ResourcesType extends Component {
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Subnet</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">DB Subnet Group</div>
                 <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Cloud Watch</div>
-                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Lambda Function</div>
-                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Bot</div>
+                {/* <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Lambda Function</div>
+                <div draggable={true} onMouseDown={this.mouseDown} onDragStart={(e)=>this.dragstart(e)} className="resource-items">Bot</div> */}
             </div>
         );
     }

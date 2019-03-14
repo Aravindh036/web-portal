@@ -69,7 +69,7 @@
     align-items: center;
     padding: 10px;
     width: 70px;
-    font-size: 16px;
+    font-size: 18px;
     border-radius: 50px;
     border: 0px solid #21F9CF;
     background-color: transparent;
@@ -81,7 +81,6 @@
 
 .buttons-container button:hover{
     background-color: rgba(255, 255, 255, 0.925);
-    font-size: 14px;
     color: rgb(9, 133, 108);
     border: 2px solid rgb(5, 204, 164)
 }
@@ -94,10 +93,15 @@
     padding: 12px 10px!important;
 }
 
-.deploy:hover, .upload:hover, .save:hover, .download:hover{
+.deploy:hover, .upload:hover, .save:hover{
     background-color: transparent!important;
     color: white!important;
     width: 140px;
+}
+.download:hover{
+    background-color: transparent!important;
+    color: white!important;
+    width: 160px;
 }
 
 .buttons-container button img{
@@ -191,14 +195,20 @@
     background-color: #2C2A37;
     width: calc(100% - 3px);
     height: calc(100% - 80px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+.code-space{
+    padding: 50px 50px;
+    white-space: pre-wrap;
+    overflow: scroll;
 }
 
 .work-space{
     background-image: url(../../assets/workspace_bg.png);
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .properties{

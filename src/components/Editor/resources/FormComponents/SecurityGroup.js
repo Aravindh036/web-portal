@@ -10,6 +10,11 @@ export default class SecurityGroup extends Component {
     VpcId:"",
     GroupDescription:"",
     Port:"",
+    IP:"",
+    Protocol:"",
+    ePort:"",
+    eIP:"",
+    eProtocol:"",
     x:0,
     y:0
     // VpcId:""
@@ -28,6 +33,11 @@ export default class SecurityGroup extends Component {
             document.getElementById("groupname-id").value = this.state.GroupName;
             document.getElementById("group-description-id").value = this.state.GroupDescription;
             document.getElementById("port-id").value = this.state.Port; 
+            document.getElementById("ip-id").value = this.state.IP;
+            document.getElementById("protocol-id").value = this.state.Protocol;
+            document.getElementById("eport-id").value = this.state.ePort; 
+            document.getElementById("eip-id").value = this.state.eIP;
+            document.getElementById("eprotocol-id").value = this.state.eProtocol;
         })
     }
     document.getElementById('drop-head-vpc').addEventListener('click', () => {
@@ -60,6 +70,31 @@ export default class SecurityGroup extends Component {
   getPort=(e)=>{
     this.setState({
       Port:e.target.value
+    });
+  }
+  getProtocol=(e)=>{
+    this.setState({
+      Protocol:e.target.value
+    });
+  }
+  getIP=(e)=>{
+    this.setState({
+      IP:e.target.value
+    });
+  }
+  getePort=(e)=>{
+    this.setState({
+      ePort:e.target.value
+    });
+  }
+  geteProtocol=(e)=>{
+    this.setState({
+      eProtocol:e.target.value
+    });
+  }
+  geteIP=(e)=>{
+    this.setState({
+      eIP:e.target.value
     });
   }
   // getVpcId = (e)=>{
@@ -113,7 +148,14 @@ export default class SecurityGroup extends Component {
             <input type="text" placeholder="GroupName" id="groupname-id" onBlur={this.getGroupName} />
             <input type="text"placeholder="GroupDescription" id="group-description-id" onBlur={this.getGroupDescription} />
             {/* <input type="text" placeholder="VpcId" id="vpc-id" onBlur={this.getVpcId} /> */}
+            <label>Ingress</label>
             <input type="text" placeholder="Port(s)" id="port-id" onBlur={this.getPort}/>
+            <input type="text" placeholder="IP(s)" id="ip-id" onBlur={this.getIP}/>
+            <input type="text" placeholder="Protocol" id="protocol-id" onBlur={this.getProtocol}/>
+            <label>Egress</label>
+            <input type="text" placeholder="Port(s)" id="eport-id" onBlur={this.getePort}/>
+            <input type="text" placeholder="IP(s)" id="eip-id" onBlur={this.geteIP}/>
+            <input type="text" placeholder="Protocol" id="eprotocol-id" onBlur={this.geteProtocol}/>
             <div className="drop-down-container">
             <div className="drop-tag">
               <div className="drop-head" id="drop-head-vpc">

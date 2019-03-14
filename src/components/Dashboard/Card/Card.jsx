@@ -17,18 +17,33 @@ class Card extends Component {
         
     }
 
+    delete = (e)=>{
+        fetch('http://localhost:2019/delete',{
+            method:"DELETE",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({name:this.props.title})
+        })
+        .then(res=>{
+            console.log(res.status);
+            if(res.status === 200){
+                document.location.reload();
+            }
+        })
+    }
+
     render() {
         return (
-            <div onClick={this.select} className="card-container" >
-                <div ref={ref=>this.preview=ref} className="card-preview">
+            <div className="card-container" >
+                <div onClick={this.select} ref={ref=>this.preview=ref} className="card-preview">
                     <img width="100%" height="100%" src = {this.props.preview} alt="No preview available"/>
                 </div>
                 <div className="card-details">
-                    <div className="project-details">
+                    <div onClick={this.select} className="project-details">
                         <div className="card-name">{this.props.title}</div>
                         <div className="card-date">Created On :  {this.props.doc}</div>
                     </div>
-                    <div className="delete-card">
+                    <div onClick={this.select} className="temp"></div>
+                    <div onClick={this.delete} className="delete-card">
                         <img src={delete_icon} alt="🗑️"/>
                     </div>
                 </div>

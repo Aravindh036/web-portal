@@ -7,8 +7,7 @@ import cwatch from '../../../assets/cwatch.png';
 import lbalancer from '../../../assets/lbalance.png';
 import sg from '../../../assets/sg.png';
 import vpc from '../../../assets/vpc.png';
-
-
+import bot from '../../../assets/bot.png';
 
 
 class Workspace extends Component {
@@ -24,11 +23,11 @@ class Workspace extends Component {
         if(this.json !== "null"){
             this.json_render(this.json);
         }
-        window.addEventListener("keypress",this.delete);
+        window.addEventListener("keydown",this.delete);
     }
 
     componentWillUnmount(){
-        window.removeEventListener("keypress",this.delete);
+        window.removeEventListener("keydown",this.delete);
     }
 
     json_render = (json_str)=>{
@@ -142,12 +141,25 @@ class Workspace extends Component {
             image.setAttribute("src",vpc);
             image.setAttribute("title","VPC");
         }
+        else if(type === "bot"){
+            image.setAttribute("src",bot);
+            image.setAttribute("title","Bot");
+        }
         workspace.appendChild(image);
         this.props.updateStore(type,image.id,prop.x-workspace.offsetLeft,prop.y-workspace.offsetTop);
     }
 
     delete = (e)=>{
-        // alert(e.keyCode);
+        if(e.keyCode === 46 && this.select_elem){
+            var select_elem = this.select_elem;
+            var id = select_elem.id;
+            this.props.delete(id);
+            select_elem.parentNode.removeChild(select_elem);
+            this.select_elem = undefined;
+            var property = document.getElementById("properties");
+            property.style.right = "-314px";
+            document.getElementById('workspace').removeEventListener("click",this.windowclick,true);
+        }
     }
 
     drop = (e)=>{
@@ -203,6 +215,10 @@ class Workspace extends Component {
         else if(type === "vpc"){
             image.setAttribute("src",vpc);
             image.setAttribute("title","VPC");
+        }
+        else if(type === "bot"){
+            image.setAttribute("src",bot);
+            image.setAttribute("title","Bot");
         }
         workspace.appendChild(image);
         this.props.updateStore(type,image.id,e.pageX-workspace.offsetLeft,e.pageY-workspace.offsetTop);
