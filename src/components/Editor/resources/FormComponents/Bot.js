@@ -51,7 +51,6 @@ export default class Bot extends Component {
       file_selector.click();
   }
   saveForm = () => {
-    // console.log("hello");
     if (this.state.name === "") {
       alert("Give a name for the Bot!!!");
       return;
@@ -61,15 +60,12 @@ export default class Bot extends Component {
       return;
     }
     if ((this.state.name !== "")) {
-      console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
       store[selectedID].properties = this.state;
-      console.log("inside the save button", store);
       this.props.saveStore(store);
       this.props.remove();
       document.getElementById('properties').style.right = "-314px";
-      console.log("count", store);
     }
   }
   render() {

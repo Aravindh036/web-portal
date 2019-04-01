@@ -30,7 +30,6 @@ export default class DatabaseServer extends Component {
     document.getElementById('drop-head-id').innerHTML = this.state.DBInstanceClass;
     if (Object.keys(store[selectedID].properties).length !== 0) {
       this.setState({ ...store[selectedID].properties }, () => {
-        console.log(this.state.Engine);
         document.getElementById("dbname-id").value = this.state.DBName;
         document.getElementById("db-security-groups-id").value = this.state.VPCSecurityGroups;
         document.getElementById("allocated-storage-id").value = this.state.AllocatedStorage;
@@ -42,12 +41,10 @@ export default class DatabaseServer extends Component {
     }
     document.getElementById('drop-head-id').addEventListener('click', () => {
       document.getElementById('drop-id').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-id').addEventListener('click', (e) => {
       document.getElementById("drop-id").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
         DBInstanceClass: e.target.innerHTML
@@ -55,12 +52,10 @@ export default class DatabaseServer extends Component {
     })
     document.getElementById('drop-head-subnet').addEventListener('click', () => {
       document.getElementById('drop-subnet').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-subnet').addEventListener('click', (e) => {
       document.getElementById("drop-subnet").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       if (!e.target.innerHTML.includes("No DB Subnets created")) {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
@@ -118,17 +113,14 @@ export default class DatabaseServer extends Component {
       return;
     }
     if ((this.state.DBName !== "") && (this.state.DBInstanceClass !== "")) {
-      console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
       //     store[i].properties = this.state
       //   }
       // }
       store[selectedID].properties = this.state;
-      console.log("inside the save button", store);
       this.props.saveStore(store);
       this.props.remove();
       document.getElementById('properties').style.right = "-314px";
@@ -136,10 +128,8 @@ export default class DatabaseServer extends Component {
   }
   render() {
     // const id = this.props.currentComponent();
-    // console.log("id", id);
     var subnet = this.props.getDBsubnet();
     var subnetDropdown = "";
-    console.log(subnet,"hiiiiiiii");
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
         return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>

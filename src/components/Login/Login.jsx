@@ -34,27 +34,45 @@ class Login extends Component {
         text.innerHTML = '';
         var email = elements[0].value;
         var pass = elements[1].value;
-        // console.log(email,pass);
-        fetch(`http://localhost:2019/login?email=${email}&password=${pass}`,{
-            method:"GET",
-        })
-        .then(res=>{
-            if(res.status === 200){
-                sessionStorage.setItem('email',email)
-                document.location = "/dashboard"
-            }
-            else if(res.status === 403){
-                text.innerHTML = "*email or password wrong";
-            }
-            else if(res.status === 404){
-                text.innerHTML = "*no user found";
-            }
-        })
-        .catch(err=>{
-            console.log(err.message);
-        })
+        let params = (new URL(document.location)).searchParams;
+        if(params.has("client_id")){
+            let client_id = params.get("client_id");
+            let response_type = params.get("response_type");
+            let redirect_uri = params.get("redirect_uri");
+            let state = params.get("state");
+            fetch(`https://02476d4d.ngrok.io/authenticate?email=${email}&password=${pass}&clinet_id=${client_id}&response_type=${response_type}&redirect_uri=${redirect_uri}&state=${state}`,{
+                method:"GET",
+            })
+            .then(res=>{
+                return res.json()
+            })
+            .then(data=>{
+                var redirect_url = data.redirect_url;
+                document.location.href = redirect_url;
+                // document.location.reload();
+            })
+        }
+        else{
+            fetch(`https://02476d4d.ngrok.io/login?email=${email}&password=${pass}`,{
+                method:"GET",
+            })
+            .then(res=>{
+                if(res.status === 200){
+                    sessionStorage.setItem('email',email)
+                    document.location = "/dashboard"
+                }
+                else if(res.status === 403){
+                    text.innerHTML = "*email or password wrong";
+                }
+                else if(res.status === 404){
+                    text.innerHTML = "*no user found";
+                }
+            })
+            .catch(err=>{
+                console.log(err.message);
+            })
+        }
     }
-
     signup = ()=>{
         document.getElementsByClassName('pass-match')[1].style.display = "none";
         document.getElementsByClassName('pass-match')[0].style.display = "none";
@@ -67,7 +85,7 @@ class Login extends Component {
         var confirm_pass = document.getElementById('comf-pass').value;
         if(pass === confirm_pass){
             var that = this;
-            fetch('http://localhost:2019/signup',{
+            fetch('https://02476d4d.ngrok.io/signup',{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({

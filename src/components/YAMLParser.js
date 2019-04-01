@@ -53,7 +53,6 @@ const generate = {
         var vpcsecuritygroup = obj.properties.DBSecurityGroups ? `VPCSecurityGroups: \n${tab}${tab}${tab}${tab}- !Ref ${obj.properties.DBSecurityGroups}\n${tab}${tab}${tab}` : '';
         var allocatedstorage = obj.properties.AllocatedStorage ? `AllocatedStorage: ${obj.properties.AllocatedStorage}\n${tab}${tab}${tab}` : '';
         yaml += `${obj.properties.DBName}:\n${tab}${tab}Type: AWS::RDS::DBInstance\n${tab}${tab}Properties:\n${tab}${tab}${tab}DBName: ${obj.properties.DBName}\n${tab}${tab}${tab}${vpcsecuritygroup}${allocatedstorage}DBInstanceClass: ${obj.properties.DBInstanceClass}\n${tab}${tab}${tab}Engine: ${obj.properties.Engine}\n${MasterUserPassword}${tab}`
-        // console.log(obj);
     },
     'lbalancer': (obj,email) => {
         if (!obj.properties.LoadBalancerName) {
@@ -61,9 +60,9 @@ const generate = {
             throw "hi";
         }
         var subnet = obj.properties.Subnet ? `Subnets:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.Subnet}\n${tab}${tab}${tab}`:'';
+        var instance = obj.properties.Instance ? `Instances:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.Instance}`:'';
         var securitygroup = obj.properties.SecurityGroup ? `SecurityGroups:\n ${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n${tab}${tab}${tab}`:'';
-        yaml += `${obj.properties.LoadBalancerName}:\n${tab}${tab}Type: AWS::ElasticLoadBalancing::LoadBalancer\n${tab}${tab}Properties:\n${tab}${tab}${tab}LoadBalancerName: ${obj.properties.LoadBalancerName}\n${tab}${tab}${tab}${subnet}${securitygroup}Listeners:\n${tab}${tab}${tab}-${tab1}LoadBalancerPort: ${obj.properties.LoadBalancerPort}\n${tab}${tab}${tab}${tab}InstancePort: ${obj.properties.InstancePort}\n${tab}${tab}${tab}${tab}Protocol: ${obj.properties.Protocol}\n${tab}`
-        // console.log(obj);
+        yaml += `${obj.properties.LoadBalancerName}:\n${tab}${tab}Type: AWS::ElasticLoadBalancing::LoadBalancer\n${tab}${tab}Properties:\n${tab}${tab}${tab}LoadBalancerName: ${obj.properties.LoadBalancerName}\n${tab}${tab}${tab}${instance}\n${tab}${tab}${tab}${subnet}${securitygroup}Listeners:\n${tab}${tab}${tab}-${tab1}LoadBalancerPort: ${obj.properties.LoadBalancerPort}\n${tab}${tab}${tab}${tab}InstancePort: ${obj.properties.InstancePort}\n${tab}${tab}${tab}${tab}Protocol: ${obj.properties.Protocol}\n${tab}`
     },
     'subnet': (obj,email) => {
         if (!obj.properties.name) {
@@ -74,7 +73,6 @@ const generate = {
         if (subnet[obj.properties.SubnetType]) {
             yaml += `${obj.id}RouteTableAssociation:\n${tab}${tab}Type: AWS::EC2::SubnetRouteTableAssociation\n${tab}${tab}Properties:\n${tab}${tab}${tab}RouteTableId: !Ref ${obj.properties.VpcId}RouteTable\n${tab}${tab}${tab}SubnetId: !Ref ${obj.id}\n${tab}`
         }
-        console.log(obj);
     },
     'dbsubnet': (obj,email) => {
         if (!obj.properties.name) {
@@ -82,7 +80,6 @@ const generate = {
             throw "hi";
         }
         yaml += `${obj.properties.name}:\n${tab}${tab}Type: AWS::EC2::DBSubnetGroup\n${tab}${tab}Properties:\n${tab}${tab}${tab}DBSubnetGroupDescription:${obj.properties.description}\n${tab}${tab}${tab}SubnetIds:\n${tab}${tab}${tab}${tab1}` //to be completed;
-        console.log(obj);
     },
     'instance': (obj,email) => {
         if (!obj.properties.name) {
@@ -90,12 +87,10 @@ const generate = {
             throw "hi";
         }
         var subnet = obj.properties.SubnetName ? `${tab}${tab}${tab}SubnetId: !Ref ${obj.properties.SubnetName}\n` : ``;
-        console.log('keyname', obj.properties.keyname);
         var keyname = obj.properties.KeyName ? `KeyName: ${obj.properties.KeyName}\n${tab}${tab}${tab}` : '';
         var imageid = obj.properties.ImageID ? `ImageId: ${obj.properties.ImageID}\n${tab}${tab}${tab}` : '';
         var securitygroup = obj.properties.SecurityGroup ? `${subnet}${tab}${tab}${tab}SecurityGroupIds:\n${tab}${tab}${tab}${tab}- !Ref ${obj.properties.SecurityGroup}\n` : '';
         yaml += `${obj.id}:\n${tab}${tab}Type: AWS::EC2::Instance\n${tab}${tab}Properties:\n${tab}${tab}${tab}${imageid}AvailabilityZone: ${obj.properties.AvailabilityZone}\n${tab}${tab}${tab}${keyname}InstanceType: ${obj.properties.InstanceType}\n${securitygroup}${tab}`
-        // console.log(obj);
         // if (obj.properties.ImageID === "ami-e24b7d9d") {
         //     yaml += `${tab}${tab}${tab}UserData:\n${tab}${tab}${tab}${tab}Fn::Base64: !Sub |\n${tab}${tab}${tab}${tab}${tab}sudo su\n${tab}${tab}${tab}${tab}${tab}yum install httpd -y\n${tab}${tab}${tab}${tab}${tab}systemctl enable httpd\n${tab}${tab}${tab}${tab}${tab}systemctl start httpd\n${tab}`
         // }
@@ -150,13 +145,13 @@ const generate = {
             content:obj.properties.file_content,
             file_name:obj.properties.file_name,
         }
-        fetch('http://localhost:2019/bot',{
+        fetch('https://02476d4d.ngrok.io/bot',{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(properties)
         })
         .then(res=>{
-            console.log(res.status);
+            // console.log(res.status);
         })
         .catch(err=>{
             console.log(err);
@@ -175,25 +170,21 @@ export default function deploy(sample,email) {
         if ((sample[i].serviceName === "subnet") && (routeTableTemp !== true)) {
             if (subnet[sample[i].properties.SubnetType]){
                 var obj = sample[i];
-                console.log(obj)
                 yaml += `${obj.properties.VpcId}RouteTable:\n${tab}${tab}Type: AWS::EC2::RouteTable\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n${tab}${obj.properties.VpcId}InternetRoute:\n${tab}${tab}Type: AWS::EC2::Route\n${tab}${tab}DependsOn: ${obj.id}VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}DestinationCidrBlock: 0.0.0.0/0\n${tab}${tab}${tab}GatewayId: !Ref ${obj.id}InternetGateway\n${tab}${tab}${tab}RouteTableId: !Ref ${obj.properties.VpcId}RouteTable\n${tab}`;
                 yaml += `${obj.id}InternetGateway:\n${tab}${tab}Type: AWS::EC2::InternetGateway\n${tab}${obj.id}VPCGatewayAttachment:\n${tab}${tab}Type: AWS::EC2::VPCGatewayAttachment\n${tab}${tab}Properties:\n${tab}${tab}${tab}VpcId: !Ref ${obj.properties.VpcId}\n${tab}${tab}${tab}InternetGatewayId: !Ref ${obj.id}InternetGateway\n${tab}`
                 routeTableTemp = true;
             }
         }
-        console.log(sample[i])
         try {
             generate[sample[i].serviceName](sample[i],email);
         }
         catch (e) {
-            console.log(e,"vauva");
             if (e === "hi") {
                 return "";
             }
             alert("Check your design");
         }
     }
-    // console.log(yaml);
     if (lambda) {
         yaml += `LambdaExecutionRole:\n${tab}${tab}Type: AWS::IAM::Role\n${tab}${tab}Properties:\n${tab}${tab}${tab}AssumeRolePolicyDocument:\n${tab}${tab}${tab}${tab}Version: '2012-10-17'\n${tab}${tab}${tab}${tab}Statement:\n${tab}${tab}${tab}${tab}- Effect: Allow\n${tab}${tab}${tab}${tab}  Principal:\n${tab}${tab}${tab}${tab}${tab}  Service:\n${tab}${tab}${tab}${tab}${tab}  - lambda.amazonaws.com\n${tab}${tab}${tab}${tab}  Action:\n${tab}${tab}${tab}${tab}  - sts:AssumeRole\n${tab}${tab}${tab}Path: "/"\n${tab}${tab}${tab}Policies:\n${tab}${tab}${tab}- PolicyName: root\n${tab}${tab}${tab}  PolicyDocument:\n${tab}${tab}${tab}${tab}  Version: '2012-10-17'\n${tab}${tab}${tab}${tab}  Statement:\n${tab}${tab}${tab}${tab}  - Effect: Allow\n${tab}${tab}${tab}${tab}    Action:\n${tab}${tab}${tab}${tab}    - "logs:*"\n${tab}${tab}${tab}${tab}    Resource: arn:aws:logs:::*\n${tab}`
     }

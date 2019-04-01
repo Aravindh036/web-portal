@@ -7,7 +7,7 @@ class Modal extends Component {
     new = ()=>{
         var title = document.getElementById('title').value;
         var email = sessionStorage.getItem('email');
-        fetch('http://localhost:2019/dashboard/'+email,{
+        fetch('https://02476d4d.ngrok.io/dashboard/'+email,{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({name:title,doc:new Date().toISOString()})

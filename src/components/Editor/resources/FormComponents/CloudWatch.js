@@ -4,6 +4,13 @@ import arrow from '../../../../assets/drop@2x.png'
 
 import './FormComponents.css';
 
+var threshold = {
+    GreaterThanOrEqualToThreshold:">= Threshold",
+    GreaterThanThreshold:"> Threshold",
+    LessThanOrEqualToThreshold:"<= Threshold",
+    LessThanThreshold:"< Threshold",
+    "":"Select a Comparitor"
+}
 export default class CloudWatch extends Component {
     state = {
         name: "",
@@ -24,11 +31,12 @@ export default class CloudWatch extends Component {
     componentDidMount() {
         var store = this.props.store();
         var selectedID = this.props.getSelected();
+        var instance = this.props.getInstance();
         if (Object.keys(store[selectedID].properties).length !== 0) {
-            // console.log("mount", store[selectedID].properties);
             this.setState({ ...store[selectedID].properties }, () => {
                 document.getElementById("alarm-name-id").value = this.state.name;
-                // document.getElementById("instance-name-id").value = this.state.InstanceName;
+                document.getElementById("drop-head-instance").innerHTML = instance[this.state.InstanceName]?instance[this.state.InstanceName].properties.name:'Select a Instance';
+                document.getElementById("drop-head-id").innerHTML = threshold[this.state.ComparisonOperator];
                 document.getElementById("period-id").value = this.state.Period;
                 document.getElementById("evaluation-period-id").value = this.state.EvaluationPeriods;
                 document.getElementById("threshold-id").value = this.state.Threshold;
@@ -37,7 +45,6 @@ export default class CloudWatch extends Component {
         }
         document.getElementById('drop-head-id').addEventListener('click', () => {
             document.getElementById('drop-id').classList.toggle('hide');
-            // console.log("hhhh");
         });
 
         document.getElementById('drop-id').addEventListener('click', (e) => {
@@ -56,25 +63,21 @@ export default class CloudWatch extends Component {
             else if (e.target.innerHTML.includes('&lt;')) {
                 operator = "LessThanThreshold";
             }
-            // console.log(operator);
             this.setState({
                 ComparisonOperator: operator
             }, () => {
-                console.log(this.state.ComparisonOperator);
             });
         })
-        document.getElementById('drop-head-subnet').addEventListener('click', () => {
-            document.getElementById('drop-subnet').classList.toggle('hide');
-            // console.log("hhhh");
+        document.getElementById('drop-head-instance').addEventListener('click', () => {
+            document.getElementById('drop-instance').classList.toggle('hide');
           });
       
-          document.getElementById('drop-subnet').addEventListener('click', (e) => {
-            document.getElementById("drop-subnet").classList.toggle('hide');
-            // console.log(e.target.innerHTML);
+          document.getElementById('drop-instance').addEventListener('click', (e) => {
+            document.getElementById("drop-instance").classList.toggle('hide');
             if (!e.target.innerHTML.includes("No Instance created")) {
-              document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
+              document.getElementById('drop-head-instance').innerHTML = e.target.innerHTML;
               this.setState({
-                SubnetName: e.target.id
+                InstanceName: e.target.id
               });
             }
           })
@@ -131,17 +134,14 @@ export default class CloudWatch extends Component {
             alert("Mention the mail id to get the alarm notification");
         }
         if ((this.state.name !== "") && (this.state.EvaluationPeriods !== "") && (this.state.Threshold !== "") && (this.state.ComparisonOperator !== "") && (this.state.Email !== "")) {
-            // console.log(this.state);
             var store = this.props.store();
             var selectedID = this.props.getSelected();
             // for (var i = 0; i <= store.length - 1; i++) {
             //   if (store[i].id === selectedID) {
-            //     console.log("hhhh");
             //     store[i].properties = this.state
             //   }
             // }
             store[selectedID].properties = this.state;
-            // console.log("inside the save button", store);
             this.props.saveStore(store);
             document.getElementById('properties').style.right = "-314px";
             this.props.remove();
@@ -150,7 +150,6 @@ export default class CloudWatch extends Component {
     render() {
         var subnet = this.props.getInstance();
         var subnetDropdown = "";
-        console.log(subnet,"hiiiiiiii");
         if (Object.values(subnet).length !== 0) {
           subnetDropdown = Object.values(subnet).map(sub => {
             return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
@@ -169,12 +168,12 @@ export default class CloudWatch extends Component {
                     {/* <input type="text" placeholder="InstanceName" id="instance-name-id" onBlur={this.getInstanceName} /> */}
                     <div className="drop-down-container">
                         <div className="drop-tag">
-                        <div className="drop-head" id="drop-head-subnet">
+                        <div className="drop-head" id="drop-head-instance">
                             Select a Instance
                         </div>
                         <div className="arrow"><img src={arrow} alt="⥮" /></div>
                         </div>
-                        <div className="drop-down hide" id="drop-subnet">
+                        <div className="drop-down hide" id="drop-instance">
                         {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
                         {subnetDropdown}
                         </div>

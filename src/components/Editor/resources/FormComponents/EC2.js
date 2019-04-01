@@ -58,13 +58,12 @@ export default class EC2 extends Component {
   componentDidMount() {
     var store = this.props.store();
     var selectedID = this.props.getSelected();
+    var sg = this.props.getSecurity();
+    var subnet = this.props.getSubnet();
     document.getElementById('drop-head-id').innerHTML = this.state.InstanceType;
     document.getElementById('drop-head-image').innerHTML = this.state.ImageID;
     if (Object.keys(store[selectedID].properties).length !== 0) {
-      console.log("mount", store[selectedID].properties);
       this.setState({ ...store[selectedID].properties }, () => {
-        console.log(store[selectedID].properties);
-        console.log("updated", this.state)
         document.getElementById("ec2-name-id").value = this.state.name;
         document.getElementById("keyname-id").value = this.state.KeyName;
         document.getElementById("availability-id").value = this.state.AvailabilityZone;
@@ -75,19 +74,18 @@ export default class EC2 extends Component {
         document.getElementById('checkbox-b').checked = this.state.Backup;
         // document.getElementById("ec2-subnet-id").value = this.state.SubnetName;
         // document.getElementById("security-groups-id").value = this.state.SecurityGroup;
-        document.getElementById('drop-head-security').innerHTML = this.state.SecurityGroup?this.state.SecurityGroup:"Select a security group";
+        document.getElementById('drop-head-security').innerHTML = sg[this.state.SecurityGroup]?sg[this.state.SecurityGroup].properties.GroupName:"Select a security group";
+        document.getElementById('drop-head-subnet').innerHTML = subnet[this.state.SubnetName]?subnet[this.state.SubnetName].properties.name:"Select a security group";
         document.getElementById('drop-head-id').innerHTML = this.state.InstanceType;
         document.getElementById('drop-head-image').innerHTML = this.instance_id[this.state.AvailabilityZone][this.state.ImageID];
       })
     }
     document.getElementById('drop-head-id').addEventListener('click', () => {
       document.getElementById('drop-id').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-id').addEventListener('click', (e) => {
       document.getElementById("drop-id").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
         InstanceType: e.target.innerHTML
@@ -95,12 +93,10 @@ export default class EC2 extends Component {
     })
     document.getElementById('drop-head-image').addEventListener('click', () => {
       document.getElementById('drop-image').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-image').addEventListener('click', (e) => {
       document.getElementById("drop-image").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-image').innerHTML = e.target.innerHTML;
       this.setState({
         ImageID: this.ami_id[this.state.AvailabilityZone][e.target.innerHTML]
@@ -108,12 +104,10 @@ export default class EC2 extends Component {
     })
     document.getElementById('drop-head-subnet').addEventListener('click', () => {
       document.getElementById('drop-subnet').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-subnet').addEventListener('click', (e) => {
       document.getElementById("drop-subnet").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       if (!e.target.innerHTML.includes("No subnets created")) {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
@@ -123,12 +117,10 @@ export default class EC2 extends Component {
     })
     document.getElementById('drop-head-security').addEventListener('click', () => {
       document.getElementById('drop-security').classList.toggle('hide');
-      console.log("vauva");
     });
 
     document.getElementById('drop-security').addEventListener('click', (e) => {
       document.getElementById("drop-security").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       if (!e.target.innerHTML.includes("No security group created")) {
         document.getElementById('drop-head-security').innerHTML = e.target.innerHTML;
         this.setState({
@@ -166,7 +158,6 @@ export default class EC2 extends Component {
     this.setState({
       Backup: !this.state.Backup
     });
-    // console.log(this.state.Backup);
   }
   getEventLog = (e) => {
     this.setState({
@@ -188,17 +179,16 @@ export default class EC2 extends Component {
       alert("Give the availability zone for the instance");
     }
     if ((this.state.name !== "") && (this.state.AvailabilityZone !== "")) {
-      // console.log(this.state);
       var store = this.props.store();
+      var instance = this.props.getInstance();
       var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
       //     store[i].properties = this.state
       //   }
       // }
       store[selectedID].properties = this.state;
-      console.log("inside the save button", store);
+      instance[selectedID].properties = this.state;
       this.props.remove();
       this.props.saveStore(store);
       document.getElementById('properties').style.right = "-314px";
@@ -208,7 +198,6 @@ export default class EC2 extends Component {
     // if(store.properties===undefined){
     var subnet = this.props.getSubnet();
     var subnetDropdown = "";
-    console.log(subnet,"hiiiiiiii");
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
         return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
@@ -233,8 +222,6 @@ export default class EC2 extends Component {
         return <div className="drop-down-item">No Security Group created</div>
       })
     }
-    console.log("security",securitygroup);
-    console.log("helloeee", subnetDropdown);
     return (
       <div className="ec2-form" id="ec2-form-id">
         <div className="form-elements">

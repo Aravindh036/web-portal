@@ -30,12 +30,10 @@ export default class DBSubnet extends Component {
         }
         document.getElementById('drop-head-subnet').addEventListener('click', () => {
             document.getElementById('drop-subnet').classList.toggle('hide');
-            // console.log("hhhh");
           });
       
           document.getElementById('drop-subnet').addEventListener('click', (e) => {
             document.getElementById("drop-subnet").classList.toggle('hide');
-            // console.log(e.target.innerHTML);
             if (!e.target.innerHTML.includes("No subnets created")) {
               document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
               this.setState({
@@ -75,13 +73,11 @@ export default class DBSubnet extends Component {
             var selectedID = this.props.getSelected();
             // for (var i = 0; i <= store.length - 1; i++) {
             //   if (store[i].id === selectedID) {
-            //     console.log("hhhh");
             //     store[i].properties = this.state
             //   }
             // }
             store[selectedID].properties = this.state;
             dbSubnet[selectedID].properties = this.state;
-            console.log("inside the save button", store);
             this.props.saveStore(store);
             this.props.remove();
             document.getElementById('properties').style.right = "-314px";
@@ -90,7 +86,6 @@ export default class DBSubnet extends Component {
     render() {
         var subnet = this.props.getSubnet();
         var subnetDropdown = "";
-        console.log(subnet,"hiiiiiiii");
         if (Object.values(subnet).length !== 0) {
           subnetDropdown = Object.values(subnet).map(sub => {
             return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>

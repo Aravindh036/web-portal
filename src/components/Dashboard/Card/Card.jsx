@@ -18,13 +18,12 @@ class Card extends Component {
     }
 
     delete = (e)=>{
-        fetch('http://localhost:2019/delete',{
+        fetch('https://02476d4d.ngrok.io/delete',{
             method:"DELETE",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({name:this.props.title})
         })
         .then(res=>{
-            console.log(res.status);
             if(res.status === 200){
                 document.location.reload();
             }

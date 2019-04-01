@@ -20,7 +20,7 @@ class Dashboard extends Component {
         if(!this.email){
             document.location = '/';
         }
-        fetch('http://localhost:2019/dashboard/r.eniyanilavan@gmail.com',{
+        fetch('https://02476d4d.ngrok.io/dashboard/r.eniyanilavan@gmail.com',{
             method:"GET",
         })
         .then(res=>{
@@ -33,7 +33,6 @@ class Dashboard extends Component {
             }
         })
         .then(res=>{
-            console.log(res);
             var arr = res.archs;
             var projects = arr.map(pro => {
                 var date = (new Date(pro.doc).toDateString());

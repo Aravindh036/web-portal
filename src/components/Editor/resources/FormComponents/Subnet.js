@@ -20,7 +20,6 @@ export default class Subnet extends Component {
   componentDidMount() {
     var store = this.props.store();
     var selectedID = this.props.getSelected();
-    console.log(store[selectedID]);
     if (Object.keys(store[selectedID].properties).length !== 0) {
       this.setState({ ...store[selectedID].properties }, () => {
         document.getElementById("subnet-name-id").value = this.state.name;
@@ -30,12 +29,10 @@ export default class Subnet extends Component {
     }
     document.getElementById('drop-head-id').addEventListener('click', () => {
       document.getElementById('drop-id').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-id').addEventListener('click', (e) => {
       document.getElementById("drop-id").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
         SubnetType: e.target.innerHTML
@@ -43,12 +40,10 @@ export default class Subnet extends Component {
     })
     document.getElementById('drop-head-vpc').addEventListener('click', () => {
       document.getElementById('drop-vpc').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-vpc').addEventListener('click', (e) => {
       document.getElementById("drop-vpc").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       if (!e.target.innerHTML.includes("No vpcs created")) {
         document.getElementById('drop-head-vpc').innerHTML = e.target.innerHTML;
         this.setState({
@@ -78,7 +73,6 @@ export default class Subnet extends Component {
     });
   }
   saveForm = () => {
-    // console.log("hello");
     if (this.state.name === "") {
       alert("Give a name for the Subnet!!!");
     }
@@ -86,29 +80,24 @@ export default class Subnet extends Component {
       alert("Specify the Cidr address");
     }
     if ((this.state.CidrBlock !== "")) {
-      console.log(this.state);
       var store = this.props.store();
       var subnet = this.props.getSubnet();
       var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
       //     store[i].properties = this.state
       //   }
       // }
       store[selectedID].properties = this.state;
       subnet[selectedID].properties = this.state;
-      console.log("inside the save button", store);
       this.props.saveStore(store);
       this.props.remove();
       document.getElementById('properties').style.right = "-314px";
-      console.log("subnete", subnet);
     }
   }
   render() {
     var subnet = this.props.getVpc();
     var subnetDropdown = "";
-    console.log(subnet,"hiiiiiiii",subnet);
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
         return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>

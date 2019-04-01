@@ -33,8 +33,7 @@ class Editor extends Component {
         workflow: true,
         code: false,
         instance: (x, y) => {
-            // console.log("hello");
-            return <EC2 x={x} y={y} incLog = {this.incLog} decLog = {this.decLog} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <EC2 x={x} y={y} getInstance={this.getInstance} incLog = {this.incLog} decLog = {this.decLog} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         cwatch: (x, y) => {
             return <CloudWatch x={x} y={y} getInstance={this.getInstance} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
@@ -46,7 +45,7 @@ class Editor extends Component {
             return <DatabaseServer getDBsubnet={this.getDBsubnet} x={x} y={y} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         lbalancer: (x, y) => {
-            return <LoadBalancer x={x} y={y} getSecurity={this.getSecurity} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
+            return <LoadBalancer x={x} y={y} getSecurity={this.getSecurity} getInstance={this.getInstance} getSubnet={this.getSubnet} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
         },
         sg: (x, y) => {
             return <SecurityGroup x={x} y={y} getVpc={this.getVpc} saveStore={this.saveStore} store={this.store} getSelected={this.getSelected} remove={this.removeproperties} />
@@ -66,7 +65,6 @@ class Editor extends Component {
 
     componentDidMount(){
         this.json = JSON.parse(sessionStorage.getItem('json'));
-        console.log(this.json,"hi");
         this.email = sessionStorage.getItem('email');
         this.title = sessionStorage.getItem('title');
         if(!this.email || !this.title){
@@ -131,17 +129,15 @@ class Editor extends Component {
             alert('no service to build');
             return;
         }
+        this.cloud_save();
         yaml = deploy(count,this.email);
-        // console.log(yaml);
         this.setState({yaml:yaml});
-        // console.log(log);
         var log_flag = false
         if(log>0){
             log_flag = true;
         }
         sessionStorage.setItem('json',JSON.stringify(count))
-        // console.log(log_array);
-        fetch('http://localhost:2019/deploy', {
+        fetch('https://02476d4d.ngrok.io/deploy', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
@@ -152,10 +148,17 @@ class Editor extends Component {
                 log_array:log_array
             })
         })
+        .then(res=>{
+            if(res.status === 200){
+                alert("Deploy successful");
+            }
+            else{
+                alert("There was a problem in deployment");
+            }
+        })
     }
     removeproperties = () => {
         Editor.properties = null;
-        // console.log("remove",count);
         this.forceUpdate()
     }
     saveStore = (store) => {
@@ -174,7 +177,6 @@ class Editor extends Component {
         return current_element_id;
     }
     updateStore = (title, id, x, y) => {
-        // console.log(title);
         // count.push({
         //     id:id,
         //     serviceName:title,
@@ -277,7 +279,6 @@ class Editor extends Component {
                 }
             }
         }
-        // console.log(count);
     }
     workflowPressed = (e) => {
         if (this.state.workflow !== true) {
@@ -303,10 +304,8 @@ class Editor extends Component {
     }
 
     update_position = (id, x, y) => {
-        // console.log("before",count);
         count[id].properties.x = x;
         count[id].properties.y = y;
-        // console.log("after",count);
 
     }
 
@@ -314,7 +313,7 @@ class Editor extends Component {
         var that = this;
         html2canvas(document.getElementById('workspace'))
         .then(function(canvas) {
-            fetch('http://localhost:2019/save',{
+            fetch('https://02476d4d.ngrok.io/save',{
                 method:"POST",
                 body:JSON.stringify({
                     "json":JSON.stringify(count),

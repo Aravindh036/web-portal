@@ -16,7 +16,6 @@ class Workspace extends Component {
         this.json = sessionStorage.getItem('json');
         this.email = sessionStorage.getItem('email');
         this.title = sessionStorage.getItem('title');
-        // console.log(this.json);
         if(!this.email || !this.title){
             document.location = "/";
         }
@@ -67,7 +66,6 @@ class Workspace extends Component {
             this.drag_elem.style.boxShadow = "0px 0px 10px rgba(33,249,207,0.6)";
             window.addEventListener("mouseup",this.up);
         }
-        // console.log(e.target.id);
         this.props.currentID(e.target.id);
     }
 
@@ -244,7 +242,6 @@ class Workspace extends Component {
     }
 
     windowclick = (e)=>{
-        // console.log(e.target);
         this.select_elem.style.border = "";
         this.select_elem.style.boxShadow = "";
         this.select_elem = undefined;

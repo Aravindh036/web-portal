@@ -42,12 +42,10 @@ export default class SecurityGroup extends Component {
     }
     document.getElementById('drop-head-vpc').addEventListener('click', () => {
       document.getElementById('drop-vpc').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-vpc').addEventListener('click', (e) => {
       document.getElementById("drop-vpc").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       if (!e.target.innerHTML.includes("No vpcs created")) {
         document.getElementById('drop-head-vpc').innerHTML = e.target.innerHTML;
         this.setState({
@@ -111,17 +109,14 @@ export default class SecurityGroup extends Component {
     }
     
     if ((this.state.GroupName !== "") && (this.state.GroupDescription !== "") ) {
-      console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
       //     store[i].properties = this.state
       //   }
       // }
       store[selectedID].properties = this.state;
-      console.log("inside the save button", store);
       this.props.saveStore(store);
       this.props.remove();
       document.getElementById('properties').style.right = "-314px"; 
@@ -130,7 +125,6 @@ export default class SecurityGroup extends Component {
   render() {
     var subnet = this.props.getVpc();
     var subnetDropdown = "";
-    console.log(subnet,"hiiiiiiii",subnet);
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
         return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>

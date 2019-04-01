@@ -31,12 +31,10 @@ export default class Vpc extends Component {
     }
     document.getElementById('drop-head-id').addEventListener('click', () => {
       document.getElementById('drop-id').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-id').addEventListener('click', (e) => {
       document.getElementById("drop-id").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       document.getElementById('drop-head-id').innerHTML = e.target.innerHTML;
       this.setState({
         InstanceTenancy: e.target.innerHTML
@@ -67,16 +65,13 @@ export default class Vpc extends Component {
     this.setState({
       DNS: !this.state.DNS
     });
-    // console.log(this.state.Backup);
   }
   getDNShost = (e) => {
     this.setState({
       DNShost: !this.state.DNShost
     });
-    // console.log(this.state.Backup);
   }
   saveForm = () => {
-    // console.log("hello");
     if (this.state.name === "") {
       alert("Give a name for the Subnet!!!");
     }
@@ -84,24 +79,19 @@ export default class Vpc extends Component {
       alert("Specify the Cidr address");
     }
     if ((this.state.CidrBlock !== "")) {
-      console.log(this.state);
       var store = this.props.store();
       var vpc = this.props.getVpc();
       var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
       //     store[i].properties = this.state
       //   }
       // }
       store[selectedID].properties = this.state;
       vpc[selectedID].properties = this.state;
-      console.log("inside the save button", store);
       this.props.saveStore(store);
       this.props.remove();
       document.getElementById('properties').style.right = "-314px";
-      console.log("vpc", vpc);
-      console.log("count", store);
     }
   }
   render() {

@@ -13,6 +13,7 @@ export default class LoadBalancer extends Component {
     LoadBalancerName:"",
     SecurityGroup:"",
     Subnet:"",
+    Instance:"",
     x:0,
     y:0
   }
@@ -24,25 +25,28 @@ export default class LoadBalancer extends Component {
   componentDidMount(){
     var store = this.props.store();
     var selectedID = this.props.getSelected();
+    var subnet = this.props.getSubnet();
+    var instance = this.props.getInstance();
+    var security = this.props.getSecurity();
     if(Object.keys(store[selectedID].properties).length !== 0){
         this.setState({...store[selectedID].properties},()=>{
+            console.log(security[this.state.SecurityGroup])
             document.getElementById("loadbalancer-name-id").value = this.state.LoadBalancerName;
             document.getElementById("instance-port-id").value = this.state.InstancePort;
             document.getElementById("loadbalancer-port-id").value = this.state.LoadBalancerPort; 
             document.getElementById("policyname-id").value = this.state.PolicyNames;
             document.getElementById("protocol-id").value = this.state.Protocol;
-            // document.getElementById("security-group-id").value = this.state.SecurityGroup; 
-            // document.getElementById("subnet-name-id").value = this.state.Subnet; 
+            document.getElementById("drop-head-security").innerHTML = security[this.state.SecurityGroup]?security[this.state.SecurityGroup].properties.GroupName:'Select a Security Group'; 
+            document.getElementById("drop-head-subnet").innerHTML = subnet[this.state.Subnet]?subnet[this.state.Subnet].properties.name:'Select a Subnet'; 
+            document.getElementById("drop-head-instance").innerHTML = instance[this.state.Instance]?instance[this.state.Instance].properties.name:'Select a Instance'; 
         })
     }
     document.getElementById('drop-head-subnet').addEventListener('click', () => {
       document.getElementById('drop-subnet').classList.toggle('hide');
-      // console.log("hhhh");
     });
 
     document.getElementById('drop-subnet').addEventListener('click', (e) => {
       document.getElementById("drop-subnet").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       if (!e.target.innerHTML.includes("No subnets created")) {
         document.getElementById('drop-head-subnet').innerHTML = e.target.innerHTML;
         this.setState({
@@ -50,18 +54,33 @@ export default class LoadBalancer extends Component {
         });
       }
     })
+
+
     document.getElementById('drop-head-security').addEventListener('click', () => {
       document.getElementById('drop-security').classList.toggle('hide');
-      console.log("vauva");
     });
 
     document.getElementById('drop-security').addEventListener('click', (e) => {
       document.getElementById("drop-security").classList.toggle('hide');
-      // console.log(e.target.innerHTML);
       if (!e.target.innerHTML.includes("No Security Group created")) {
         document.getElementById('drop-head-security').innerHTML = e.target.innerHTML;
         this.setState({
           SecurityGroup: e.target.id
+        });
+      }
+    })
+
+
+    document.getElementById('drop-head-instance').addEventListener('click', () => {
+      document.getElementById('drop-instance').classList.toggle('hide');
+    });
+
+    document.getElementById('drop-instance').addEventListener('click', (e) => {
+      document.getElementById("drop-instance").classList.toggle('hide');
+      if (!e.target.innerHTML.includes("No Instance created")) {
+        document.getElementById('drop-head-instance').innerHTML = e.target.innerHTML;
+        this.setState({
+          Instance: e.target.id
         });
       }
     })
@@ -122,19 +141,15 @@ export default class LoadBalancer extends Component {
       return;
 
     }
-    // console.log("gegege",this.state);
     if ((this.state.InstancePort!== "") && (this.state.LoadBalancerPort !== "") && (this.state.Protocol !== "")) {
-      console.log(this.state);
       var store = this.props.store();
       var selectedID = this.props.getSelected();
       // for (var i = 0; i <= store.length - 1; i++) {
       //   if (store[i].id === selectedID) {
-      //     console.log("hhhh");
       //     store[i].properties = this.state
       //   }
       // }
       store[selectedID].properties = this.state;
-      console.log("inside the save button", store);
       this.props.saveStore(store);
       this.props.remove();      
       document.getElementById('properties').style.right = "-314px"; 
@@ -143,7 +158,7 @@ export default class LoadBalancer extends Component {
   }
   render() {
     var subnet = this.props.getSubnet();
-    var subnetDropdown = "",i;
+    var subnetDropdown = "";
     if (Object.values(subnet).length !== 0) {
       subnetDropdown = Object.values(subnet).map(sub => {
         return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
@@ -155,6 +170,21 @@ export default class LoadBalancer extends Component {
         return <div className="drop-down-item">No subnets created</div>
       })
     }
+
+    var instances = this.props.getInstance();
+    var instanceDropdown = "";
+    if (Object.values(instances).length !== 0) {
+      instanceDropdown = Object.values(instances).map(sub => {
+        return <div id={sub.id} className="drop-down-item">{sub.properties.name}</div>
+      })
+    }
+    else {
+      subnet = [1];
+      subnetDropdown = subnet.map(empty => {
+        return <div className="drop-down-item">No subnets created</div>
+      })
+    }
+
     var security = this.props.getSecurity();
     var securitygroup = "";
     if (Object.values(security).length !== 0) {
@@ -191,17 +221,29 @@ export default class LoadBalancer extends Component {
           </div>
             {/* <input id="subnet-name-id" type="text" placeholder="SubnetName" onBlur={this.getSubnetName}/> */}
             <div className="drop-down-container">
-            <div className="drop-tag">
-              <div className="drop-head" id="drop-head-subnet">
-                Select a Subnet
+              <div className="drop-tag">
+                <div className="drop-head" id="drop-head-subnet">
+                  Select a Subnet
+                </div>
+                <div className="arrow"><img src={arrow} alt="⥮" /></div>
               </div>
-              <div className="arrow"><img src={arrow} alt="⥮" /></div>
+              <div className="drop-down hide" id="drop-subnet">
+                {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+                {subnetDropdown}
+              </div>
             </div>
-            <div className="drop-down hide" id="drop-subnet">
-              {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
-              {subnetDropdown}
+            <div className="drop-down-container">
+              <div className="drop-tag">
+                <div className="drop-head" id="drop-head-instance">
+                  Select a Instance
+                </div>
+                <div className="arrow"><img src={arrow} alt="⥮" /></div>
+              </div>
+              <div className="drop-down hide" id="drop-instance">
+                {/* <div className="drop-down-item">Amazon Linux 2 AMI</div> */}
+                {instanceDropdown}
+              </div>
             </div>
-          </div>
         </div>
         <button onClick={this.saveForm}>Save</button>
       </div>
