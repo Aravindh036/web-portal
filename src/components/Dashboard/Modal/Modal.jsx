@@ -25,6 +25,9 @@ class Modal extends Component {
         .catch(err=>{
             console.log(err.message);
         })
+        sessionStorage.setItem('title',title);
+        sessionStorage.setItem('json',null);
+        document.location = '/editor'
     }
 
     render() {

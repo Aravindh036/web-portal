@@ -72,6 +72,9 @@ class Login extends Component {
                 console.log(err.message);
             })
         }
+        sessionStorage.setItem('email',email);
+        document.location = "/dashboard";
+
     }
     signup = ()=>{
         document.getElementsByClassName('pass-match')[1].style.display = "none";
